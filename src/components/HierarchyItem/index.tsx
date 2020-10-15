@@ -70,10 +70,17 @@ export type HierarchyItemProps = {
   selected?: boolean;
 };
 
-const Menu = (props: { onDeletePage: () => void; id: string }) => (
+const Menu = (props: {
+  onDeletePage: () => void;
+  onCreatePage: () => void;
+  id: string;
+}) => (
   <ul>
     <li>
       <button onClick={props.onDeletePage}>Удолить</button>
+    </li>
+    <li>
+      <button onClick={props.onCreatePage}>Создать подстраницу</button>
     </li>
     <li>
       <a href={"/edit-page/" + props.id}>Редактировать</a>
@@ -95,6 +102,9 @@ export const HierarchyItem = (props: HierarchyItemProps) => {
   };
   const onDeletePage = () => {
     dispatch(flowSlice.actions.removePage(props.id));
+  };
+  const onCratePage = () => {
+    dispatch(flowSlice.actions.addPage({ hierarchyParent: props.id }));
   };
 
   return (
@@ -128,7 +138,11 @@ export const HierarchyItem = (props: HierarchyItemProps) => {
         ●●●
         {isMenu && (
           <div style={{ position: "absolute", left: "100%", top: 0 }}>
-            <Menu onDeletePage={onDeletePage} id={props.id} />
+            <Menu
+              onDeletePage={onDeletePage}
+              onCreatePage={onCratePage}
+              id={props.id}
+            />
           </div>
         )}
       </div>

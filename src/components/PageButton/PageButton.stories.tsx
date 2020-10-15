@@ -9,7 +9,7 @@ export default {
 
 export const Normal = () => <PageButton>Далее</PageButton>;
 export const WithAnchor = () => (
-  <PageButtonWithAnchor active>Далее</PageButtonWithAnchor>
+  <PageButtonWithAnchor active >Далее</PageButtonWithAnchor>
 );
 
 export const WithAnchorDisabled = () => (

@@ -43,9 +43,15 @@ export const PageButton: React.FC<any> = props => (
   <StyledPageButton {...props}></StyledPageButton>
 );
 
-export const PageButtonWithAnchor: React.FC<{ active?: boolean }> = props => (
+export const PageButtonWithAnchor: React.FC<{
+  active?: boolean;
+  id?: string;
+}> = props => (
   <PageButton className="with-anchor">
     {props.children}
-    <div className={"anchor" + (props.active ? " active" : "")}></div>
+    <div
+      className={"anchor" + (props.active ? " active" : "")}
+      id={"anchor-" + props.id}
+    ></div>
   </PageButton>
 );

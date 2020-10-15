@@ -8,6 +8,18 @@ export const DEV_data: FlowLessonPageTree = {
       path: "/",
       id: "1",
       flowChildren: ["2", "3", "4", "6"],
+      triggers: [
+        {
+          goToPageId: "2",
+          id: "1289379",
+          title: "Событие №1",
+        },
+        {
+          goToPageId: "3",
+          id: "2834792",
+          title: "Событие №2",
+        },
+      ],
       hierarchyChildren: ["2", "3", "4", "6"],
       isRoot: true,
       thumbnail:
@@ -82,31 +94,70 @@ export const flowSlice = createSlice({
   name: "pages",
   initialState: DEV_data.pages,
   reducers: {
-    removePage: (state, action: { payload: string; type: string }) =>
-      state.filter(p => p.id !== action.payload),
+    removePage: (state, action: { payload: string; type: string }) => {
+      const indexToRemove = state.findIndex(p => p.id === action.payload);
+      const pageToRemove = state[indexToRemove];
+      const parentPage = state.find(p =>
+        p.hierarchyChildren?.includes(action.payload)
+      );
+      if (parentPage && pageToRemove.hierarchyChildren?.length) {
+        parentPage!.hierarchyChildren!.push(...pageToRemove.hierarchyChildren);
+      }
+      state.splice(indexToRemove, 1);
+    },
     addPage: (
       state,
-      action: { payload: Partial<LessonPage>; type: string }
+      action: {
+        payload: Partial<LessonPage> & { hierarchyParent?: string };
+        type: string;
+      }
     ) => {
+      const column =
+        action.payload.column ?? action.payload.hierarchyParent
+          ? state.find(p => p.id === action.payload.hierarchyParent)!.column + 1
+          : 1;
+
+      const row =
+        action.payload.row ??
+        (state
+          .filter(p => p.column === column)
+          .reduce((max, cur) => Math.max(max, cur.row), 1) + 1 ||
+          1);
+
+      const path =
+        action.payload.path ??
+        (action.payload.flowParent
+          ? state.find(p => p.id === action.payload.flowParent)?.path +
+            (action.payload.title ?? "")
+          : "");
+
+      const id = Math.trunc(Math.random() * 1000).toString();
+
+      if (action.payload.hierarchyParent) {
+        console.log("Finding parent and adding children");
+        const parent = state.find(
+          p => p.id === action.payload.hierarchyParent
+        )!;
+
+        if (!Array.isArray(parent.hierarchyChildren)) {
+          parent.hierarchyChildren = [];
+        }
+
+        console.log("Found parent ", JSON.stringify(parent, null, 2));
+        console.log("with children ", parent.hierarchyChildren?.length);
+
+        parent.hierarchyChildren?.push(id);
+
+        console.log("new children ", parent.hierarchyChildren?.length);
+      }
+
       state.push({
         ...action.payload,
-        id: Math.trunc(Math.random() * 1000).toString(),
-        title: action.payload.title ?? "",
-        path:
-          action.payload.path ??
-          (action.payload.flowParent
-            ? state.find(p => p.id === action.payload.flowParent)?.path +
-              (action.payload.title ?? "")
-            : ""),
-        row:
-          action.payload.row ??
-          (action.payload.column
-            ? state
-                .filter(p => p.column === action.payload.column)
-                .reduce((max, cur) => Math.max(max, cur.row), 1) || 1
-            : 1),
-
-        column: action.payload.column ?? 1,
+        id,
+        title: action.payload.title ?? "Page " + id,
+        path,
+        row,
+        column,
       });
     },
   },
@@ -125,9 +176,10 @@ export const workSlice = createSlice({
         type: string;
       }
     ) => {
-      state.selectedPages = Array.from(
-        new Set(state.selectedPages.concat(action.payload))
-      );
+      // state.selectedPages = Array.from(
+      //   new Set(state.selectedPages.concat(action.payload))
+      // );
+      state.selectedPages = [action.payload[0]];
     },
     deselectPages: (
       state,
