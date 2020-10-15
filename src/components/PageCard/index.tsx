@@ -6,6 +6,11 @@ const StyledPageCard = styled.div`
   border: 2px solid ${p => p.theme.white};
   border-radius: 14px;
   background-color: ${p => p.theme.white};
+
+  &.selected {
+    background-color: ${p => p.theme.lightBlue};
+    border-color: ${p => p.theme.lightBlue};
+  }
   > .content {
     padding: 10px;
   }
@@ -27,7 +32,7 @@ export type PageCardProps = LessonPage & {
 };
 
 export const PageCard = (props: PageCardProps) => (
-  <StyledPageCard>
+  <StyledPageCard className={props.selected ? "selected" : ""}>
     {props.thumbnail && (
       <div className="thumbnail-container">
         <img className="thumbnail" src={props.thumbnail} alt={props.title} />

@@ -15,84 +15,17 @@ export type LessonPage = {
   path: string;
   thumbnail?: string;
   id: string;
-  parent?: string;
-  children?: string[];
+  flowParent?: string;
+  flowChildren?: string[];
+  isRoot?: boolean;
+  hierarchyChildren?: string[];
   row: number;
   column: number;
+  selected?: boolean;
 };
 
 export type FlowLessonPageTree = {
   pages: LessonPage[];
-};
-
-export const DEV_data: FlowLessonPageTree = {
-  pages: [
-    {
-      title: "Test1",
-      path: "/",
-      id: "1",
-      children: ["2", "3", "4", "6"],
-      thumbnail:
-        "https://adastrum.io/lessons_data/history-intro/ea07cf78c3cc74393f3442f673405b20.png",
-      row: 1,
-      column: 1,
-    },
-    {
-      title: "Test2",
-      path: "/Test2",
-      id: "2",
-      parent: "1",
-      children: ["5"],
-      thumbnail:
-        "https://adastrum.io/lessons_data/history-intro/ea07cf78c3cc74393f3442f673405b20.png",
-      row: 1,
-      column: 2,
-    },
-    {
-      title: "Test5",
-      path: "/Test2/Test5",
-      id: "5",
-      parent: "2",
-      children: [],
-      thumbnail:
-        "https://adastrum.io/lessons_data/history-intro/ea07cf78c3cc74393f3442f673405b20.png",
-      row: 1,
-      column: 3,
-    },
-    {
-      title: "Test3",
-      path: "/Test3",
-      id: "3",
-      parent: "1",
-      children: [],
-      thumbnail:
-        "https://adastrum.io/lessons_data/history-intro/ea07cf78c3cc74393f3442f673405b20.png",
-      row: 2,
-      column: 2,
-    },
-    {
-      title: "Test4",
-      path: "/Test4",
-      id: "4",
-      parent: "1",
-      children: [],
-      thumbnail:
-        "https://adastrum.io/lessons_data/history-intro/ea07cf78c3cc74393f3442f673405b20.png",
-      row: 3,
-      column: 2,
-    },
-    {
-      title: "Test6",
-      path: "/Test6",
-      id: "6",
-      parent: "1",
-      children: [],
-      thumbnail:
-        "https://adastrum.io/lessons_data/history-intro/ea07cf78c3cc74393f3442f673405b20.png",
-      row: 4,
-      column: 2,
-    },
-  ],
 };
 
 const CardWrapper = (props: PageCardProps) => {
@@ -101,6 +34,7 @@ const CardWrapper = (props: PageCardProps) => {
       style={{
         gridRow: `${props.row} / span 1`,
         gridColumn: `${props.column} / span 1`,
+        zIndex: 2,
       }}
       id={"card-" + props.id}
     >
@@ -117,7 +51,7 @@ const StyledGrid = styled.div`
   row-gap: 30px;
   background-color: ${p => p.theme.lightLightGray};
   padding: 32px 42px;
-  overflow: scroll;
+  width: fit-content;
 `;
 
 const Connections = (props: FlowLessonPageTree) => {
@@ -127,9 +61,9 @@ const Connections = (props: FlowLessonPageTree) => {
   useEffect(() => {
     const newElMap: typeof elMap = {};
     props.pages.forEach(p => {
-      console.log("searching for el ", "card-" + p.id);
+      // console.log("searching for el ", "card-" + p.id);
       const el = document.getElementById("card-" + p.id);
-      console.log("found el ", el);
+      // console.log("found el ", el);
       if (el) {
         newElMap[p.id] = el;
       }
@@ -146,8 +80,8 @@ const Connections = (props: FlowLessonPageTree) => {
 
   props.pages.forEach(p => {
     if (!elMap[p.id]) return;
-    p.children?.forEach(c => {
-      console.log("p.id, c ", p.id, c, elMap);
+    p.flowChildren?.forEach(c => {
+      // console.log("p.id, c ", p.id, c, elMap);
       if (!elMap[c]) return;
       const parentPos = elMap[p.id].getBoundingClientRect();
       const childPos = elMap[c].getBoundingClientRect();
@@ -156,6 +90,7 @@ const Connections = (props: FlowLessonPageTree) => {
           stroke="red"
           strokeWidth="3"
           fill="none"
+          key={p.id + "_" + c}
           d={`M${parentPos.x - selfPos.x} ${parentPos.y - selfPos.y} L${
             childPos.x - selfPos.x
           } ${childPos.y - selfPos.y}`}
@@ -165,7 +100,7 @@ const Connections = (props: FlowLessonPageTree) => {
     });
   });
 
-  console.log("conns", conEl);
+  // console.log("conns", conEl);
 
   return (
     <svg
@@ -177,7 +112,7 @@ const Connections = (props: FlowLessonPageTree) => {
         bottom: 0,
         width: "100%",
         height: "100%",
-        // zIndex: -1,
+        zIndex: 1,
       }}
       ref={self}
     >
@@ -187,17 +122,43 @@ const Connections = (props: FlowLessonPageTree) => {
 };
 
 export default () => {
-  const data = useSelector<RootState, RootState>(state => state);
+  const data = useSelector<RootState, RootState["flow"]>(state => state.flow);
+  const dataSelected = useSelector((state: RootState) => state.work)
+    .selectedPages;
+  const [ref, setRef] = useState<HTMLDivElement | null>(null);
 
   return (
-    <div>
-      <h1>Flow</h1>
-      <StyledGrid id="flow-creator">
-        {data.map(p => (
-          <CardWrapper {...p} key={p.id}></CardWrapper>
-        ))}
-        <Connections pages={data} />
-      </StyledGrid>
+    <div
+      style={{
+        flexGrow: 2,
+        display: "flex",
+        flexDirection: "column",
+        // overflow: "scroll",
+      }}
+    >
+      <h2>Flow</h2>
+      <div
+        style={{
+          flexGrow: 2,
+          overflow: "scroll",
+          width: ref?.clientWidth,
+          height: ref?.clientHeight,
+        }}
+        ref={ref => setRef(ref)}
+      >
+        {ref && (
+          <StyledGrid id="flow-creator">
+            <Connections pages={data} />
+            {data.map(p => (
+              <CardWrapper
+                {...p}
+                key={p.id}
+                selected={dataSelected.includes(p.id)}
+              ></CardWrapper>
+            ))}
+          </StyledGrid>
+        )}
+      </div>
     </div>
   );
 };
