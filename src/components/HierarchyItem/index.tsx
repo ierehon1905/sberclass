@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import moduleSrc from "./Module.svg";
 import pageSrc from "./Page.svg";
 import sectionSrc from "./Section.svg";
@@ -70,22 +70,27 @@ export type HierarchyItemProps = {
   selected?: boolean;
 };
 
+const StyledMenu = styled.div`
+  background-color: ${p => p.theme.white};
+  padding: 8px;s
+`;
+
 const Menu = (props: {
   onDeletePage: () => void;
   onCreatePage: () => void;
   id: string;
 }) => (
-  <ul>
-    <li>
+  <StyledMenu>
+    <div>
       <button onClick={props.onDeletePage}>Удолить</button>
-    </li>
-    <li>
+    </div>
+    <div>
       <button onClick={props.onCreatePage}>Создать подстраницу</button>
-    </li>
-    <li>
+    </div>
+    <div>
       <a href={"/edit-page/" + props.id}>Редактировать</a>
-    </li>
-  </ul>
+    </div>
+  </StyledMenu>
 );
 
 export const HierarchyItem = (props: HierarchyItemProps) => {
