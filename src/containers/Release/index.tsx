@@ -134,6 +134,7 @@ const Release = () => {
       dispatch(moduleSlice.actions.setModule(m));
     });
   }, [moduleId]);
+
   const module = useSelector((state: RootState) => state.module);
 
   const [selectedTask, setSelectedTask] = useState(null);
@@ -141,7 +142,6 @@ const Release = () => {
   const [revisions, setRevisions] = useState([]);
   const [currentRevision, setCurrentRevision] = useState([]);
 
-  const { moduleId } = release;
 
 
   // REVISIONS
