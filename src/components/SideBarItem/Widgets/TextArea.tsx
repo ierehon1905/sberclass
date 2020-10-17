@@ -1,6 +1,6 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
-import { InputStyles, InputStylesDark } from './ShortInput';
+import React from "react";
+import styled, { css } from "styled-components";
+import { InputStyles, InputStylesDark } from "./ShortInput";
 
 const StyledTextArea = styled.textarea`
   ${InputStyles}
@@ -14,10 +14,11 @@ const TextArea: React.FC<any> = props => {
     <StyledTextArea
       className={props.error?.type}
       onChange={() => {
-        !props.isValid && props.clearError();
+        !props.isValid &&
+          typeof props.clearError == "function" &&
+          props.clearError();
       }}
       name={props.name}
-      theme={props.theme}
       ref={props.register}
       placeholder={props.placeholder}
     />

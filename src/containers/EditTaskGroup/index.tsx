@@ -212,8 +212,9 @@ export default () => {
           <SideBarItem>
             <h2>Превью</h2>
           </SideBarItem>
-          {/* <SideBarItem type="button" data={{title: 'lol'}}/>
-            <SideBarItem type="textarea" data={{title: 'lol'}}/> */}
+          <SideBarItem type="button" data={{ title: "lol" }} />
+          <SideBarItem type="textArea" data={{ title: "lol" }} />
+          {/* <SideBarItem type="select" data={{ title: "lol" }} /> */}
           <ShadowClipWrapper>
             <SideBarItem>
               {state.content.blocks.map(w => {

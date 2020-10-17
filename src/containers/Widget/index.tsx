@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { CmsBlockTypes } from "../../entities/cms";
+import { colors } from "../../utils/theme";
 import { RichTextBox } from "./RichTextBox";
 import { TestWithOptions } from "./TestWithOptions";
 import { TestWithTextInput } from "./TestWithTextInput";
@@ -29,17 +30,37 @@ export interface ConfiguredWidget
 
 export const StyledConfiguredWidget = styled.div`
   background-color: transparent;
+  .show-on-hover {
+    opacity: 0;
+    pointer-events: none;
+  }
   &:hover {
     background-color: ${p => p.theme.white};
+    .show-on-hover {
+      opacity: 1;
+      pointer-events: all;
+    }
   }
 
   input {
-    border-radius: 8px;
-    border: 1.5px solid #444;
     outline: none;
-    background-color: white;
-    min-height: 32px;
-    padding-left: 10px;
+    display: inline-block;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 20px;
+
+    width: 50%;
+    height: 62px;
+    left: 0px;
+    top: 0px;
+
+    background: #ffffff;
+
+    border: 1.5px solid ${colors.gray2};
+    box-sizing: border-box;
+    border-radius: 18px;
   }
 
   margin: 10px 0;
