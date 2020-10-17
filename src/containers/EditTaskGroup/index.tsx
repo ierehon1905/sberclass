@@ -68,6 +68,13 @@ export default () => {
   const dispatch = useDispatch();
   const onAddWidget = (state: string) =>
     dispatch(taskGroupSlice.actions.addWidget(state));
+  const onEditWidget = (inTaskGroupId: string) => (params: any) =>
+    dispatch(
+      taskGroupSlice.actions.editWidget({
+        inTaskGroupId: inTaskGroupId,
+        params,
+      })
+    );
 
   return (
     <StyledEditTaskGroupArea>
@@ -95,7 +102,7 @@ export default () => {
               const Jsx = El.editRender;
               return (
                 <React.Fragment key={w.inTaskGroupId}>
-                  <Jsx {...w} />
+                  <Jsx {...w} onChange={onEditWidget(w.inTaskGroupId)} />
                 </React.Fragment>
               );
             })}
