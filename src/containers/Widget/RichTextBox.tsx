@@ -15,14 +15,14 @@ import { CommentTool } from "./CommentTool";
 import { CmsBlockTypes } from "../../entities/cms";
 
 export class RichTextBox implements GenWidget {
-  editRender = props => {
+  editRender = (props: WidgetProps) => {
     const dispatch = useDispatch();
     const [editor, setEditor] = useState<null | EditorJS>(null);
     useEffect(() => {
       setEditor(
         new EditorJS({
           holder: "editorjs" + props._id,
-          data: props.params as any,
+          data: props.data as any,
           tools: {
             header: Header,
             image: SimpleImage,
@@ -42,8 +42,8 @@ export class RichTextBox implements GenWidget {
     }, []);
     return (
       <StyledConfiguredWidget>
-        {"editorjs" + props.inTaskGroupId}
-        <div id={"editorjs" + props.inTaskGroupId}></div>
+        {"editorjs" + props._id}
+        <div id={"editorjs" + props._id}></div>
         <button
           onClick={() => {
             editor.save().then(res => {

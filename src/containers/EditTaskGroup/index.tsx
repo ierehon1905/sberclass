@@ -97,7 +97,7 @@ export default () => {
     const newState = JSON.parse(JSON.stringify(state)) as typeof state;
     const widgetToEdit = newState.content?.blocks?.find(w => w._id === id);
     if (!widgetToEdit) return;
-    
+
     widgetToEdit.data = params;
 
     const patch: Partial<TaskGroup> = {
@@ -196,7 +196,8 @@ export default () => {
                 return (
                   <React.Fragment key={w._id}>
                     <Jsx
-                      {...w}
+                      _id={w._id}
+                      data={w.data}
                       onChange={onEditWidget(w._id)}
                       onDelete={onDeleteWidget(w._id)}
                     />

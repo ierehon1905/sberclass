@@ -7,7 +7,7 @@ import { GenWidget, WidgetProps, StyledConfiguredWidget } from "./index";
 
 export class TestWithOptions
   implements GenWidget<{ text: string; options: string[] }> {
-  editRender = props => {
+  editRender = (props: WidgetProps) => {
     // const dispatch = useDispatch();
     const {
       register,
@@ -22,23 +22,23 @@ export class TestWithOptions
       options: string[];
     }>({
       defaultValues: {
-        text: props.params?.text,
-        options: props.params?.options || [],
+        text: props.data?.text,
+        options: props.data?.options || [],
       },
     });
 
     const onAddOption = () => {
       props.onChange({
-        ...(props.params || {}),
-        options: (props.params?.options || []).concat(
-          "New Option " + (props.params?.options.length + 1 || 1)
+        ...(props.data || {}),
+        options: (props.data?.options || []).concat(
+          "New Option " + (props.data?.options.length + 1 || 1)
         ),
       });
     };
     useEffect(() => {
-      if (!props.params?.options) {
+      if (!props.data?.options) {
         props.onChange({
-          ...(props.params || {}),
+          ...(props.data || {}),
           options: ["New Option 1", "New Option 2"],
         });
       }
@@ -46,10 +46,8 @@ export class TestWithOptions
 
     const onRemoveOption = (order: number) => {
       props.onChange({
-        ...(props.params || {}),
-        options: (props.params.options as string[]).filter(
-          (_, i) => i !== order
-        ),
+        ...(props.data || {}),
+        options: (props.data.options as string[]).filter((_, i) => i !== order),
       });
     };
 
@@ -88,7 +86,7 @@ export class TestWithOptions
           </div>
           <div>
             <ol>
-              {((props.params?.options as string[]) || []).map((o, i) => (
+              {((props.data?.options as string[]) || []).map((o, i) => (
                 <li key={o}>
                   <input
                     type="text"
