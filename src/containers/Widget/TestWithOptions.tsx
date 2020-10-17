@@ -69,6 +69,11 @@ export class TestWithOptions
       props.onChange({ ...data, options, correct, multi });
     });
 
+    const canEdit =
+      props.phase === "edit" ||
+      (props.phase === "partial-edit" &&
+        props.editableIds?.includes(props._id));
+
     return (
       <StyledConfiguredWidget>
         {this.title}
@@ -78,6 +83,7 @@ export class TestWithOptions
               type="text"
               className="input-title"
               name="text"
+              readOnly={!canEdit}
               ref={register({
                 required: true,
               })}
@@ -91,6 +97,7 @@ export class TestWithOptions
                   name={"option" + i}
                   key={"input" + o + i}
                   defaultValue={o}
+                  readOnly={!canEdit}
                   ref={register({
                     required: true,
                   })}
@@ -100,27 +107,34 @@ export class TestWithOptions
                     type="checkbox"
                     name={"option" + i + "correct"}
                     defaultChecked={props.data?.correct?.includes(o)}
+                    disabled={!canEdit}
                     ref={register({
                       required: false,
                     })}
                   />
                   Правильный
                 </label>
-                <button type="button" onClick={() => onRemoveOption(i)}>
+                <button
+                  type="button"
+                  onClick={() => onRemoveOption(i)}
+                  disabled={!canEdit}
+                >
                   Удалить
                 </button>
               </div>
             ))}
           </div>
           <div>
-            <button type="button" onClick={onAddOption}>
+            <button type="button" onClick={onAddOption} disabled={!canEdit}>
               Добавить вариант ответа
             </button>
           </div>
 
           <div>
-            <button type="submit">Сохранить виджет</button>
-            <button type="button" onClick={props.onDelete}>
+            <button type="submit" disabled={!canEdit}>
+              Сохранить виджет
+            </button>
+            <button type="button" onClick={props.onDelete} disabled={!canEdit}>
               Удалить виджет
             </button>
           </div>

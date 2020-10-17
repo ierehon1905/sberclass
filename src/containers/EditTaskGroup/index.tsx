@@ -40,11 +40,18 @@ const StyledEditTaskGroupArea = styled.div`
   }
 `;
 
-const ControllableMain = (props: {
-  state: TaskGroup;
-  onEditWidget: (arg0: any) => any;
-  onDeleteWidget: (arg0: any) => any;
-}) => (
+export type WithPhase = {
+  phase: "edit" | "partial-edit" | "comment" | "view";
+  editableIds?: string[];
+};
+
+const ControllableMain = (
+  props: {
+    state: TaskGroup;
+    onEditWidget: (arg0: any) => any;
+    onDeleteWidget: (arg0: any) => any;
+  } & WithPhase
+) => (
   <div>
     {props.state.content.blocks.map(w => {
       const El = widgetMap[w.type];
@@ -54,6 +61,7 @@ const ControllableMain = (props: {
           <Jsx
             _id={w._id}
             data={w.data}
+            phase={props.phase}
             onChange={props.onEditWidget(w._id)}
             onDelete={props.onDeleteWidget(w._id)}
           />
@@ -92,6 +100,7 @@ const Controllable = (props: {
       <View>
         <Content>
           <ControllableMain
+            phase="view"
             state={props.state}
             onDeleteWidget={props.onDeleteWidget}
             onEditWidget={props.onEditWidget}
@@ -112,7 +121,7 @@ const Controllable = (props: {
               const Jsx = El.previewRender;
               return (
                 <React.Fragment key={w._id}>
-                  <Jsx {...w} />
+                  <Jsx {...w} phase="view" />
                 </React.Fragment>
               );
             })}

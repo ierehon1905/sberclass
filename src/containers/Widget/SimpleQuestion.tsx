@@ -60,6 +60,7 @@ export class SimpleQuestion implements BlockToolConstructable {
         <Jsx
           _id={this.data._id}
           data={this.data.data}
+          phase={this.data.phase}
           onChange={data => {
             console.log("Changed input in editor ", data);
             this.data = { ...this.data, data };
