@@ -1,11 +1,12 @@
 import styled from "styled-components";
+import { CmsBlockTypes } from "../../entities/cms";
 import { RichTextBox } from "./RichTextBox";
 import { TestWithOptions } from "./TestWithOptions";
 import { TestWithTextInput } from "./TestWithTextInput";
 
 export interface WidgetInfo {
-  readonly widgetGuid: string; // === type
-  readonly title: string;
+  type: CmsBlockTypes; // === type
+  title: string;
 }
 
 export interface GenWidget<T extends {} = {}> extends WidgetInfo {
@@ -14,17 +15,17 @@ export interface GenWidget<T extends {} = {}> extends WidgetInfo {
 }
 
 export interface WidgetProps {
-  inTaskGroupId: string;
+  id: string;
   onChange?: (params: any) => void;
   onDelete?: () => void;
-  params?: {
+  data?: {
     [key: string]: any;
   };
 }
 
 export interface ConfiguredWidget
   extends WidgetInfo,
-    Omit<WidgetProps, "onChange"> {}
+    Omit<WidgetProps, "onChange" | "onDelete"> {}
 
 export const StyledConfiguredWidget = styled.div`
   background-color: transparent;
@@ -44,8 +45,10 @@ export const StyledConfiguredWidget = styled.div`
   margin: 10px 0;
 `;
 
-export const widgetMap: { [widgetGuid: string]: GenWidget } = {
-  "1": new TestWithTextInput(),
-  "2": new TestWithOptions(),
-  "3": new RichTextBox(),
+export const widgetMap: { [widgetGuid in CmsBlockTypes]: GenWidget } = {
+  textQuestion: new TestWithTextInput(),
+  testSingle: new TestWithOptions(),
+  testMultiple: new TestWithOptions(),
+  testMultipleCombination: new TestWithOptions(),
+  richContent: new RichTextBox(),
 };

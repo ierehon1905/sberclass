@@ -10,6 +10,7 @@ import {
 } from "@editorjs/editorjs";
 import ReactDOM from "react-dom";
 import { widgetMap, ConfiguredWidget } from "./index";
+import { CmsBlockTypes } from "../../entities/cms";
 
 // @ts-ignore
 
@@ -58,11 +59,11 @@ export class SimpleQuestion implements BlockToolConstructable {
       const Jsx = widgetMap[this.data.type].editRender;
       return (
         <Jsx
-          inTaskGroupId={this.data.inTaskGroupId}
-          params={this.data.params}
+          id={this.data.id}
+          data={this.data.data}
           onChange={params => {
             console.log("Changed input in editor ", params);
-            this.data.params = params;
+            this.data.data = params;
             setFoo(p => p + 1);
           }}
         />
@@ -75,7 +76,7 @@ export class SimpleQuestion implements BlockToolConstructable {
           <li>
             <button
               onClick={() => {
-                this.data.type = "1";
+                this.data.type = CmsBlockTypes.textQuestion;
                 console.log("Setting editor tool state", this.data);
                 setFoo(p => p + 1);
                 this.render();
@@ -87,7 +88,8 @@ export class SimpleQuestion implements BlockToolConstructable {
           <li>
             <button
               onClick={() => {
-                this.data.type = "2";
+                this.data.type = CmsBlockTypes.testSingle;
+
                 console.log("Setting editor tool state", this.data);
                 setFoo(p => p + 1);
                 this.render();

@@ -1,50 +1,19 @@
-import React, { ReactElement, ReactNode } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Content from "../../components/Content";
 import { SideBar } from "../../components/SideBar";
 import { SideBarItem } from "../../components/SideBarItem";
 import { ShadowClipWrapper } from "../../components/SideBarItem/ShadowClipWrapper";
 import View from "../../components/View";
-import { DEV_data, RootState, taskGroupSlice } from "../../store";
-import {
-  ConfiguredWidget,
-  StyledConfiguredWidget,
-  WidgetInfo,
-  widgetMap,
-} from "../Widget";
+import { CmsBlockTypes } from "../../entities/cms";
+import { EducationModule } from "../../entities/education";
+import { resolveEducationModule } from "../../entities/education/resolvers";
+import { moduleSlice, RootState, taskGroupSlice } from "../../store";
+import { ConfiguredWidget, widgetMap } from "../Widget";
 
 export type TaskGroup = ConfiguredWidget[];
-
-const DEV_groupConfiguredWidgets: TaskGroup = [
-  {
-    widgetGuid: "1",
-    inTaskGroupId: "2",
-    title: "С полем ввода",
-    params: {
-      text: "Когда?",
-    },
-  },
-  {
-    widgetGuid: "2",
-    inTaskGroupId: "2",
-    title: "С вариантами ответа",
-    params: {
-      text: "Что?",
-      options: ["Да", "Нет"],
-    },
-  },
-  {
-    widgetGuid: "3",
-    inTaskGroupId: "3",
-    title: "Рич текст",
-    params: {
-      content: `## Test Header
-          > Test quote
-          `,
-    },
-  },
-];
 
 const StyledEditTaskGroupArea = styled.div`
   flex-grow: 2;
@@ -71,10 +40,33 @@ const StyledEditTaskGroupArea = styled.div`
 `;
 
 export default () => {
-  const state = useSelector((state: RootState) => state);
+  // useEffect(() => {
+  //   resolveEducationModules().then(res => {
+  //     console.log(res);
+  //     debugger;
+  //   });
+  // }, []);
+  const { moduleId, topicId, taskGroupId } = useParams<{
+    moduleId: string;
+    topicId: string;
+    taskGroupId: string;
+  }>();
   const dispatch = useDispatch();
-  const onAddWidget = (state: string) =>
-    dispatch(taskGroupSlice.actions.addWidget(state));
+
+  useEffect(() => {
+    resolveEducationModule(moduleId).then(res => {
+      const m = res.result as EducationModule;
+      dispatch(moduleSlice.actions.setModule(m));
+      const topic = m.topics.find(t => t._id === topicId);
+      const group = topic.taskGroups.find(g => g._id === taskGroupId);
+      dispatch(taskGroupSlice.actions.setGroup(group));
+    });
+  });
+  const state = useSelector((state: RootState) => state.taskGroup);
+
+  const onAddWidget = (type: CmsBlockTypes) =>
+    dispatch(taskGroupSlice.actions.addWidget(type));
+
   const onEditWidget = (inTaskGroupId: string) => (params: any) =>
     dispatch(
       taskGroupSlice.actions.editWidget({
@@ -84,6 +76,10 @@ export default () => {
     );
   const onDeleteWidget = (inTaskGroupId: string) => () =>
     dispatch(taskGroupSlice.actions.removeWidget(inTaskGroupId));
+
+  if (!Array.isArray(state.content?.blocks)) {
+    return <h1>Нет данных</h1>;
+  }
 
   return (
     <StyledEditTaskGroupArea>
@@ -98,8 +94,8 @@ export default () => {
               <SideBarItem
                 withShadow
                 isClickable
-                key={gw.widgetGuid}
-                onClick={() => onAddWidget(gw.widgetGuid)}
+                key={gw.type}
+                onClick={() => onAddWidget(gw.type)}
               >
                 {gw.title}
               </SideBarItem>
@@ -109,15 +105,15 @@ export default () => {
         <View>
           <Content>
             <div>
-              {state.taskGroup.map(w => {
-                const El = widgetMap[w.widgetGuid];
+              {state.content.blocks.map(w => {
+                const El = widgetMap[w.type];
                 const Jsx = El.editRender;
                 return (
-                  <React.Fragment key={w.inTaskGroupId}>
+                  <React.Fragment key={w.id}>
                     <Jsx
                       {...w}
-                      onChange={onEditWidget(w.inTaskGroupId)}
-                      onDelete={onDeleteWidget(w.inTaskGroupId)}
+                      onChange={onEditWidget(w.id)}
+                      onDelete={onDeleteWidget(w.id)}
                     />
                   </React.Fragment>
                 );
@@ -134,11 +130,11 @@ export default () => {
             <SideBarItem type="textarea" data={{title: 'lol'}}/> */}
           <ShadowClipWrapper>
             <SideBarItem>
-              {state.taskGroup.map(w => {
-                const El = widgetMap[w.widgetGuid];
+              {state.content.blocks.map(w => {
+                const El = widgetMap[w.type];
                 const Jsx = El.previewRender;
                 return (
-                  <React.Fragment key={w.inTaskGroupId}>
+                  <React.Fragment key={w.id}>
                     <Jsx {...w} />
                   </React.Fragment>
                 );

@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import { CmsBlockTypes } from "../../entities/cms";
 import { taskGroupSlice } from "../../store";
 import { GenWidget, StyledConfiguredWidget, WidgetProps } from "./index";
 
@@ -10,6 +11,7 @@ export class TestWithTextInput
       text: string;
       answer: string;
     }> {
+  type: CmsBlockTypes = CmsBlockTypes.textQuestion;
   editRender = props => {
     // const dispatch = useDispatch();
     const { register, handleSubmit, watch, setValue, errors } = useForm<{
@@ -62,11 +64,10 @@ export class TestWithTextInput
   previewRender = (props: WidgetProps) => (
     <StyledConfiguredWidget>
       Preview Text input test
-      <div>{props.params?.text}</div>
-      <div>{props.params?.answer}</div>
+      <div>{props.data?.text}</div>
+      <div>{props.data?.answer}</div>
     </StyledConfiguredWidget>
   );
 
-  widgetGuid: string = "1";
   title: string = "С полем ввода";
 }

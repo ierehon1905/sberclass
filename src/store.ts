@@ -2,6 +2,8 @@ import { combineReducers, configureStore, createSlice } from "@reduxjs/toolkit";
 
 import { FlowLessonPageTree, LessonPage } from "./containers/Flow";
 import { ConfiguredWidget, widgetMap, WidgetProps } from "./containers/Widget";
+import { CmsBlock, CmsBlockTypes } from "./entities/cms";
+import { EducationModule, TaskGroup } from "./entities/education";
 
 export const DEV_data: FlowLessonPageTree = {
   pages: [
@@ -118,7 +120,7 @@ export const flowSlice = createSlice({
         action.payload.path ??
         (action.payload.flowParent
           ? state.find(p => p.id === action.payload.flowParent)?.path +
-          (action.payload.title ?? "")
+            (action.payload.title ?? "")
           : "");
 
       const id = Math.trunc(Math.random() * 1000).toString();
@@ -185,24 +187,40 @@ export const workSlice = createSlice({
   },
 });
 
+// const typaMap: { [id in keyof typeof widgetMap]: CmsBlockTypes } = {
+//   "1": CmsBlockTypes.textQuestion,
+//   "2": CmsBlockTypes.testMultiple,
+//   "3": CmsBlockTypes.richContent,
+// };
+
 export const taskGroupSlice = createSlice({
   name: "taskGroup",
-  initialState: [] as ConfiguredWidget[],
+  initialState: {} as TaskGroup,
   reducers: {
+    setGroup: (state, action) => {
+      state = action.payload;
+    },
     addWidget: (
       state,
       action: {
         type: string;
-        payload: ConfiguredWidget["widgetGuid"];
+        payload: CmsBlockTypes;
       }
     ) => {
-      const newRawWidget = Object.values(widgetMap).find(
-        w => w.widgetGuid === action.payload
-      );
+      // const newRawWidget = Object.values(widgetMap).find(
+      //   w => w.widgetGuid === action.payload
+      // );
 
-      const newWidget: ConfiguredWidget = {
-        ...newRawWidget,
-        inTaskGroupId: Math.trunc(Math.random() * 100000000000).toString(),
+      const newWidget: CmsBlock = {
+        // ...newRawWidget,
+        type: action.payload,
+        data: {
+          educationMeta: {
+            level: 0,
+            required: false,
+          },
+        },
+        id: Math.trunc(Math.random() * 100000000000).toString(),
       };
 
       Object.keys(newWidget).forEach(key => {
@@ -211,37 +229,45 @@ export const taskGroupSlice = createSlice({
         }
       });
 
-      state.push(newWidget);
+      state.content.blocks.push(newWidget);
     },
     removeWidget: (
       state,
       action: {
         type: string;
-        payload: ConfiguredWidget["inTaskGroupId"];
+        payload: CmsBlock["id"];
       }
     ) => {
-      // debugger;
-
-      const indexToRemove = state.findIndex(
-        w => w.inTaskGroupId === action.payload
+      const indexToRemove = state.content.blocks.findIndex(
+        w => w.id === action.payload
       );
-      state.splice(indexToRemove, 1);
+      state.content.blocks.splice(indexToRemove, 1);
     },
     editWidget: (
       state,
       action: {
         type: string;
         payload: {
-          inTaskGroupId: WidgetProps["inTaskGroupId"];
-          params: WidgetProps["params"];
+          inTaskGroupId: CmsBlock["id"];
+          params: CmsBlock["data"];
         };
       }
     ) => {
-      const widgetToEdit = state.find(
-        w => w.inTaskGroupId === action.payload.inTaskGroupId
+      const widgetToEdit = state.content.blocks.find(
+        w => w.id === action.payload.inTaskGroupId
       );
 
-      widgetToEdit.params = action.payload.params;
+      widgetToEdit.data = action.payload.params;
+    },
+  },
+});
+
+export const moduleSlice = createSlice({
+  name: "module",
+  initialState: {} as EducationModule,
+  reducers: {
+    setModule: (state, action) => {
+      state = action.payload;
     },
   },
 });
@@ -250,6 +276,7 @@ const rootReducer = combineReducers({
   flow: flowSlice.reducer,
   work: workSlice.reducer,
   taskGroup: taskGroupSlice.reducer,
+  module: moduleSlice.reducer,
 });
 
 export const store = configureStore({

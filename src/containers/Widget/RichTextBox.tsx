@@ -12,6 +12,7 @@ import RawTool from "@editorjs/raw";
 import { GenWidget, WidgetProps, StyledConfiguredWidget } from "./index";
 import { SimpleQuestion } from "./SimpleQuestion";
 import { CommentTool } from "./CommentTool";
+import { CmsBlockTypes } from "../../entities/cms";
 
 export class RichTextBox implements GenWidget {
   editRender = props => {
@@ -72,6 +73,7 @@ export class RichTextBox implements GenWidget {
     <StyledConfiguredWidget>preview RichTextBox</StyledConfiguredWidget>
   );
 
-  widgetGuid: string = "3";
+  type: CmsBlockTypes = CmsBlockTypes.richContent;
+
   title: string = "Рич текст";
 }
