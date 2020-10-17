@@ -15,7 +15,7 @@ export interface GenWidget<T extends {} = {}> extends WidgetInfo {
 }
 
 export interface WidgetProps {
-  id: string;
+  _id: string;
   onChange?: (params: any) => void;
   onDelete?: () => void;
   data?: {

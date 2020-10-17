@@ -1,9 +1,15 @@
-import { combineReducers, configureStore, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  combineReducers,
+  configureStore,
+  createAsyncThunk,
+  createSlice,
+} from "@reduxjs/toolkit";
 
 import { FlowLessonPageTree, LessonPage } from "./containers/Flow";
 import { ConfiguredWidget, widgetMap, WidgetProps } from "./containers/Widget";
 import { CmsBlock, CmsBlockTypes } from "./entities/cms";
 import { EducationModule, TaskGroup } from "./entities/education";
+import { resolveUpdateTaskGroup } from "./entities/education/resolvers";
 
 export const DEV_data: FlowLessonPageTree = {
   pages: [
@@ -187,11 +193,22 @@ export const workSlice = createSlice({
   },
 });
 
-// const taskUpdate = createAsyncThunk('taskGroup/taskUpdate', (...args:) => )
+// const taskUpdate = createAsyncThunk(
+//   "taskGroup/taskUpdate",
+//   async (params: Parameters<typeof resolveUpdateTaskGroup>, thunkAPI) => {
+//     const res = await resolveUpdateTaskGroup(
+//       params[0],
+//       params[1],
+//       params[2],
+//       params[3]
+//     );
+//   }
+// );
 
 export const taskGroupSlice = createSlice({
   name: "taskGroup",
   initialState: {} as TaskGroup,
+  extraReducers: {},
   reducers: {
     setGroup: (
       state,
@@ -224,7 +241,7 @@ export const taskGroupSlice = createSlice({
             required: false,
           },
         },
-        id: Math.trunc(Math.random() * 100000000000).toString(),
+        _id: Math.trunc(Math.random() * 100000000000).toString(),
       };
 
       Object.keys(newWidget).forEach(key => {
@@ -239,11 +256,11 @@ export const taskGroupSlice = createSlice({
       state,
       action: {
         type: string;
-        payload: CmsBlock["id"];
+        payload: CmsBlock["_id"];
       }
     ) => {
       const indexToRemove = state.content.blocks.findIndex(
-        w => w.id === action.payload
+        w => w._id === action.payload
       );
       state.content.blocks.splice(indexToRemove, 1);
     },
@@ -252,13 +269,18 @@ export const taskGroupSlice = createSlice({
       action: {
         type: string;
         payload: {
-          id: CmsBlock["id"];
+          _id: CmsBlock["_id"];
           params: CmsBlock["data"];
         };
       }
     ) => {
-      const widgetToEdit = state.content.blocks.find(
-        w => w.id === action.payload.id
+      if (!state.content?.blocks) {
+        console.log("Did not found state to edit", action);
+        return;
+      }
+
+      const widgetToEdit = state.content?.blocks?.find(
+        w => w._id === action.payload._id
       );
 
       widgetToEdit.data = action.payload.params;
@@ -277,7 +299,9 @@ export const moduleSlice = createSlice({
         type: string;
       }
     ) => {
-      state = action.payload;
+      Object.entries(action.payload).forEach(([key, value]) => {
+        state[key] = value;
+      });
     },
   },
 });
