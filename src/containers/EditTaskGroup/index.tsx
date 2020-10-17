@@ -8,14 +8,13 @@ import { SideBarItem } from "../../components/SideBarItem";
 import { ShadowClipWrapper } from "../../components/SideBarItem/ShadowClipWrapper";
 import View from "../../components/View";
 import { CmsBlockTypes } from "../../entities/cms";
-import { EducationModule } from "../../entities/education";
+import { EducationModule, TaskGroup } from "../../entities/education";
 import {
-  resolveAddTaskGroup,
   resolveEducationModule,
   resolveUpdateTaskGroup,
 } from "../../entities/education/resolvers";
-import { moduleSlice, RootState, taskGroupSlice } from "../../store";
-import { ConfiguredWidget, widgetMap } from "../Widget";
+import { moduleSlice, RootState } from "../../store";
+import { widgetMap } from "../Widget";
 
 const StyledEditTaskGroupArea = styled.div`
   flex-grow: 2;
@@ -26,6 +25,7 @@ const StyledEditTaskGroupArea = styled.div`
     flex-grow: 2;
     background-color: ${p => p.theme.light};
     padding-top: 80px;
+    height: 100vh;
   }
   .main-edit {
     background-color: ${p => p.theme.white};
@@ -41,13 +41,99 @@ const StyledEditTaskGroupArea = styled.div`
   }
 `;
 
+export type WithPhase = {
+  phase: "edit" | "partial-edit" | "comment" | "view";
+  editableIds?: string[];
+};
+
+const ControllableMain = (
+  props: {
+    state: TaskGroup;
+    onEditWidget: (arg0: any) => any;
+    onDeleteWidget: (arg0: any) => any;
+  } & WithPhase
+) => (
+  <div>
+    {props.state.content.blocks.map(w => {
+      const El = widgetMap[w.type];
+      const Jsx = El.editRender;
+      return (
+        <React.Fragment key={w._id}>
+          <Jsx
+            _id={w._id}
+            data={w.data}
+            phase={props.phase}
+            onChange={props.onEditWidget(w._id)}
+            onDelete={props.onDeleteWidget(w._id)}
+          />
+        </React.Fragment>
+      );
+    })}
+  </div>
+);
+
+const Controllable = (props: {
+  onAddWidget: (arg0: CmsBlockTypes) => any;
+  state: TaskGroup;
+  onEditWidget: (arg0: any) => any;
+  onDeleteWidget: (arg0: any) => any;
+}) => (
+  <StyledEditTaskGroupArea>
+    {/* <h2>Редактор группы заданий</h2> */}
+    <div className="edit-area">
+      <SideBar>
+        <SideBarItem>
+          <h2>Библиотека</h2>
+        </SideBarItem>
+        <ShadowClipWrapper>
+          {Object.values(widgetMap).map((gw, i) => (
+            <SideBarItem
+              withShadow
+              isClickable
+              key={gw.type + i}
+              onClick={() => props.onAddWidget(gw.type)}
+            >
+              {gw.title}
+            </SideBarItem>
+          ))}
+        </ShadowClipWrapper>
+      </SideBar>
+      <View>
+        <Content>
+          <ControllableMain
+            phase="edit"
+            state={props.state}
+            onDeleteWidget={props.onDeleteWidget}
+            onEditWidget={props.onEditWidget}
+          />
+        </Content>
+      </View>
+      <SideBar isRight>
+        <SideBarItem>
+          <h2>Превью</h2>
+        </SideBarItem>
+        <SideBarItem type="button" data={{ title: "lol" }} />
+        <SideBarItem type="textArea" data={{ title: "lol" }} />
+        {/* <SideBarItem type="select" data={{ title: "lol" }} /> */}
+        <ShadowClipWrapper>
+          <SideBarItem>
+            {props.state.content.blocks.map(w => {
+              const El = widgetMap[w.type];
+              const Jsx = El.previewRender;
+              return (
+                <React.Fragment key={w._id}>
+                  <Jsx {...w} phase="view" />
+                </React.Fragment>
+              );
+            })}
+          </SideBarItem>
+        </ShadowClipWrapper>
+      </SideBar>
+    </div>
+  </StyledEditTaskGroupArea>
+);
+
 export default () => {
-  // useEffect(() => {
-  //   resolveEducationModules().then(res => {
-  //     console.log(res);
-  //     debugger;
-  //   });
-  // }, []);
   const { moduleId, topicId, taskGroupId } = useParams<{
     moduleId: string;
     topicId: string;
@@ -59,31 +145,88 @@ export default () => {
     resolveEducationModule(moduleId).then(res => {
       const m = res.result as EducationModule;
       dispatch(moduleSlice.actions.setModule(m));
-      const topic = m.topics.find(t => t._id === topicId);
-      const group = topic.taskGroups.find(g => g._id === taskGroupId);
-      dispatch(taskGroupSlice.actions.setGroup(group));
+      // const topic = m.topics.find(t => t._id === topicId);
+      // const group = topic.taskGroups.find(g => g._id === taskGroupId);
+      // dispatch(taskGroupSlice.actions.setGroup(group));
       // debugger;
     });
-  }, []);
+  }, [moduleId]);
 
-  const state = useSelector((state: RootState) => state.taskGroup);
+  const state = useSelector((state: RootState) =>
+    state.module.topics
+      ?.find(t => t._id === topicId)
+      .taskGroups.find(t => t._id === taskGroupId)
+  );
 
-  const onAddWidget = (type: CmsBlockTypes) =>
-    dispatch(taskGroupSlice.actions.addWidget(type));
-
-  const onEditWidget = (id: string) => (params: any) => {
-    dispatch(
-      taskGroupSlice.actions.editWidget({
-        id: id,
-        params,
-      })
+  const onAddWidget = (type: CmsBlockTypes) => {
+    const patch: Partial<TaskGroup> = {
+      content: {
+        ...state.content,
+        blocks: state.content.blocks.concat({
+          type,
+          _id: undefined,
+          data: undefined,
+        }),
+      },
+    };
+    // @ts-ignore
+    resolveUpdateTaskGroup(moduleId, topicId, taskGroupId, patch).then(
+      ({ result }) => {
+        if (result) {
+          dispatch(moduleSlice.actions.setModule(result));
+        }
+      }
     );
+    // dispatch(taskGroupSlice.actions.addWidget(type));
   };
 
-  const onDeleteWidget = (inTaskGroupId: string) => () =>
-    dispatch(taskGroupSlice.actions.removeWidget(inTaskGroupId));
+  const onEditWidget = (id: string) => (params: any) => {
+    const newState = JSON.parse(JSON.stringify(state)) as typeof state;
+    const widgetToEdit = newState.content?.blocks?.find(w => w._id === id);
+    if (!widgetToEdit) return;
 
-  if (!Array.isArray(state.content?.blocks)) {
+    widgetToEdit.data = params;
+
+    const patch: Partial<TaskGroup> = {
+      ...newState,
+    };
+    // debugger;
+
+    // @ts-ignore
+    resolveUpdateTaskGroup(moduleId, topicId, taskGroupId, patch).then(
+      ({ result }) => {
+        if (result) {
+          dispatch(moduleSlice.actions.setModule(result));
+        }
+      }
+    );
+    // dispatch(
+    //   taskGroupSlice.actions.editWidget({
+    //     _id: id,
+    //     params,
+    //   })
+    // );
+  };
+
+  const onDeleteWidget = (inTaskGroupId: string) => () => {
+    const indexToRemove = state.content.blocks.findIndex(
+      w => w._id === inTaskGroupId
+    );
+
+    const newState = JSON.parse(JSON.stringify(state));
+    newState.content.blocks.splice(indexToRemove, 1);
+    // @ts-ignore
+    resolveUpdateTaskGroup(moduleId, topicId, taskGroupId, newState).then(
+      ({ result }) => {
+        if (result) {
+          dispatch(moduleSlice.actions.setModule(result));
+        }
+      }
+    );
+    // dispatch(taskGroupSlice.actions.removeWidget(inTaskGroupId));
+  };
+
+  if (!Array.isArray(state?.content?.blocks)) {
     // debugger;
     return (
       <div>
@@ -110,81 +253,11 @@ export default () => {
   }
 
   return (
-    <StyledEditTaskGroupArea>
-      {/* <h2>Редактор группы заданий</h2> */}
-      <div className="edit-area">
-        <SideBar>
-          <SideBarItem>
-            <h2>Библиотека</h2>
-          </SideBarItem>
-          <ShadowClipWrapper>
-            {Object.values(widgetMap).map(gw => (
-              <SideBarItem
-                withShadow
-                isClickable
-                key={gw.type}
-                onClick={() => onAddWidget(gw.type)}
-              >
-                {gw.title}
-              </SideBarItem>
-            ))}
-          </ShadowClipWrapper>
-        </SideBar>
-        <View>
-          <Content>
-            <div>
-              {state.content.blocks.map(w => {
-                const El = widgetMap[w.type];
-                const Jsx = El.editRender;
-                return (
-                  <React.Fragment key={w.id}>
-                    <Jsx
-                      {...w}
-                      onChange={onEditWidget(w.id)}
-                      onDelete={onDeleteWidget(w.id)}
-                    />
-                  </React.Fragment>
-                );
-              })}
-            </div>
-          </Content>
-        </View>
-
-        <SideBar isRight>
-          <SideBarItem>
-            <h2>Превью</h2>
-          </SideBarItem>
-          {/* <SideBarItem type="button" data={{title: 'lol'}}/>
-            <SideBarItem type="textarea" data={{title: 'lol'}}/> */}
-          <ShadowClipWrapper>
-            <SideBarItem>
-              {state.content.blocks.map(w => {
-                const El = widgetMap[w.type];
-                const Jsx = El.previewRender;
-                return (
-                  <React.Fragment key={w.id}>
-                    <Jsx {...w} />
-                  </React.Fragment>
-                );
-              })}
-            </SideBarItem>
-          </ShadowClipWrapper>
-        </SideBar>
-        {/* <div className="preview">
-          Preview
-          <div>
-            {state.taskGroup.map(w => {
-              const El = widgetMap[w.widgetGuid];
-              const Jsx = El.previewRender;
-              return (
-                <React.Fragment key={w.inTaskGroupId}>
-                  <Jsx {...w} />
-                </React.Fragment>
-              );
-            })}
-          </div>
-        </div> */}
-      </div>
-    </StyledEditTaskGroupArea>
+    <Controllable
+      onAddWidget={onAddWidget}
+      onDeleteWidget={onDeleteWidget}
+      onEditWidget={onEditWidget}
+      state={state}
+    />
   );
 };

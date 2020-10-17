@@ -1,8 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import { CmsBlockTypes } from "../../entities/cms";
-import { taskGroupSlice } from "../../store";
 import { GenWidget, StyledConfiguredWidget, WidgetProps } from "./index";
 
 export class TestWithTextInput
@@ -12,18 +10,23 @@ export class TestWithTextInput
       answer: string;
     }> {
   type: CmsBlockTypes = CmsBlockTypes.textQuestion;
-  editRender = props => {
-    // const dispatch = useDispatch();
+  editRender = (props: WidgetProps) => {
     const { register, handleSubmit, watch, setValue, errors } = useForm<{
       text: string;
       answer: string;
     }>({
-      defaultValues: { text: props.params?.text, answer: props.params?.answer },
+      defaultValues: { text: props.data?.text, answer: props.data?.answer },
     });
 
     const onSubmit = handleSubmit(data => {
-      props.onChange(data);
+      // props.onChange(data);
+      props.onChange?.call(null, data);
     });
+
+    const canEdit =
+      props.phase === "edit" ||
+      (props.phase === "partial-edit" &&
+        props.editableIds?.includes(props._id));
 
     return (
       <StyledConfiguredWidget>
@@ -33,6 +36,7 @@ export class TestWithTextInput
             <input
               type="text"
               name="text"
+              readOnly={!canEdit}
               ref={register({
                 required: true,
               })}
@@ -45,6 +49,7 @@ export class TestWithTextInput
               type="text"
               name="answer"
               placeholder="Ответ"
+              readOnly={!canEdit}
               ref={register({
                 required: true,
               })}
@@ -52,8 +57,10 @@ export class TestWithTextInput
             {errors.answer?.message}
           </div>
           <div>
-            <button type="submit">Сохранить виджет</button>
-            <button type="button" onClick={props.onDelete}>
+            <button type="submit" disabled={!canEdit}>
+              Сохранить виджет
+            </button>
+            <button type="button" disabled={!canEdit} onClick={props.onDelete}>
               Удалить виджет
             </button>
           </div>

@@ -1,13 +1,15 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { batch, useDispatch } from "react-redux";
+import Icon from "../../components/Icon";
 import { CmsBlockTypes } from "../../entities/cms";
 import { taskGroupSlice } from "../../store";
+import { colors } from "../../utils/theme";
 import { GenWidget, WidgetProps, StyledConfiguredWidget } from "./index";
 
 export class TestWithOptions
   implements GenWidget<{ text: string; options: string[] }> {
-  editRender = props => {
+  editRender = (props: WidgetProps) => {
     // const dispatch = useDispatch();
     const {
       register,
@@ -22,34 +24,34 @@ export class TestWithOptions
       options: string[];
     }>({
       defaultValues: {
-        text: props.params?.text,
-        options: props.params?.options || [],
+        text: props.data?.text,
+        options: props.data?.options || [],
       },
     });
 
     const onAddOption = () => {
       props.onChange({
-        ...(props.params || {}),
-        options: (props.params?.options || []).concat(
-          "New Option " + (props.params?.options.length + 1 || 1)
+        ...(props.data || {}),
+        options: (props.data?.options || []).concat(
+          ""
+          // "New Option " + (props.data?.options.length + 1 || 1)
         ),
       });
     };
     useEffect(() => {
-      if (!props.params?.options) {
+      if (!props.data?.options) {
         props.onChange({
-          ...(props.params || {}),
-          options: ["New Option 1", "New Option 2"],
+          ...(props.data || {}),
+          options: ["", ""],
+          // options: ["New Option 1", "New Option 2"],
         });
       }
     }, []);
 
     const onRemoveOption = (order: number) => {
       props.onChange({
-        ...(props.params || {}),
-        options: (props.params.options as string[]).filter(
-          (_, i) => i !== order
-        ),
+        ...(props.data || {}),
+        options: (props.data.options as string[]).filter((_, i) => i !== order),
       });
     };
 
@@ -73,6 +75,11 @@ export class TestWithOptions
       props.onChange({ ...data, options, correct, multi });
     });
 
+    const canEdit =
+      props.phase === "edit" ||
+      (props.phase === "partial-edit" &&
+        props.editableIds?.includes(props._id));
+
     return (
       <StyledConfiguredWidget>
         {this.title}
@@ -80,51 +87,60 @@ export class TestWithOptions
           <div>
             <input
               type="text"
+              className="input-title"
               name="text"
+              readOnly={!canEdit}
               ref={register({
                 required: true,
               })}
             />
           </div>
           <div>
-            <ol>
-              {((props.params?.options as string[]) || []).map((o, i) => (
-                <li key={o}>
+            {((props.data?.options as string[]) || []).map((o, i) => (
+              <div key={o + i} className="input-half">
+                <div className="inner-action left">
                   <input
-                    type="text"
-                    name={"option" + i}
-                    key={o}
-                    defaultValue={o}
+                    type="checkbox"
+                    className="pointer"
+                    name={"option" + i + "correct"}
+                    defaultChecked={props.data?.correct?.includes(o)}
                     ref={register({
-                      required: true,
+                      required: false,
                     })}
                   />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name={"option" + i + "correct"}
-                      ref={register({
-                        required: false,
-                      })}
-                    />
-                    Правильный
-                  </label>
-                  <button type="button" onClick={() => onRemoveOption(i)}>
-                    Удалить
-                  </button>
-                </li>
-              ))}
-            </ol>
+                </div>
+                <input
+                  type="text"
+                  name={"option" + i}
+                  key={"input" + o + i}
+                  defaultValue={o}
+                  placeholder={"Введи вариант"}
+                  readOnly={!canEdit}
+                  ref={register({
+                    required: true,
+                  })}
+                />
+                <button
+                  className="inner-action button right"
+                  type="button"
+                  onClick={() => onRemoveOption(i)}
+                >
+                  <Icon size={16} glyph="remove" color={colors.red} />
+                </button>
+              </div>
+            ))}
           </div>
           <div>
-            <button type="button" onClick={onAddOption}>
+            <button type="button" onClick={onAddOption} disabled={!canEdit}>
               Добавить вариант ответа
             </button>
           </div>
 
           <div>
-            <button type="submit">Сохранить виджет</button>
-            <button type="button" onClick={props.onDelete}>
+            <button type="submit" disabled={!canEdit}>
+              Сохранить виджет
+            </button>
+            <button type="button" onClick={props.onDelete} disabled={!canEdit}>
               Удалить виджет
             </button>
           </div>

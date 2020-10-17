@@ -1,6 +1,3 @@
-import React, { useState } from "react";
-import { Provider, useDispatch, useSelector } from "react-redux";
-import { RootState, store } from "../../store";
 import {
   BlockToolConstructable,
   BlockToolConstructorOptions,
@@ -8,16 +5,28 @@ import {
   PasteConfig,
   SanitizerConfig,
 } from "@editorjs/editorjs";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { widgetMap, ConfiguredWidget } from "./index";
+import { Provider, useSelector } from "react-redux";
 import { CmsBlockTypes } from "../../entities/cms";
+import { RootState, store } from "../../store";
+import { ConfiguredWidget, widgetMap } from "./index";
 
 // @ts-ignore
-
 export class SimpleQuestion implements BlockToolConstructable {
   data: { type: keyof typeof widgetMap } & ConfiguredWidget;
   wrapper: HTMLDivElement;
   holder: any;
+  readOnly: boolean;
+
+  /**
+   * Returns true to notify core that read-only is supported
+   *
+   * @returns {boolean}
+   */
+  static get isReadOnlySupported() {
+    return true;
+  }
 
   static get toolbox() {
     return {
@@ -33,7 +42,8 @@ export class SimpleQuestion implements BlockToolConstructable {
     >
   ) {
     this.data = config.data;
-    console.log("Creating SimpleQuestion");
+    this.readOnly = config.readOnly;
+    console.log("Creating SimpleQuestion", config);
   }
 
   toolbox?: { icon: string; title?: string };
@@ -50,7 +60,7 @@ export class SimpleQuestion implements BlockToolConstructable {
     throw new Error("Method not implemented.");
   }
 
-  realReder = () => {
+  realRender = () => {
     const state = useSelector((state: RootState) => state.taskGroup);
     // const dispatch = useDispatch()
     const [foo, setFoo] = useState(0);
@@ -59,11 +69,12 @@ export class SimpleQuestion implements BlockToolConstructable {
       const Jsx = widgetMap[this.data.type].editRender;
       return (
         <Jsx
-          id={this.data.id}
+          _id={this.data._id}
           data={this.data.data}
-          onChange={params => {
-            console.log("Changed input in editor ", params);
-            this.data.data = params;
+          phase={this.readOnly ? "view" : "edit"}
+          onChange={data => {
+            console.log("Changed input in editor ", data);
+            this.data = { ...this.data, data };
             setFoo(p => p + 1);
           }}
         />
@@ -82,7 +93,7 @@ export class SimpleQuestion implements BlockToolConstructable {
                 this.render();
               }}
             >
-              {widgetMap["1"].title}
+              {widgetMap[CmsBlockTypes.textQuestion].title}
             </button>
           </li>
           <li>
@@ -95,7 +106,7 @@ export class SimpleQuestion implements BlockToolConstructable {
                 this.render();
               }}
             >
-              {widgetMap["2"].title}
+              {widgetMap[CmsBlockTypes.testSingle].title}
             </button>
           </li>
         </ol>
@@ -119,7 +130,7 @@ export class SimpleQuestion implements BlockToolConstructable {
     }, 10);
 
     wrapper.id = "simple-question";
-    const Jsx = this.realReder;
+    const Jsx = this.realRender;
 
     ReactDOM.render(
       <div>

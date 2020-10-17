@@ -64,7 +64,7 @@ export const resolveUpdateTaskGroup = (
   taskGroupId: string,
   data: TaskGroup
 ) => {
-  return httpFetch("/lesson/addTaskGroup", {
+  return httpFetch("/lesson/updateTaskGroup", {
     body: {
       moduleId,
       topicId,
