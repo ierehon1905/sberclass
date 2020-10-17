@@ -1,9 +1,35 @@
 import { API as EditorAPI } from "@editorjs/editorjs";
+import React from "react";
+import ReactDOM from "react-dom";
 
+type CommentContents = {
+  author: string;
+  text: string;
+  time: number;
+};
+
+const Comment = (props: CommentContents) => (
+  <div>
+    <div>Перед тем как захлебнуться говном {props.author}</div>
+    <div> сказал {props.text}</div>
+    <div> и пернул {props.time} раз</div>
+  </div>
+);
 // @ts-ignore
-window.initializeComments = e => {
-  debugger;
-  console.log(e);
+window.initializeComments = (e: HTMLElement) => {
+  const comment = JSON.parse(e.dataset.comment) as CommentContents;
+
+  ReactDOM.hydrate(<Comment {...comment} />, e);
+  // let author = e.querySelector(".author");
+  // if (author) {
+  //   author.textContent = comment.author;
+  // } else {
+  // }
+  // document.createElement("div");
+
+  // e.appendChild(author);
+
+  console.log("Comment hovered", comment, e);
 };
 
 export class CommentTool {
@@ -77,20 +103,27 @@ export class CommentTool {
     markInput.style.top = "0";
 
     markInput.onchange = e => {
+      mark.setAttribute(
+        "data-comment",
+        JSON.stringify({
+          author: "leon",
+          // @ts-ignore
+          text: e.target.value,
+          time: new Date().getTime(),
+        })
+      );
       // @ts-ignore
-      mark.setAttribute("data-comment", e.target.value);
-      // @ts-ignore
-      mark.setAttribute("title", e.target.value);
+      // mark.setAttribute("title", e.target.value);
     };
     mark.onmouseenter = e => {
-      console.log("Mouse entered comment");
+      // console.log("Mouse entered comment");
       mark.appendChild(markInput);
     };
     mark.onmouseleave = e => {
-      console.log("Mouse left comment");
+      // console.log("Mouse left comment");
       mark.removeChild(markInput);
     };
-    mark.setAttribute("onload", "window.initializeComments");
+    mark.setAttribute("onmouseover", "window.initializeComments(this)");
     range.insertNode(mark);
 
     this.api.selection.expandToTag(mark);
@@ -116,7 +149,7 @@ export class CommentTool {
       mark: {
         class: "cdx-marker",
         "data-comment": true,
-        onload: true,
+        onmouseover: true,
         title: true,
       },
     };
