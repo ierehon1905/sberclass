@@ -27,10 +27,12 @@ export class CommentTool {
 
     this.tag = "MARK";
     this.class = "cdx-marker";
-    // console.log("Creating new comment instance", api);
+    console.log("Creating new comment instance", );
   }
 
   render() {
+    console.log('Rendering coomment');
+    
     this.button = document.createElement("button");
     this.button.type = "button";
     this.button.innerHTML =

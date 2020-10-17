@@ -17,6 +17,16 @@ export class SimpleQuestion implements BlockToolConstructable {
   data: { type: keyof typeof widgetMap } & ConfiguredWidget;
   wrapper: HTMLDivElement;
   holder: any;
+  readOnly: boolean;
+
+  /**
+   * Returns true to notify core that read-only is supported
+   *
+   * @returns {boolean}
+   */
+  static get isReadOnlySupported() {
+    return true;
+  }
 
   static get toolbox() {
     return {
@@ -32,7 +42,8 @@ export class SimpleQuestion implements BlockToolConstructable {
     >
   ) {
     this.data = config.data;
-    console.log("Creating SimpleQuestion");
+    this.readOnly = config.readOnly;
+    console.log("Creating SimpleQuestion", config);
   }
 
   toolbox?: { icon: string; title?: string };
@@ -60,7 +71,7 @@ export class SimpleQuestion implements BlockToolConstructable {
         <Jsx
           _id={this.data._id}
           data={this.data.data}
-          phase={this.data.phase}
+          phase={this.readOnly ? "view" : "edit"}
           onChange={data => {
             console.log("Changed input in editor ", data);
             this.data = { ...this.data, data };

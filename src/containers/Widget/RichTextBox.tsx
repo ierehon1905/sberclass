@@ -15,11 +15,17 @@ import { SimpleQuestion } from "./SimpleQuestion";
 export class RichTextBox implements GenWidget {
   editRender = (props: WidgetProps) => {
     const [editor, setEditor] = useState<null | EditorJS>(null);
+    const canEdit =
+      props.phase === "edit" ||
+      (props.phase === "partial-edit" &&
+        props.editableIds?.includes(props._id));
+
     useEffect(() => {
       setEditor(
         new EditorJS({
           holder: "editorjs" + props._id,
           data: props.data as any,
+          readOnly: !canEdit,
           tools: {
             header: Header,
             image: SimpleImage,
@@ -38,10 +44,6 @@ export class RichTextBox implements GenWidget {
       );
     }, []);
 
-    const canEdit =
-      props.phase === "edit" ||
-      (props.phase === "partial-edit" &&
-        props.editableIds?.includes(props._id));
     return (
       <StyledConfiguredWidget>
         {"editorjs" + props._id}

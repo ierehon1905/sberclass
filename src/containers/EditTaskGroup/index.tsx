@@ -13,7 +13,7 @@ import {
   resolveEducationModule,
   resolveUpdateTaskGroup,
 } from "../../entities/education/resolvers";
-import { moduleSlice, RootState, taskGroupSlice } from "../../store";
+import { moduleSlice, RootState } from "../../store";
 import { widgetMap } from "../Widget";
 
 const StyledEditTaskGroupArea = styled.div`
@@ -100,7 +100,7 @@ const Controllable = (props: {
       <View>
         <Content>
           <ControllableMain
-            phase="view"
+            phase="edit"
             state={props.state}
             onDeleteWidget={props.onDeleteWidget}
             onEditWidget={props.onEditWidget}
