@@ -118,11 +118,11 @@ export default () => {
             <h2>Библиотека</h2>
           </SideBarItem>
           <ShadowClipWrapper>
-            {Object.values(widgetMap).map(gw => (
+            {Object.values(widgetMap).map((gw, i) => (
               <SideBarItem
                 withShadow
                 isClickable
-                key={gw.type}
+                key={`${gw.type}-${gw.title}-${i}`}
                 onClick={() => onAddWidget(gw.type)}
               >
                 {gw.title}
@@ -163,7 +163,7 @@ export default () => {
                 const El = widgetMap[w.type];
                 const Jsx = El.previewRender;
                 return (
-                  <React.Fragment key={w.id}>
+                  <React.Fragment key={w.id + "preview"}>
                     <Jsx {...w} />
                   </React.Fragment>
                 );

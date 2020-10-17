@@ -89,11 +89,11 @@ export class TestWithOptions
           <div>
             <ol>
               {((props.params?.options as string[]) || []).map((o, i) => (
-                <li key={o}>
+                <li key={o + i}>
                   <input
                     type="text"
                     name={"option" + i}
-                    key={o}
+                    key={"input" + o + i}
                     defaultValue={o}
                     ref={register({
                       required: true,

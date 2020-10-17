@@ -50,7 +50,7 @@ export class SimpleQuestion implements BlockToolConstructable {
     throw new Error("Method not implemented.");
   }
 
-  realReder = () => {
+  realRender = () => {
     const state = useSelector((state: RootState) => state.taskGroup);
     // const dispatch = useDispatch()
     const [foo, setFoo] = useState(0);
@@ -119,7 +119,7 @@ export class SimpleQuestion implements BlockToolConstructable {
     }, 10);
 
     wrapper.id = "simple-question";
-    const Jsx = this.realReder;
+    const Jsx = this.realRender;
 
     ReactDOM.render(
       <div>
