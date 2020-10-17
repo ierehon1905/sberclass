@@ -8,10 +8,10 @@ const StyledChoose = styled.div`
   .module {
   }
   .topic {
-    padding-left: 1em;
+    margin-left: 2em;
   }
   .group {
-    padding-left: 1em;
+    margin-left: 2em;
     display: inline-block;
     padding: 0.5em;
     border: 1px solid ${p => p.theme.gray6};
