@@ -37,11 +37,17 @@ export class RichTextBox implements GenWidget {
         })
       );
     }, []);
+
+    const canEdit =
+      props.phase === "edit" ||
+      (props.phase === "partial-edit" &&
+        props.editableIds?.includes(props._id));
     return (
       <StyledConfiguredWidget>
         {"editorjs" + props._id}
         <div id={"editorjs" + props._id}></div>
         <button
+          disabled={!canEdit}
           onClick={() => {
             editor.save().then(res => {
               console.log("Saving the whole editor");
@@ -55,6 +61,7 @@ export class RichTextBox implements GenWidget {
         </button>
         <button
           type="button"
+          disabled={!canEdit}
           onClick={() => {
             // editor.destroy();
             props.onDelete();
