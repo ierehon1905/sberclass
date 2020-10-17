@@ -1,28 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { taskGroupSlice } from "../../store";
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
-import SimpleImage from "@editorjs/simple-image";
-import Quote from "@editorjs/quote";
 import List from "@editorjs/list";
-import Warning from "@editorjs/warning";
-import Table from "@editorjs/table";
+import Quote from "@editorjs/quote";
 import RawTool from "@editorjs/raw";
-import { GenWidget, WidgetProps, StyledConfiguredWidget } from "./index";
-import { SimpleQuestion } from "./SimpleQuestion";
-import { CommentTool } from "./CommentTool";
+import SimpleImage from "@editorjs/simple-image";
+import Table from "@editorjs/table";
+import Warning from "@editorjs/warning";
+import React, { useEffect, useState } from "react";
 import { CmsBlockTypes } from "../../entities/cms";
+import { CommentTool } from "./CommentTool";
+import { GenWidget, StyledConfiguredWidget, WidgetProps } from "./index";
+import { SimpleQuestion } from "./SimpleQuestion";
 
 export class RichTextBox implements GenWidget {
   editRender = (props: WidgetProps) => {
-    const dispatch = useDispatch();
     const [editor, setEditor] = useState<null | EditorJS>(null);
+    const canEdit =
+      props.phase === "edit" ||
+      (props.phase === "partial-edit" &&
+        props.editableIds?.includes(props._id));
+
     useEffect(() => {
       setEditor(
         new EditorJS({
           holder: "editorjs" + props._id,
           data: props.data as any,
+          readOnly: !canEdit,
           tools: {
             header: Header,
             image: SimpleImage,
@@ -40,11 +43,13 @@ export class RichTextBox implements GenWidget {
         })
       );
     }, []);
+
     return (
       <StyledConfiguredWidget>
         {"editorjs" + props._id}
         <div id={"editorjs" + props._id}></div>
         <button
+          disabled={!canEdit}
           onClick={() => {
             editor.save().then(res => {
               console.log("Saving the whole editor");
@@ -58,6 +63,7 @@ export class RichTextBox implements GenWidget {
         </button>
         <button
           type="button"
+          disabled={!canEdit}
           onClick={() => {
             // editor.destroy();
             props.onDelete();

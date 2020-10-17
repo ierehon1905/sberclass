@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 import { CmsBlockTypes } from "../../entities/cms";
 import { colors } from "../../utils/theme";
+import { WithPhase } from "../EditTaskGroup";
 import { RichTextBox } from "./RichTextBox";
 import { TestWithOptions } from "./TestWithOptions";
 import { TestWithTextInput } from "./TestWithTextInput";
@@ -15,7 +16,7 @@ export interface GenWidget<T extends {} = {}> extends WidgetInfo {
   previewRender: (props: WidgetProps & T) => JSX.Element;
 }
 
-export interface WidgetProps {
+export interface WidgetProps extends WithPhase {
   _id: string;
   onChange?: (params: any) => void;
   onDelete?: () => void;
