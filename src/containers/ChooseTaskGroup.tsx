@@ -36,7 +36,9 @@ export default () => {
       <h3>Модули</h3>
       {modules.map(m => (
         <div key={m._id} className="module">
-          <div>{m.name}</div>
+          <div>
+            {m.name} <Link to={"/release/" + m._id}>Редактировать модуль</Link>
+          </div>
           <h4>Топики</h4>
           {m.topics.map(t => (
             <div key={t._id} className="topic">

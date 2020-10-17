@@ -3,12 +3,7 @@ import { taskStatuses } from '.';
 import { Spoiler } from '../../../components/Spoilter';
 
 
-export type Props = {
-    context: any,
-    taskState: any,
-    setTaskState: (data: any) => void,
-    setReleaseContext: (data: any) => void,
-}
+
 
 export const View = () => {
 

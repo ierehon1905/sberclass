@@ -27,8 +27,7 @@ function App() {
           <Route path="/edit-page/:id">
             <Edit />
           </Route> */}
-          <Route path="/release" exact>
-            {/* <EditTaskGroup /> */}
+          <Route path="/release/:moduleId">
             <View>
               <Release />
             </View>

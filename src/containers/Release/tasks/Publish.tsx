@@ -1,24 +1,12 @@
-import React from 'react';
-import { taskStatuses } from '.';
-
-export type Props = {
-    context: any,
-    taskState: any,
-    setTaskState: (data: any) => void,
-    setReleaseContext: (data: any) => void,
-}
+import React from "react";
 
 export const View = () => {
-    return (
-        <div style={{ background: 'green' }}>
-            {/* sasai */}
-        </div>
-    )
-}
+  return <div style={{ background: "green" }}>{/* sasai */}</div>;
+};
 
 export default {
-    view: View,
-    triggerStart: null,
-    triggerEnd: null,
-    triggerError: null,
-}
+  view: View,
+  triggerStart: null,
+  triggerEnd: null,
+  triggerError: null,
+};

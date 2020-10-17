@@ -45,7 +45,7 @@ export type WithPhase = {
   editableIds?: string[];
 };
 
-const ControllableMain = (
+export const ControllableEditArea = (
   props: {
     state: TaskGroup;
     onEditWidget: (arg0: any) => any;
@@ -98,7 +98,7 @@ const Controllable = (props: {
         </ShadowClipWrapper>
       </SideBar>
       <View>
-        <ControllableMain
+        <ControllableEditArea
           phase="edit"
           state={props.state}
           onDeleteWidget={props.onDeleteWidget}
