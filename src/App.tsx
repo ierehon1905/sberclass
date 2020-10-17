@@ -1,5 +1,7 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
+import View from "./components/View";
+import ChooseTaskGroup from "./containers/ChooseTaskGroup";
 import EditTaskGroup from "./containers/EditTaskGroup";
 import Footer from "./containers/Footer";
 import { Header } from "./containers/Header";
@@ -23,15 +25,23 @@ function App() {
           <Route path="/edit-page/:id">
             <Edit />
           </Route> */}
-          <Route path="/edit-task-group">
-            <EditTaskGroup />
+          <Route path="/edit-task-group" exact>
+            {/* <EditTaskGroup /> */}
+            <View>
+              <ChooseTaskGroup />
+            </View>
+          </Route>
+          <Route path="/edit-task-group/:moduleId/:topicId/:taskGroupId" exact>
+            <View>
+              <EditTaskGroup />
+            </View>
           </Route>
           <Redirect to="/edit-task-group" />
         </Switch>
       </div>
       {/* </div> */}
       {/* <Footer /> */}
-    </div >
+    </div>
   );
 }
 

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { batch, useDispatch } from "react-redux";
+import { CmsBlockTypes } from "../../entities/cms";
 import { taskGroupSlice } from "../../store";
 import { GenWidget, WidgetProps, StyledConfiguredWidget } from "./index";
 
@@ -132,16 +133,16 @@ export class TestWithOptions
     );
   };
   previewRender: (props: WidgetProps) => JSX.Element = props => {
-    if (!props.params) return <div>Заполните поля и сохраните виджет</div>;
+    if (!props.data) return <div>Заполните поля и сохраните виджет</div>;
     return (
       <div>
-        {props.params.text}
+        {props.data.text}
         <div>
-          {props.params.options.map((o, i) => (
+          {props.data.options.map((o, i) => (
             <div>
               <label>
                 <input
-                  type={props.params.multi ? "checkbox" : "radio"}
+                  type={props.data.multi ? "checkbox" : "radio"}
                   name={"option" + i}
                 />
                 {o}
@@ -152,6 +153,7 @@ export class TestWithOptions
       </div>
     );
   };
-  widgetGuid: string = "2";
+  type: CmsBlockTypes = CmsBlockTypes.testSingle;
+
   title: string = "С вариантами ответа";
 }
