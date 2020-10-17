@@ -11,20 +11,20 @@ const StyledPageCard = styled.div`
   background-color: ${p => p.theme.white};
 
   &.selected {
-    background-color: ${p => p.theme.lightBlue};
-    border-color: ${p => p.theme.lightBlue};
+    background-color: ${p => p.theme.light};
+    border-color: ${p => p.theme.light};
   }
   > .content {
     padding: 10px;
   }
 
   .thumbnail-container {
-    background-color: ${p => p.theme.lightLightGray};
+    background-color: ${p => p.theme.gray1};
     text-align: center;
     border-radius: 12px;
   }
 
-  .thumbnail {l
+  .thumbnail {
     height: 174px;
   }
 

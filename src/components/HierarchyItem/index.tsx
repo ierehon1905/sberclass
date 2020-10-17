@@ -22,12 +22,12 @@ const StyledHierarchyItem = styled.div`
 
   &.selected,
   &.selected:hover {
-    background-color: ${p => p.theme.lightBlue};
+    background-color: ${p => p.theme.light};
     color: ${p => p.theme.blue};
   }
 
   &:hover {
-    background-color: ${p => p.theme.lightLightGray};
+    background-color: ${p => p.theme.gray4};
 
     /* &::after {
       opacity: 0.5;

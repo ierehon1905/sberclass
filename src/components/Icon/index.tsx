@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { colors } from '../../utils/colors';
+import { colors } from '../../utils/theme';
 import { mapping } from './assets';
 
 // const mapping = require.context("images/icons", true, /\.svg$/);

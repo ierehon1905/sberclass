@@ -14,6 +14,10 @@ export const colors = {
   lightBlue: '#E8F2FA',
 };
 
+export const shadows = {
+  shadow3: '0px 4px 28px rgba(52, 58, 69, 0.1)',
+}
+
 export function lightenDarkenColor(hex, amt) {
   var col = hex.replace('#', '');
   if (col == hex) return hex;

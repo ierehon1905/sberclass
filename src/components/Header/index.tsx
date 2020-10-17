@@ -1,13 +1,18 @@
 import React from "react";
 import styled from "styled-components";
+import { shadows } from "../../utils/theme";
 import Logo from '../images/Logo.svg'
 import Slash from '../images/Slash.svg'
 import SmartFlowLogo from '../images/SmartFlowLogo.svg'
 
 const StyledHeader = styled.header`
+  position: fixed;
+  display: block;
+  width:100vw;
+  z-index: 10;
   height: 60px;
   background: #FFFFFF;
-  box-shadow: 0px 4px 28px rgba(52, 58, 69, 0.1);
+  box-shadow: ${shadows.shadow3};
   display: flex;
   align-items: center;
   padding: 0 20px;

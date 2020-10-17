@@ -200,7 +200,7 @@ export interface ConfiguredWidget extends WidgetInfo, WidgetProps {}
 
 export const StyledConfiguredWidget = styled.div`
   &:hover {
-    background-color: ${p => p.theme.lightLightGray};
+    background-color: ${p => p.theme.gray1};
   }
   margin: 10px 0;
 `;

@@ -1,6 +1,11 @@
 import React, { ReactElement, ReactNode } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import Content from "../../components/Content";
+import { SideBar } from "../../components/SideBar";
+import { SideBarItem } from "../../components/SideBarItem";
+import { ShadowClipWrapper } from "../../components/SideBarItem/ShadowClipWrapper";
+import View from "../../components/View";
 import { DEV_data, RootState, taskGroupSlice } from "../../store";
 import {
   ConfiguredWidget,
@@ -48,14 +53,16 @@ const StyledEditTaskGroupArea = styled.div`
   .edit-area {
     display: flex;
     flex-grow: 2;
-    background-color: ${p => p.theme.lightLightGray};
+    background-color: ${p => p.theme.light};
+    padding-top: 80px;
   }
   .main-edit {
     background-color: ${p => p.theme.white};
-    box-shadow: 0 0 10px 10px gray;
-    margin-top: 2em;
+    /* box-shadow: 0 0 10px 10px gray; */
+    margin-left: 340px;
   }
   .side-bar {
+    margin-left: 20px;
     width: 200px;
     .widget-item {
       cursor: pointer;
@@ -71,24 +78,26 @@ export default () => {
 
   return (
     <StyledEditTaskGroupArea>
-      <h2>Редактор группы заданий</h2>
+      {/* <h2>Редактор группы заданий</h2> */}
       <div className="edit-area">
-        <div className="side-bar">
-          Side Bar
-          <div>
+        <SideBar right>
+            <SideBarItem>
+              <h2>Библиотека</h2>
+            </SideBarItem>
+            <ShadowClipWrapper>
             {Object.values(widgetMap).map(gw => (
-              <div
-                className="widget-item"
-                key={gw.widgetGuid}
-                onClick={() => onAddWidget(gw.widgetGuid)}
-              >
+              <SideBarItem 
+              withShadow 
+              isClickable
+              key={gw.widgetGuid}
+              onClick={() => onAddWidget(gw.widgetGuid)}>
                 {gw.title}
-              </div>
+              </SideBarItem>
             ))}
-          </div>
-        </div>
-        <div style={{ flexGrow: 2 }} className="main-edit">
-          Main Edit
+            </ShadowClipWrapper>
+        </SideBar>
+        <View>
+          <Content>
           <div>
             {state.taskGroup.map(w => {
               const El = widgetMap[w.widgetGuid];
@@ -100,8 +109,9 @@ export default () => {
               );
             })}
           </div>
-        </div>
-        <div className="preview">
+          </Content>
+        </View>
+        {/* <div className="preview">
           Preview
           <div>
             {state.taskGroup.map(w => {
@@ -114,7 +124,7 @@ export default () => {
               );
             })}
           </div>
-        </div>
+        </div> */}
       </div>
     </StyledEditTaskGroupArea>
   );

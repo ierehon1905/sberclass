@@ -2,14 +2,21 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import Icon from "../../components/Icon";
-import { colors } from "../../utils/colors";
+import { colors, shadows } from "../../utils/theme";
 
 const StyledNavbar = styled.nav`
+  position: fixed;
   display: flex;
+  height: calc(100vh - 60px);
+  top: 60px;
+  z-index: 9;
   flex-direction: column;
   font-size: 8px;
+  padding-top: 16px;
   width: 60px;
   text-align: center;
+  background: ${colors.white};
+  box-shadow: ${shadows.shadow3};
   a {
     height: 60px;
     text-decoration: none;
