@@ -69,8 +69,8 @@ export class SimpleQuestion implements BlockToolConstructable {
 
     return (
       <div>
-        HHHUUUUII {state.length}
-        this.data.type {this.data.type}
+        {state.length}
+        {this.data.type}
         <ol>
           <li>
             <button
@@ -81,7 +81,7 @@ export class SimpleQuestion implements BlockToolConstructable {
                 this.render();
               }}
             >
-              hui
+              Текстовое задание
             </button>
           </li>
           <li>
@@ -93,7 +93,7 @@ export class SimpleQuestion implements BlockToolConstructable {
                 this.render();
               }}
             >
-              pizdsa
+              Тест с вариантом выбора
             </button>
           </li>
         </ol>
@@ -121,7 +121,7 @@ export class SimpleQuestion implements BlockToolConstructable {
     return wrapper;
   }
   save(blockContent) {
-    
+
 
     return JSON.parse(JSON.stringify(this.data));
   }
