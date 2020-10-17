@@ -1,6 +1,3 @@
-import React, { useState } from "react";
-import { Provider, useDispatch, useSelector } from "react-redux";
-import { RootState, store } from "../../store";
 import {
   BlockToolConstructable,
   BlockToolConstructorOptions,
@@ -8,12 +5,14 @@ import {
   PasteConfig,
   SanitizerConfig,
 } from "@editorjs/editorjs";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { widgetMap, ConfiguredWidget } from "./index";
+import { Provider, useSelector } from "react-redux";
 import { CmsBlockTypes } from "../../entities/cms";
+import { RootState, store } from "../../store";
+import { ConfiguredWidget, widgetMap } from "./index";
 
 // @ts-ignore
-
 export class SimpleQuestion implements BlockToolConstructable {
   data: { type: keyof typeof widgetMap } & ConfiguredWidget;
   wrapper: HTMLDivElement;
@@ -61,9 +60,9 @@ export class SimpleQuestion implements BlockToolConstructable {
         <Jsx
           _id={this.data._id}
           data={this.data.data}
-          onChange={params => {
-            console.log("Changed input in editor ", params);
-            this.data.data = params;
+          onChange={data => {
+            console.log("Changed input in editor ", data);
+            this.data = { ...this.data, data };
             setFoo(p => p + 1);
           }}
         />
