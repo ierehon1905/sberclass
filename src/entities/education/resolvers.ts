@@ -7,7 +7,7 @@ export const resolveEducationModules = () => {
 }
 
 export const resolveEducationModule = (id: string) => {
-    return httpFetch('/lesson/getModules', {
+    return httpFetch('/lesson/getModule', {
         body: {
             moduleId: id
         }
