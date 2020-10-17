@@ -62,7 +62,7 @@ const StyledGrid = styled.div`
   /* grid-auto-columns: 320px; */
   /* column-gap: 40px; */
   /* row-gap: 30px; */
-  background-color: ${p => p.theme.lightLightGray};
+  background-color: ${p => p.theme.gray1};
   padding: 32px 42px;
   width: fit-content;
 `;
@@ -104,9 +104,8 @@ const Connections = (props: FlowLessonPageTree) => {
           strokeWidth="3"
           fill="none"
           key={p.id + "_" + c}
-          d={`M${parentPos.x - selfPos.x} ${parentPos.y - selfPos.y} L${
-            childPos.x - selfPos.x
-          } ${childPos.y - selfPos.y}`}
+          d={`M${parentPos.x - selfPos.x} ${parentPos.y - selfPos.y} L${childPos.x - selfPos.x
+            } ${childPos.y - selfPos.y}`}
         />
       );
       conEl.push(conn);

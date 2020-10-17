@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { LessonPage } from "../../containers/Flow";
+import { GoToTrigger, LessonPage } from "../../containers/Flow";
 import { PageButtonWithAnchor } from "../PageButton";
+import pageSrc from "../HierarchyItem/Page.svg";
 
 const StyledPageCard = styled.div`
   border: 2px solid ${p => p.theme.white};
@@ -10,11 +11,17 @@ const StyledPageCard = styled.div`
   background-color: ${p => p.theme.white};
 
   &.selected {
-    background-color: ${p => p.theme.lightBlue};
-    border-color: ${p => p.theme.lightBlue};
+    background-color: ${p => p.theme.light};
+    border-color: ${p => p.theme.light};
   }
   > .content {
     padding: 10px;
+  }
+
+  .thumbnail-container {
+    background-color: ${p => p.theme.gray1};
+    text-align: center;
+    border-radius: 12px;
   }
 
   .thumbnail {
@@ -36,17 +43,24 @@ export type PageCardProps = LessonPage & {
 export const PageCard = (props: PageCardProps) => {
   return (
     <StyledPageCard className={props.selected ? "selected" : ""}>
-      {props.thumbnail && (
-        <div className="thumbnail-container">
-          <img className="thumbnail" src={props.thumbnail} alt={props.title} />
-        </div>
-      )}
+      <div className="thumbnail-container">
+        <img
+          className={"thumbnail " + (props.thumbnail ? "" : "fallback")}
+          src={props.thumbnail || pageSrc}
+          alt={props.title}
+        />
+      </div>
+
       <div className="content">
         <div>Название: {props.title}</div>
         <div>Путь: {props.path}</div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           {props.triggers?.map(tr => (
-            <PageButtonWithAnchor key={tr.id} id={tr.id}>
+            <PageButtonWithAnchor
+              key={tr.id}
+              id={tr.id}
+              active={!!(tr as GoToTrigger).goToPageId}
+            >
               {tr.title}
             </PageButtonWithAnchor>
           ))}

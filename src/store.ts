@@ -1,5 +1,7 @@
 import { combineReducers, configureStore, createSlice } from "@reduxjs/toolkit";
+
 import { FlowLessonPageTree, LessonPage } from "./containers/Flow";
+import { ConfiguredWidget, widgetMap, WidgetProps } from "./containers/Widget";
 
 export const DEV_data: FlowLessonPageTree = {
   pages: [
@@ -22,8 +24,6 @@ export const DEV_data: FlowLessonPageTree = {
       ],
       hierarchyChildren: ["2", "3", "4", "6"],
       isRoot: true,
-      thumbnail:
-        "https://adastrum.io/lessons_data/history-intro/ea07cf78c3cc74393f3442f673405b20.png",
       row: 1,
       column: 1,
     },
@@ -34,8 +34,6 @@ export const DEV_data: FlowLessonPageTree = {
       flowParent: "1",
       flowChildren: ["5"],
       hierarchyChildren: ["5"],
-      thumbnail:
-        "https://adastrum.io/lessons_data/history-intro/ea07cf78c3cc74393f3442f673405b20.png",
       row: 1,
       column: 2,
     },
@@ -46,8 +44,6 @@ export const DEV_data: FlowLessonPageTree = {
       flowParent: "2",
       flowChildren: [],
       hierarchyChildren: [],
-      thumbnail:
-        "https://adastrum.io/lessons_data/history-intro/ea07cf78c3cc74393f3442f673405b20.png",
       row: 1,
       column: 3,
     },
@@ -58,8 +54,6 @@ export const DEV_data: FlowLessonPageTree = {
       flowParent: "1",
       flowChildren: [],
       hierarchyChildren: [],
-      thumbnail:
-        "https://adastrum.io/lessons_data/history-intro/ea07cf78c3cc74393f3442f673405b20.png",
       row: 2,
       column: 2,
     },
@@ -70,8 +64,6 @@ export const DEV_data: FlowLessonPageTree = {
       flowParent: "1",
       flowChildren: [],
       hierarchyChildren: [],
-      thumbnail:
-        "https://adastrum.io/lessons_data/history-intro/ea07cf78c3cc74393f3442f673405b20.png",
       row: 3,
       column: 2,
     },
@@ -82,8 +74,6 @@ export const DEV_data: FlowLessonPageTree = {
       flowParent: "1",
       flowChildren: [],
       hierarchyChildren: [],
-      thumbnail:
-        "https://adastrum.io/lessons_data/history-intro/ea07cf78c3cc74393f3442f673405b20.png",
       row: 4,
       column: 2,
     },
@@ -128,7 +118,7 @@ export const flowSlice = createSlice({
         action.payload.path ??
         (action.payload.flowParent
           ? state.find(p => p.id === action.payload.flowParent)?.path +
-            (action.payload.title ?? "")
+          (action.payload.title ?? "")
           : "");
 
       const id = Math.trunc(Math.random() * 1000).toString();
@@ -195,9 +185,57 @@ export const workSlice = createSlice({
   },
 });
 
+export const taskGroupSlice = createSlice({
+  name: "taskGroup",
+  initialState: [] as ConfiguredWidget[],
+  reducers: {
+    addWidget: (
+      state,
+      action: {
+        type: string;
+        payload: ConfiguredWidget["widgetGuid"];
+      }
+    ) => {
+      const newRawWidget = Object.values(widgetMap).find(
+        w => w.widgetGuid === action.payload
+      );
+
+      const newWidget: ConfiguredWidget = {
+        ...newRawWidget,
+        inTaskGroupId: Math.trunc(Math.random() * 100000000000).toString(),
+      };
+
+      Object.keys(newWidget).forEach(key => {
+        if (typeof newWidget[key] === "function") {
+          delete newWidget[key];
+        }
+      });
+
+      state.push(newWidget);
+    },
+    editWidget: (
+      state,
+      action: {
+        type: string;
+        payload: {
+          inTaskGroupId: WidgetProps["inTaskGroupId"];
+          params: WidgetProps["params"];
+        };
+      }
+    ) => {
+      const widgetToEdit = state.find(
+        w => w.inTaskGroupId === action.payload.inTaskGroupId
+      );
+
+      widgetToEdit.params = action.payload.params;
+    },
+  },
+});
+
 const rootReducer = combineReducers({
   flow: flowSlice.reducer,
   work: workSlice.reducer,
+  taskGroup: taskGroupSlice.reducer,
 });
 
 export const store = configureStore({

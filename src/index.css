@@ -21,3 +21,38 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-style: normal;
+  font-weight: bold;
+  line-height: 140%;
+  margin: 0;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h4 {
+  font-size: 16px;
+  line-height: 120%;
+}
+
+p {
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 140%;
+}
+
+span {
+  font-size: 12px;
+  line-height: 20px;
+}

@@ -1,25 +1,47 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import editScr from "./Edit.svg";
-import settingsSrc from "./Settings.svg";
-import gridSrc from "./Grid.svg";
-import listSrc from "./List.svg";
+import Icon from "../../components/Icon";
+import { colors, shadows } from "../../utils/theme";
 
 const StyledNavbar = styled.nav`
+  position: fixed;
   display: flex;
+  height: calc(100vh - 60px);
+  top: 60px;
+  z-index: 9;
   flex-direction: column;
   font-size: 8px;
+  padding-top: 16px;
   width: 60px;
   text-align: center;
+  background: ${colors.white};
+  box-shadow: ${shadows.shadow3};
   a {
     height: 60px;
+    text-decoration: none;
+    color: ${colors.gray6};
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: 0.3s ease;
   }
-  .nav-active {
-    color: ${p => p.theme.blue};
-    > img {
-      display: inline-block;
+  a:hover {
+    background: ${colors.lightBlue};
+
+  }
+  a > div:first-child {
+      margin: 0 auto;
+  }
+  a > div:nth-child(1) {
+      margin: 2px auto;
+  }
+
+  .nav-active > div:first-child {
+      background-color: ${colors.blue} !important;
     }
+  .nav-active {
+    color: ${colors.blue};
   }
 `;
 
@@ -27,21 +49,25 @@ export default () => {
   return (
     <StyledNavbar>
       <NavLink to="/flow" activeClassName="nav-active">
-        <img src={gridSrc} alt="" />
+        <Icon glyph='grid' />
+        <div>Материалы</div>
+      </NavLink>
+      <NavLink to="/edit-task-group" activeClassName="nav-active">
+        <Icon glyph='flow' />
         <div>Конструктор</div>
       </NavLink>
-      <NavLink to="/edit-page" activeClassName="nav-active">
-        <img src={editScr} alt="" />
-        <div>Редактор</div>
+      <NavLink to="/data" activeClassName="nav-active">
+        <Icon glyph='shipment' />
+        <div>Релизы</div>
       </NavLink>
       <NavLink to="/data" activeClassName="nav-active">
-        <img src={listSrc} alt="" />
+        <Icon glyph='list' />
         <div>Данные</div>
       </NavLink>
       <NavLink to="/settings" activeClassName="nav-active">
-        <img src={settingsSrc} alt="" />
+        <Icon glyph='settings' />
         <div>Настройки</div>
       </NavLink>
-    </StyledNavbar>
+    </StyledNavbar >
   );
 };
