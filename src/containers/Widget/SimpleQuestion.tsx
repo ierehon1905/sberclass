@@ -82,7 +82,7 @@ export class SimpleQuestion implements BlockToolConstructable {
                 this.render();
               }}
             >
-              {widgetMap["1"].title}
+              {widgetMap[CmsBlockTypes.textQuestion].title}
             </button>
           </li>
           <li>
@@ -95,7 +95,7 @@ export class SimpleQuestion implements BlockToolConstructable {
                 this.render();
               }}
             >
-              {widgetMap["2"].title}
+              {widgetMap[CmsBlockTypes.testSingle].title}
             </button>
           </li>
         </ol>
