@@ -15,6 +15,8 @@ import { widgetMap, ConfiguredWidget } from "./index";
 
 export class SimpleQuestion implements BlockToolConstructable {
   data: { type: keyof typeof widgetMap } & ConfiguredWidget;
+  wrapper: HTMLDivElement;
+  holder: any;
 
   static get toolbox() {
     return {
@@ -69,8 +71,6 @@ export class SimpleQuestion implements BlockToolConstructable {
 
     return (
       <div>
-        HHHUUUUII {state.length}
-        this.data.type {this.data.type}
         <ol>
           <li>
             <button
@@ -81,7 +81,7 @@ export class SimpleQuestion implements BlockToolConstructable {
                 this.render();
               }}
             >
-              hui
+              {widgetMap["1"].title}
             </button>
           </li>
           <li>
@@ -93,7 +93,7 @@ export class SimpleQuestion implements BlockToolConstructable {
                 this.render();
               }}
             >
-              pizdsa
+              {widgetMap["2"].title}
             </button>
           </li>
         </ol>
@@ -105,12 +105,22 @@ export class SimpleQuestion implements BlockToolConstructable {
     console.log("Rendering ", this.data);
 
     const wrapper = document.createElement("div");
+    this.wrapper = wrapper;
+    setTimeout(() => {
+      this.holder = wrapper.closest("[id^=editorjs]");
+      console.log(
+        "Found holder for element ",
+        wrapper,
+        " and it it ",
+        this.holder
+      );
+    }, 10);
 
     wrapper.id = "simple-question";
     const Jsx = this.realReder;
 
     ReactDOM.render(
-      <div key={Math.random()}>
+      <div>
         <Provider store={store}>
           <Jsx></Jsx>
         </Provider>
@@ -121,8 +131,7 @@ export class SimpleQuestion implements BlockToolConstructable {
     return wrapper;
   }
   save(blockContent) {
-    
-
+    // debugger;
     return JSON.parse(JSON.stringify(this.data));
   }
 

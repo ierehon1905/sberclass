@@ -46,6 +46,9 @@ export class RichTextBox implements GenWidget {
         <button
           onClick={() => {
             editor.save().then(res => {
+              console.log("Saving the whole editor");
+              console.log(res);
+
               props.onChange(res);
             });
           }}

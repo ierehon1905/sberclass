@@ -26,8 +26,9 @@ export interface ConfiguredWidget
     Omit<WidgetProps, "onChange"> {}
 
 export const StyledConfiguredWidget = styled.div`
+  background-color: transparent;
   &:hover {
-    background-color: ${p => p.theme.gray1};
+    background-color: ${p => p.theme.white};
   }
   margin: 10px 0;
 `;
