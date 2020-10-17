@@ -6,10 +6,13 @@ import Footer from "./containers/Footer";
 import { Redirect, Route, Switch } from "react-router-dom";
 import NavBar from "./containers/NavBar";
 import Edit from "./containers/Edit";
-import httpFetch from "./utils/httpFetch";
+import { useResolver } from "./utils/useResolver";
+import { resolveEducationModules } from "./entities/education/resolvers";
 
 function App() {
-  httpFetch('/kekApi/kek', { method: 'GET' });
+  const { data, error, loading } = useResolver(resolveEducationModules)
+
+  console.log(data, error, loading);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
