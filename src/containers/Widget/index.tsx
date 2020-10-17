@@ -57,10 +57,15 @@ export interface ConfiguredWidget
     Omit<WidgetProps, "onChange" | "onDelete"> {}
 
 export const StyledConfiguredWidget = styled.div`
+  position: relative;
+  margin: 10px auto;
+  max-width: 600px;
+  padding: 0 60px;
   background-color: transparent;
   .show-on-hover {
     opacity: 0;
     pointer-events: none;
+    transition: 0.3s;
   }
   &:hover {
     /* background-color: ${p => p.theme.white}; */
@@ -70,12 +75,16 @@ export const StyledConfiguredWidget = styled.div`
     }
   }
 
+  input[type='text']::placeholder {
+    color: ${colors.gray2};
+  }
+
   .input-title {
     border-radius: 0;
     border: 0;
     background: transparent;
     outline: none;
-    padding: 4px 0;
+    padding: 14px 0;
     font-weight: bold;
     font-size: 20px;
     line-height: 130%;
@@ -93,7 +102,20 @@ export const StyledConfiguredWidget = styled.div`
   .input {
     ${inputBaseStyles}
     width: 100%;
+    padding: 0 20px;
     height: 62px;
+  }
+
+  .new-item {
+    ${inputBaseStyles}
+    border: 1.5px dashed ${colors.gray2};
+    color: ${colors.blue};
+    background-color: transparent;
+    display: inline-block;
+
+    &:hover {
+      border: 1.5px dashed ${colors.gray4};
+    }
   }
 
   .inner-action {
@@ -126,8 +148,6 @@ export const StyledConfiguredWidget = styled.div`
   .pointer {
     cursor: pointer;
   }
-
-  margin: 10px 0;
 `;
 
 export const widgetMap: { [widgetGuid in CmsBlockTypes]: GenWidget } = {
