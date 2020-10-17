@@ -28,9 +28,9 @@ export interface ConfiguredWidget
 
 export const StyledConfiguredWidget = styled.div`
   background-color: transparent;
-  &:hover {
+  /* &:hover {
     background-color: ${p => p.theme.white};
-  }
+  } */
 
   input {
     border-radius: 8px;
