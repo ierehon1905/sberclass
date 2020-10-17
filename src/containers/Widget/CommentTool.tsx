@@ -1,5 +1,5 @@
 import { API as EditorAPI } from "@editorjs/editorjs";
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
 type CommentContents = {
@@ -8,18 +8,74 @@ type CommentContents = {
   time: number;
 };
 
-const Comment = (props: CommentContents) => (
-  <div>
-    <div>Перед тем как захлебнуться говном {props.author}</div>
-    <div> сказал {props.text}</div>
-    <div> и пернул {props.time} раз</div>
-  </div>
-);
+const Comment = (props: CommentContents & { mark: HTMLElement }) => {
+  const [state, setState] = useState(true);
+  return (
+    <div
+      style={{
+        position: "absolute",
+        // left: "100%",
+        left:
+          props.mark.parentElement.getBoundingClientRect().left +
+          props.mark.parentElement.getBoundingClientRect().width,
+        top: props.mark.getBoundingClientRect().top,
+        // top: 0,
+        backgroundColor: "lightgray",
+        borderRadius: "0.5em",
+        display: state ? "inline-block" : "none",
+        zIndex: 100,
+      }}
+      // onMouseLeave={() => setState(!state)}
+      className="react-comment"
+    >
+      <div>Автор {props.author}</div>
+      <div>Текст {props.text}</div>
+      <div>Дата {props.time}</div>
+      <input
+        type="text"
+        name="comment"
+        // value={props.text}
+        defaultValue={props.text}
+        onChange={e => {
+          const v = e.target.value;
+          props.mark.dataset.comment = JSON.stringify({
+            author: props.author,
+            time: props.time,
+            text: v,
+          });
+        }}
+      />
+      <button
+        onClick={() => {
+          const text = props.mark.innerText;
+          // props.mark
+          props.mark.insertAdjacentText("beforebegin", text);
+          props.mark.remove();
+          setState(false);
+        }}
+      >
+        Решить
+      </button>
+    </div>
+  );
+};
 // @ts-ignore
-window.initializeComments = (e: HTMLElement) => {
-  const comment = JSON.parse(e.dataset.comment) as CommentContents;
+window.initializeComments = function (e: HTMLElement) {
+ 
 
-  ReactDOM.hydrate(<Comment {...comment} />, e);
+  const comment = JSON.parse(e.dataset.comment || "{}") as CommentContents;
+
+  // const initialized = e.querySelector(".react-comment-wrapper");
+  // if (!!initialized) {
+  //   ReactDOM.hydrate(<Comment {...comment} key={comment.text} />, initialized);
+  //   return;
+  // }
+  const el = document.createElement("comment-root");
+  document.body.appendChild(el);
+  // el.className = "react-comment-wrapper";
+  ReactDOM.hydrate(<Comment {...comment} mark={e} key={comment.text} />, el);
+
+  // e.appendChild(el);
   // let author = e.querySelector(".author");
   // if (author) {
   //   author.textContent = comment.author;
@@ -29,7 +85,7 @@ window.initializeComments = (e: HTMLElement) => {
 
   // e.appendChild(author);
 
-  console.log("Comment hovered", comment, e);
+  // console.log("Comment hovered", comment, e);
 };
 
 export class CommentTool {
@@ -96,34 +152,9 @@ export class CommentTool {
 
     mark.classList.add(this.class);
     mark.appendChild(selectedText);
-    const markInput = document.createElement("input");
     mark.style.position = "relative";
-    markInput.style.position = "absolute";
-    markInput.style.left = "100%";
-    markInput.style.top = "0";
 
-    markInput.onchange = e => {
-      mark.setAttribute(
-        "data-comment",
-        JSON.stringify({
-          author: "leon",
-          // @ts-ignore
-          text: e.target.value,
-          time: new Date().getTime(),
-        })
-      );
-      // @ts-ignore
-      // mark.setAttribute("title", e.target.value);
-    };
-    mark.onmouseenter = e => {
-      // console.log("Mouse entered comment");
-      mark.appendChild(markInput);
-    };
-    mark.onmouseleave = e => {
-      // console.log("Mouse left comment");
-      mark.removeChild(markInput);
-    };
-    mark.setAttribute("onmouseover", "window.initializeComments(this)");
+    mark.setAttribute("onmouseenter", "window.initializeComments(this)");
     range.insertNode(mark);
 
     this.api.selection.expandToTag(mark);
@@ -149,7 +180,7 @@ export class CommentTool {
       mark: {
         class: "cdx-marker",
         "data-comment": true,
-        onmouseover: true,
+        onmouseenter: true,
         title: true,
       },
     };
