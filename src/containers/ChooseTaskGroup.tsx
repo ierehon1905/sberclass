@@ -12,7 +12,7 @@ export default () => {
   return (
     <div>
       Chose
-      <code>{JSON.stringify(modules, null, 2)}</code>
+      {/* <code>{JSON.stringify(modules, null, 2)}</code> */}
       {/* <code>{typeof modules}</code> */}
       {modules.map(m => (
         <div key={m._id}>
@@ -23,7 +23,10 @@ export default () => {
               <h4>Topic</h4>
               <div>{t.name}</div>
               {t.taskGroups.map(g => (
-                <Link to={`/edit-task-group/${m._id}/${t._id}/${g._id}`}>
+                <Link
+                  to={`/edit-task-group/${m._id}/${t._id}/${g._id}`}
+                  key={g._id}
+                >
                   {g.name} {g._id}
                 </Link>
               ))}

@@ -15,7 +15,7 @@ export interface CmsBlockData {
 }
 
 export interface CmsBlock {
-    id: string,
+    _id: string,
     type: CmsBlockTypes,
     data: CmsBlockData,
 }

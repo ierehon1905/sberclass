@@ -59,7 +59,7 @@ export class SimpleQuestion implements BlockToolConstructable {
       const Jsx = widgetMap[this.data.type].editRender;
       return (
         <Jsx
-          id={this.data.id}
+          _id={this.data._id}
           data={this.data.data}
           onChange={params => {
             console.log("Changed input in editor ", params);
