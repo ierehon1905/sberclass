@@ -101,6 +101,7 @@ export class TestWithOptions
                   <input
                     type="checkbox"
                     name={"option" + i + "correct"}
+                    defaultChecked={props.data?.correct.includes(o)}
                     ref={register({
                       required: false,
                     })}
