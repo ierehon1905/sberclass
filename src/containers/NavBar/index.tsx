@@ -5,6 +5,8 @@ import editScr from "./Edit.svg";
 import settingsSrc from "./Settings.svg";
 import gridSrc from "./Grid.svg";
 import listSrc from "./List.svg";
+import Icon from "../../components/Icon";
+import { colors } from "../../utils/colors";
 
 const StyledNavbar = styled.nav`
   display: flex;
@@ -14,12 +16,29 @@ const StyledNavbar = styled.nav`
   text-align: center;
   a {
     height: 60px;
+    text-decoration: none;
+    color: ${colors.gray6};
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: 0.3s ease;
   }
-  .nav-active {
-    color: ${p => p.theme.blue};
-    > img {
-      display: inline-block;
+  a:hover {
+    background: ${colors.lightBlue};
+
+  }
+  a > div:first-child {
+      margin: 0 auto;
+  }
+  a > div:nth-child(1) {
+      margin: 2px auto;
+  }
+
+  .nav-active > div:first-child {
+      background-color: ${colors.blue} !important;
     }
+  .nav-active {
+    color: ${colors.blue};
   }
 `;
 
@@ -27,19 +46,23 @@ export default () => {
   return (
     <StyledNavbar>
       <NavLink to="/flow" activeClassName="nav-active">
-        <img src={gridSrc} alt="" />
+        <Icon glyph='grid' />
+        <div>Материалы</div>
+      </NavLink>
+      <NavLink to="/edit-task-group" activeClassName="nav-active">
+        <Icon glyph='flow' />
         <div>Конструктор</div>
       </NavLink>
-      <NavLink to="/edit-page" activeClassName="nav-active">
-        <img src={editScr} alt="" />
-        <div>Редактор</div>
+      <NavLink to="/data" activeClassName="nav-active">
+        <Icon glyph='shipment' />
+        <div>Релизы</div>
       </NavLink>
       <NavLink to="/data" activeClassName="nav-active">
-        <img src={listSrc} alt="" />
+        <Icon glyph='list' />
         <div>Данные</div>
       </NavLink>
       <NavLink to="/settings" activeClassName="nav-active">
-        <img src={settingsSrc} alt="" />
+        <Icon glyph='settings' />
         <div>Настройки</div>
       </NavLink>
     </StyledNavbar>
