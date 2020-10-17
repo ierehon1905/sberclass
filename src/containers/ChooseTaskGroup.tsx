@@ -24,7 +24,7 @@ export default () => {
               <div>{t.name}</div>
               {t.taskGroups.map(g => (
                 <Link to={`/edit-task-group/${m._id}/${t._id}/${g._id}`}>
-                  {g.name}
+                  {g.name} {g._id}
                 </Link>
               ))}
             </div>

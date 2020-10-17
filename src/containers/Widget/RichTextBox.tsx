@@ -21,7 +21,7 @@ export class RichTextBox implements GenWidget {
     useEffect(() => {
       setEditor(
         new EditorJS({
-          holder: "editorjs" + props.inTaskGroupId,
+          holder: "editorjs" + props._id,
           data: props.params as any,
           tools: {
             header: Header,

@@ -1,4 +1,4 @@
-import { combineReducers, configureStore, createSlice } from "@reduxjs/toolkit";
+import { combineReducers, configureStore, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { FlowLessonPageTree, LessonPage } from "./containers/Flow";
 import { ConfiguredWidget, widgetMap, WidgetProps } from "./containers/Widget";
@@ -187,18 +187,22 @@ export const workSlice = createSlice({
   },
 });
 
-// const typaMap: { [id in keyof typeof widgetMap]: CmsBlockTypes } = {
-//   "1": CmsBlockTypes.textQuestion,
-//   "2": CmsBlockTypes.testMultiple,
-//   "3": CmsBlockTypes.richContent,
-// };
+// const taskUpdate = createAsyncThunk('taskGroup/taskUpdate', (...args:) => )
 
 export const taskGroupSlice = createSlice({
   name: "taskGroup",
   initialState: {} as TaskGroup,
   reducers: {
-    setGroup: (state, action) => {
-      state = action.payload;
+    setGroup: (
+      state,
+      action: {
+        payload: TaskGroup;
+        type: string;
+      }
+    ) => {
+      Object.entries(action.payload).forEach(([key, value]) => {
+        state[key] = value;
+      });
     },
     addWidget: (
       state,
@@ -248,13 +252,13 @@ export const taskGroupSlice = createSlice({
       action: {
         type: string;
         payload: {
-          inTaskGroupId: CmsBlock["id"];
+          id: CmsBlock["id"];
           params: CmsBlock["data"];
         };
       }
     ) => {
       const widgetToEdit = state.content.blocks.find(
-        w => w.id === action.payload.inTaskGroupId
+        w => w.id === action.payload.id
       );
 
       widgetToEdit.data = action.payload.params;
@@ -266,7 +270,13 @@ export const moduleSlice = createSlice({
   name: "module",
   initialState: {} as EducationModule,
   reducers: {
-    setModule: (state, action) => {
+    setModule: (
+      state,
+      action: {
+        payload: EducationModule;
+        type: string;
+      }
+    ) => {
       state = action.payload;
     },
   },

@@ -9,11 +9,13 @@ import { ShadowClipWrapper } from "../../components/SideBarItem/ShadowClipWrappe
 import View from "../../components/View";
 import { CmsBlockTypes } from "../../entities/cms";
 import { EducationModule } from "../../entities/education";
-import { resolveEducationModule } from "../../entities/education/resolvers";
+import {
+  resolveAddTaskGroup,
+  resolveEducationModule,
+  resolveUpdateTaskGroup,
+} from "../../entities/education/resolvers";
 import { moduleSlice, RootState, taskGroupSlice } from "../../store";
 import { ConfiguredWidget, widgetMap } from "../Widget";
-
-export type TaskGroup = ConfiguredWidget[];
 
 const StyledEditTaskGroupArea = styled.div`
   flex-grow: 2;
@@ -60,25 +62,51 @@ export default () => {
       const topic = m.topics.find(t => t._id === topicId);
       const group = topic.taskGroups.find(g => g._id === taskGroupId);
       dispatch(taskGroupSlice.actions.setGroup(group));
+      // debugger;
     });
-  });
+  }, []);
+
   const state = useSelector((state: RootState) => state.taskGroup);
 
   const onAddWidget = (type: CmsBlockTypes) =>
     dispatch(taskGroupSlice.actions.addWidget(type));
 
-  const onEditWidget = (inTaskGroupId: string) => (params: any) =>
+  const onEditWidget = (id: string) => (params: any) => {
     dispatch(
       taskGroupSlice.actions.editWidget({
-        inTaskGroupId: inTaskGroupId,
+        id: id,
         params,
       })
     );
+  };
+
   const onDeleteWidget = (inTaskGroupId: string) => () =>
     dispatch(taskGroupSlice.actions.removeWidget(inTaskGroupId));
 
   if (!Array.isArray(state.content?.blocks)) {
-    return <h1>Нет данных</h1>;
+    // debugger;
+    return (
+      <div>
+        <h1>Нет данных</h1>
+        <div>Создать виджеты ?</div>
+        <button
+          onClick={() => {
+            // resolveAddTaskGroup(moduleId, topicId, );
+            resolveUpdateTaskGroup(moduleId, topicId, taskGroupId, {
+              ...state,
+              content: {
+                ...state.content,
+                blocks: [],
+              },
+            }).then(() => {
+              window.location.reload();
+            });
+          }}
+        >
+          Да
+        </button>
+      </div>
+    );
   }
 
   return (
