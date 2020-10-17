@@ -1,10 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import editScr from "./Edit.svg";
-import settingsSrc from "./Settings.svg";
-import gridSrc from "./Grid.svg";
-import listSrc from "./List.svg";
 import Icon from "../../components/Icon";
 import { colors } from "../../utils/colors";
 
