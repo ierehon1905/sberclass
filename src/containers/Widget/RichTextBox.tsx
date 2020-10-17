@@ -8,6 +8,7 @@ import Table from "@editorjs/table";
 import Warning from "@editorjs/warning";
 import React, { useEffect, useState } from "react";
 import { CmsBlockTypes } from "../../entities/cms";
+import ButtonGroup from "./ButtonGroup";
 import { CommentTool } from "./CommentTool";
 import { GenWidget, StyledConfiguredWidget, WidgetProps } from "./index";
 import { SimpleQuestion } from "./SimpleQuestion";
@@ -46,9 +47,25 @@ export class RichTextBox implements GenWidget {
 
     return (
       <StyledConfiguredWidget>
-        {"editorjs" + props._id}
+        <ButtonGroup
+          top={8}
+          canEdit={canEdit}
+          onDelete={() => {
+            // editor.destroy();
+            props.onDelete();
+          }}
+          onSave={() => {
+            editor.save().then(res => {
+              console.log("Saving the whole editor");
+              console.log(res);
+
+              props.onChange(res);
+            });
+          }}
+        />
+        {/* {"editorjs" + props._id} */}
         <div id={"editorjs" + props._id}></div>
-        <button
+        {/* <button
           disabled={!canEdit}
           onClick={() => {
             editor.save().then(res => {
@@ -70,7 +87,7 @@ export class RichTextBox implements GenWidget {
           }}
         >
           Удалить виджет
-        </button>
+        </button> */}
       </StyledConfiguredWidget>
     );
   };

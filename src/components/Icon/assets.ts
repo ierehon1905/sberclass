@@ -6,6 +6,7 @@ import Settings from './icons/Settings.svg';
 import Collapse from './icons/Collapse.svg';
 import Remove from './icons/Remove.svg';
 import Menu from './icons/Menu.svg';
+import SaveData from './icons/SaveData.svg';
 
 export const mapping = {
   'grid': Grid,
@@ -16,4 +17,5 @@ export const mapping = {
   'collapse': Collapse,
   'remove': Remove,
   'menu': Menu,
+  'save': SaveData,
 };

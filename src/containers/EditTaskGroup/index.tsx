@@ -99,21 +99,19 @@ const Controllable = (props: {
         </ShadowClipWrapper>
       </SideBar>
       <View>
-        <Content>
-          <ControllableMain
-            phase="edit"
-            state={props.state}
-            onDeleteWidget={props.onDeleteWidget}
-            onEditWidget={props.onEditWidget}
-          />
-        </Content>
+        <ControllableMain
+          phase="edit"
+          state={props.state}
+          onDeleteWidget={props.onDeleteWidget}
+          onEditWidget={props.onEditWidget}
+        />
       </View>
       <SideBar isRight>
         <SideBarItem>
           <h2>Превью</h2>
         </SideBarItem>
-        <SideBarItem type="button" data={{ title: "lol" }} />
-        <SideBarItem type="textArea" data={{ title: "lol" }} />
+        {/* <SideBarItem type="button" data={{ title: "lol" }} />
+        <SideBarItem type="textArea" data={{ title: "lol" }} /> */}
         {/* <SideBarItem type="select" data={{ title: "lol" }} /> */}
         <ShadowClipWrapper>
           <SideBarItem>

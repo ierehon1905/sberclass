@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { CmsBlockTypes } from "../../entities/cms";
+import ButtonGroup from "./ButtonGroup";
 import { GenWidget, StyledConfiguredWidget, WidgetProps } from "./index";
 
 export class TestWithTextInput
@@ -30,17 +31,20 @@ export class TestWithTextInput
 
     return (
       <StyledConfiguredWidget>
-        {this.title}
         <form onSubmit={onSubmit}>
+          <ButtonGroup canEdit={canEdit} onDelete={props.onDelete} />
           <div>
             <input
               type="text"
               name="text"
+              className="input-title"
+              placeholder="Заголовок вопроса"
+              autoComplete="off"
+              autoFocus
               readOnly={!canEdit}
               ref={register({
                 required: true,
               })}
-              placeholder="Вопрос"
             />
             {errors.text?.message}
           </div>
@@ -48,21 +52,15 @@ export class TestWithTextInput
             <input
               type="text"
               name="answer"
-              placeholder="Ответ"
+              placeholder="Правильный ответ"
+              className="input"
               readOnly={!canEdit}
+              autoComplete="off"
               ref={register({
                 required: true,
               })}
             />
             {errors.answer?.message}
-          </div>
-          <div>
-            <button type="submit" disabled={!canEdit}>
-              Сохранить виджет
-            </button>
-            <button type="button" disabled={!canEdit} onClick={props.onDelete}>
-              Удалить виджет
-            </button>
           </div>
         </form>
       </StyledConfiguredWidget>
