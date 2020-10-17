@@ -187,7 +187,6 @@ export default () => {
     const patch: Partial<TaskGroup> = {
       ...newState,
     };
-    // debugger;
 
     // @ts-ignore
     resolveUpdateTaskGroup(moduleId, topicId, taskGroupId, patch).then(
@@ -197,12 +196,6 @@ export default () => {
         }
       }
     );
-    // dispatch(
-    //   taskGroupSlice.actions.editWidget({
-    //     _id: id,
-    //     params,
-    //   })
-    // );
   };
 
   const onDeleteWidget = (inTaskGroupId: string) => () => {
@@ -220,7 +213,6 @@ export default () => {
         }
       }
     );
-    // dispatch(taskGroupSlice.actions.removeWidget(inTaskGroupId));
   };
 
   if (!Array.isArray(state?.content?.blocks)) {
