@@ -1,5 +1,11 @@
 import { API as EditorAPI } from "@editorjs/editorjs";
 
+// @ts-ignore
+window.initializeComments = e => {
+  debugger;
+  console.log(e);
+};
+
 export class CommentTool {
   _state: any;
   button: null | HTMLButtonElement;
@@ -21,18 +27,19 @@ export class CommentTool {
   }
 
   constructor({ api }: { api: EditorAPI }) {
+    console.log("Creating new comment instance");
+
     this.api = api;
     this.button = null;
     this._state = false;
 
     this.tag = "MARK";
     this.class = "cdx-marker";
-    console.log("Creating new comment instance", );
   }
 
   render() {
-    console.log('Rendering coomment');
-    
+    console.log("Rendering coomment");
+
     this.button = document.createElement("button");
     this.button.type = "button";
     this.button.innerHTML =
@@ -40,6 +47,12 @@ export class CommentTool {
     this.button.classList.add(this.api.styles.inlineToolButton);
 
     return this.button;
+  }
+  updated() {
+    console.log("UPDATED");
+  }
+  rendered() {
+    console.log("RENDERED");
   }
 
   surround(range: Range) {
@@ -58,10 +71,16 @@ export class CommentTool {
     mark.classList.add(this.class);
     mark.appendChild(selectedText);
     const markInput = document.createElement("input");
+    mark.style.position = "relative";
+    markInput.style.position = "absolute";
+    markInput.style.left = "100%";
+    markInput.style.top = "0";
 
     markInput.onchange = e => {
       // @ts-ignore
       mark.setAttribute("data-comment", e.target.value);
+      // @ts-ignore
+      mark.setAttribute("title", e.target.value);
     };
     mark.onmouseenter = e => {
       console.log("Mouse entered comment");
@@ -71,6 +90,7 @@ export class CommentTool {
       console.log("Mouse left comment");
       mark.removeChild(markInput);
     };
+    mark.setAttribute("onload", "window.initializeComments");
     range.insertNode(mark);
 
     this.api.selection.expandToTag(mark);
@@ -96,6 +116,8 @@ export class CommentTool {
       mark: {
         class: "cdx-marker",
         "data-comment": true,
+        onload: true,
+        title: true,
       },
     };
   }
