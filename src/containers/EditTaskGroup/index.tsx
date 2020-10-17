@@ -2,12 +2,11 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import Content from "../../components/Content";
 import { SideBar } from "../../components/SideBar";
 import { SideBarItem } from "../../components/SideBarItem";
 import { ShadowClipWrapper } from "../../components/SideBarItem/ShadowClipWrapper";
 import View from "../../components/View";
-import { CmsBlockTypes } from "../../entities/cms";
+import { CmsBlockTypes, CmsDeclaration } from "../../entities/cms";
 import { EducationModule, TaskGroup } from "../../entities/education";
 import {
   resolveEducationModule,
@@ -236,7 +235,7 @@ export default () => {
             resolveUpdateTaskGroup(moduleId, topicId, taskGroupId, {
               ...state,
               content: {
-                ...state.content,
+                ...(state?.content || ({} as CmsDeclaration)),
                 blocks: [],
               },
             }).then(() => {
