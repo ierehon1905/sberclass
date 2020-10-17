@@ -82,6 +82,8 @@ export default () => {
         params,
       })
     );
+  const onDeleteWidget = (inTaskGroupId: string) => () =>
+    dispatch(taskGroupSlice.actions.removeWidget(inTaskGroupId));
 
   return (
     <StyledEditTaskGroupArea>
@@ -112,7 +114,11 @@ export default () => {
                 const Jsx = El.editRender;
                 return (
                   <React.Fragment key={w.inTaskGroupId}>
-                    <Jsx {...w} onChange={onEditWidget(w.inTaskGroupId)} />
+                    <Jsx
+                      {...w}
+                      onChange={onEditWidget(w.inTaskGroupId)}
+                      onDelete={onDeleteWidget(w.inTaskGroupId)}
+                    />
                   </React.Fragment>
                 );
               })}

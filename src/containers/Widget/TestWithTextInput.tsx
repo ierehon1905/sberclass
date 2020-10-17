@@ -6,10 +6,10 @@ import { GenWidget, StyledConfiguredWidget, WidgetProps } from "./index";
 
 export class TestWithTextInput
   implements
-  GenWidget<{
-    text: string;
-    answer: string;
-  }> {
+    GenWidget<{
+      text: string;
+      answer: string;
+    }> {
   editRender = props => {
     // const dispatch = useDispatch();
     const { register, handleSubmit, watch, setValue, errors } = useForm<{
@@ -20,15 +20,7 @@ export class TestWithTextInput
     });
 
     const onSubmit = handleSubmit(data => {
-      console.log({ data });
-      props.onChange(data)
-
-      // dispatch(
-      //   taskGroupSlice.actions.editWidget({
-      //     inTaskGroupId: props.inTaskGroupId,
-      //     params: data,
-      //   })
-      // );
+      props.onChange(data);
     });
 
     return (
@@ -40,7 +32,8 @@ export class TestWithTextInput
             name="text"
             ref={register({
               required: true,
-            })} />
+            })}
+          />
           {errors.text?.message}
 
           <input
@@ -48,9 +41,13 @@ export class TestWithTextInput
             name="answer"
             ref={register({
               required: true,
-            })} />
+            })}
+          />
           {errors.answer?.message}
           <button type="submit">Сохранить</button>
+          <button type="button" onClick={props.onDelete}>
+            delete
+          </button>
         </form>
       </StyledConfiguredWidget>
     );

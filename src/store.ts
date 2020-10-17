@@ -213,6 +213,20 @@ export const taskGroupSlice = createSlice({
 
       state.push(newWidget);
     },
+    removeWidget: (
+      state,
+      action: {
+        type: string;
+        payload: ConfiguredWidget["inTaskGroupId"];
+      }
+    ) => {
+      // debugger;
+
+      const indexToRemove = state.findIndex(
+        w => w.inTaskGroupId === action.payload
+      );
+      state.splice(indexToRemove, 1);
+    },
     editWidget: (
       state,
       action: {

@@ -16,6 +16,7 @@ export interface GenWidget<T extends {} = {}> extends WidgetInfo {
 export interface WidgetProps {
   inTaskGroupId: string;
   onChange?: (params: any) => void;
+  onDelete?: () => void;
   params?: {
     [key: string]: any;
   };
