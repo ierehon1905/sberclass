@@ -11,8 +11,6 @@ export type Props = {
 }
 
 export const View = () => {
-
-
     return (
         <div >
             <Spoiler title="Проверка ебать" >

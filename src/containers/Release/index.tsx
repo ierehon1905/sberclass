@@ -6,7 +6,7 @@ import { SideBarItem } from "../../components/SideBarItem";
 import { ShadowClipWrapper } from "../../components/SideBarItem/ShadowClipWrapper";
 import View from "../../components/View";
 import { TaskCard } from './taskCard';
-import { TaskHeader } from './tasks/index';
+import { TaskHeader } from './components/TaskHeader';
 
 import Start from './tasks/Start';
 import AutoCheck from './tasks/AutoCheck';
@@ -15,6 +15,7 @@ import DesignReview from './tasks/DesignReview';
 import Publish from './tasks/Publish';
 import TextReview from './tasks/TextReview';
 import { taskStatuses } from "./tasks";
+import { resolveCreateRevisionBackend, resolveGetRevisions } from "../../entities/education/resolvers";
 
 const StyledReleaseArea = styled.div`
   flex-grow: 2;
@@ -50,7 +51,7 @@ const tasksMap = {
 }
 
 const releaseMock = {
-  moduleId: "5f8a7b7210636a07332f8339",
+  moduleId: "5f8ae6a09d39c34503e6dd06",
   context: {
 
   },
@@ -82,12 +83,7 @@ const releaseMock = {
             type: "TextReview",
             props: {},
             state: {},
-          }
-        ]
-      },
-      {
-        id: 3,
-        tasks: [
+          },
           {
             type: "DesignReview",
             props: {},
@@ -123,6 +119,28 @@ const Release = () => {
   const [release, setRelease] = useState(releaseMock);
   const [selectedTask, setSelectedTask] = useState(null);
 
+  const [revisions, setRevisions] = useState([]);
+  const [currentRevision, setCurrentRevision] = useState([]);
+
+  const { moduleId } = release;
+
+
+  // REVISIONS
+  const getRevisions = () => {
+    return resolveGetRevisions(release.moduleId).then(({ result }) => setRevisions(result))
+  }
+
+  const createRevision = () => {
+    return resolveCreateRevisionBackend(moduleId).then(() => {
+      return getRevisions();
+    })
+  }
+  // REVISIONS END
+
+  useEffect(() => {
+    getRevisions();
+  }, [])
+
   const selectTask = (type) => {
     let _task;
 
@@ -152,18 +170,17 @@ const Release = () => {
   // @ts-ignore
   const TaskView = (selectedTask && selectedTask.type && tasksMap[selectedTask.type].view) ? tasksMap[selectedTask.type].view : null;
 
-  console.log(TaskView);
 
-  console.log('Release', {
-    release,
-    selectedTask,
-    tasksMap,
-  });
 
   // @ts-ignore
   const currentStep = release.pipeline.steps.find((step) => step.tasks.some(task => task.state.status !== taskStatuses.COMPLETED));
 
   const releaseApiProps = {
+    getRevisions,
+    createRevision,
+    currentRevision,
+    setCurrentRevision,
+    revisions,
     task: selectedTask,
     tasksMap,
     context: release.context,
@@ -171,6 +188,13 @@ const Release = () => {
     setReleaseContext,
     setSelectedTask,
   }
+
+  console.log('Release', {
+    releaseApiProps,
+    release,
+    selectedTask,
+    tasksMap,
+  });
 
   return (
     <StyledReleaseArea>
@@ -194,20 +218,22 @@ const Release = () => {
       <View>
         <div style={{ marginLeft: '260px', overflow: 'scroll' }}>
           <div style={{ minWidth: '4000px', minHeight: '1000px', marginTop: "500px", display: "flex", flexDirection: 'row' }}>
-            {release.pipeline.steps.map((step, stepIndex) => {
-              return step.tasks.map((task, taskIndex) =>
-                <TaskCard
-                  setSelectedTask={setSelectedTask}
-                  tasksMap={tasksMap}
-                  key={`${taskIndex}-${stepIndex}`}
-                  shouldStart={(currentStep && currentStep.id === step.id)}
-                  task={task}
-                  context={release.context}
-                  setTaskState={setTaskState}
-                  setReleaseContext={setReleaseContext}
-                />
-              )
-            })}
+            {release.pipeline.steps.map((step, stepIndex) =>
+              <div style={{ flexDirection: 'column', marginLeft: '150px', justifyContent: 'center' }} >
+                {step.tasks.map((task, taskIndex) =>
+                  <TaskCard
+                    setSelectedTask={setSelectedTask}
+                    tasksMap={tasksMap}
+                    key={`${taskIndex}-${stepIndex}`}
+                    shouldStart={(currentStep && currentStep.id === step.id)}
+                    task={task}
+                    context={release.context}
+                    setTaskState={setTaskState}
+                    setReleaseContext={setReleaseContext}
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
       </View>
