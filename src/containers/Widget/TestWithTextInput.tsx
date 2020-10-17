@@ -25,29 +25,36 @@ export class TestWithTextInput
 
     return (
       <StyledConfiguredWidget>
-        Edit Text input test
+        {this.title}
         <form onSubmit={onSubmit}>
-          <input
-            type="text"
-            name="text"
-            ref={register({
-              required: true,
-            })}
-          />
-          {errors.text?.message}
-
-          <input
-            type="text"
-            name="answer"
-            ref={register({
-              required: true,
-            })}
-          />
-          {errors.answer?.message}
-          <button type="submit">Сохранить</button>
-          <button type="button" onClick={props.onDelete}>
-            delete
-          </button>
+          <div>
+            <input
+              type="text"
+              name="text"
+              ref={register({
+                required: true,
+              })}
+              placeholder="Вопрос"
+            />
+            {errors.text?.message}
+          </div>
+          <div>
+            <input
+              type="text"
+              name="answer"
+              placeholder="Ответ"
+              ref={register({
+                required: true,
+              })}
+            />
+            {errors.answer?.message}
+          </div>
+          <div>
+            <button type="submit">Сохранить виджет</button>
+            <button type="button" onClick={props.onDelete}>
+              Удалить виджет
+            </button>
+          </div>
         </form>
       </StyledConfiguredWidget>
     );

@@ -56,12 +56,3 @@ span {
   font-size: 12px;
   line-height: 20px;
 }
-
-input {
-  border-radius: 8px;
-  border:  1.5px  solid  #444;
-  outline: none;
-  background-color: white;
-  min-height: 32px;
-  padding-left: 10px;
-}

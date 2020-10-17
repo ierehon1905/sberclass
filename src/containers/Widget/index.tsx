@@ -31,6 +31,16 @@ export const StyledConfiguredWidget = styled.div`
   &:hover {
     background-color: ${p => p.theme.white};
   }
+
+  input {
+    border-radius: 8px;
+    border: 1.5px solid #444;
+    outline: none;
+    background-color: white;
+    min-height: 32px;
+    padding-left: 10px;
+  }
+
   margin: 10px 0;
 `;
 

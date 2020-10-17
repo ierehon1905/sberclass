@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { batch, useDispatch } from "react-redux";
 import { taskGroupSlice } from "../../store";
 import { GenWidget, WidgetProps, StyledConfiguredWidget } from "./index";
 
@@ -34,6 +34,14 @@ export class TestWithOptions
         ),
       });
     };
+    useEffect(() => {
+      if (!props.params?.options) {
+        props.onChange({
+          ...(props.params || {}),
+          options: ["New Option 1", "New Option 2"],
+        });
+      }
+    }, []);
 
     const onRemoveOption = (order: number) => {
       props.onChange({
@@ -66,6 +74,7 @@ export class TestWithOptions
 
     return (
       <StyledConfiguredWidget>
+        {this.title}
         <form onSubmit={onSubmit}>
           <div>
             <input
@@ -83,6 +92,7 @@ export class TestWithOptions
                   <input
                     type="text"
                     name={"option" + i}
+                    key={o}
                     defaultValue={o}
                     ref={register({
                       required: true,
@@ -96,10 +106,10 @@ export class TestWithOptions
                         required: false,
                       })}
                     />
-                    is correct
+                    Правильный
                   </label>
                   <button type="button" onClick={() => onRemoveOption(i)}>
-                    remove
+                    Удалить
                   </button>
                 </li>
               ))}
@@ -107,14 +117,14 @@ export class TestWithOptions
           </div>
           <div>
             <button type="button" onClick={onAddOption}>
-              add
+              Добавить вариант ответа
             </button>
           </div>
 
           <div>
-            <button type="submit">save</button>
+            <button type="submit">Сохранить виджет</button>
             <button type="button" onClick={props.onDelete}>
-              delete
+              Удалить виджет
             </button>
           </div>
         </form>

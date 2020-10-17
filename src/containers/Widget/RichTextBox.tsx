@@ -53,10 +53,16 @@ export class RichTextBox implements GenWidget {
             });
           }}
         >
-          Save
+          Сохранить виджет
         </button>
-        <button type="button" onClick={props.onDelete}>
-          delete
+        <button
+          type="button"
+          onClick={() => {
+            // editor.destroy();
+            props.onDelete();
+          }}
+        >
+          Удалить виджет
         </button>
       </StyledConfiguredWidget>
     );

@@ -1,6 +1,5 @@
 import { API as EditorAPI } from "@editorjs/editorjs";
 
-
 export class CommentTool {
   _state: any;
   button: null | HTMLButtonElement;
@@ -21,7 +20,7 @@ export class CommentTool {
     this.button.classList.toggle(this.api.styles.inlineToolButtonActive, state);
   }
 
-  constructor({ api }: { api: EditorAPI; }) {
+  constructor({ api }: { api: EditorAPI }) {
     this.api = api;
     this.button = null;
     this._state = false;
