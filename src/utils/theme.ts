@@ -81,3 +81,13 @@ export function smartGrayColor(hex) {
     ? 'rgba(0, 0, 0, 0.1)'
     : 'rgba(255, 255, 255, 0.2)';
 }
+
+export const textColorByTheme = (theme: 'light' | 'dark' | 'accent' | 'current' | 'gray') => {
+  let color = colors.light;
+  if (theme === 'dark') {
+    color = colors.dark;
+  } else if (['accent', 'current'].includes(theme as string)) {
+    color = colors.blue;
+  }
+  return color;
+};
