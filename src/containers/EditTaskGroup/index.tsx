@@ -125,12 +125,11 @@ export default () => {
     const indexToRemove = state.content.blocks.findIndex(
       w => w._id === inTaskGroupId
     );
-    const patch = JSON.parse(JSON.stringify(state)).content.blocks.splice(
-      indexToRemove,
-      1
-    );
+
+    const newState = JSON.parse(JSON.stringify(state));
+    newState.content.blocks.splice(indexToRemove, 1);
     // @ts-ignore
-    resolveUpdateTaskGroup(moduleId, topicId, taskGroupId, patch).then(
+    resolveUpdateTaskGroup(moduleId, topicId, taskGroupId, newState).then(
       ({ result }) => {
         if (result) {
           dispatch(moduleSlice.actions.setModule(result));
