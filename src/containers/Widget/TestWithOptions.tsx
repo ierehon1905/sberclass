@@ -103,7 +103,7 @@ export class TestWithOptions
                     type="checkbox"
                     className="pointer"
                     name={"option" + i + "correct"}
-                    defaultChecked={props.data?.correct.includes(o)}
+                    defaultChecked={props.data?.correct?.includes(o)}
                     ref={register({
                       required: false,
                     })}
