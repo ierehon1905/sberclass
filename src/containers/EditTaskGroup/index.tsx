@@ -87,7 +87,7 @@ export default () => {
     <StyledEditTaskGroupArea>
       {/* <h2>Редактор группы заданий</h2> */}
       <div className="edit-area">
-        <SideBar right>
+        <SideBar>
             <SideBarItem>
               <h2>Библиотека</h2>
             </SideBarItem>
@@ -118,6 +118,27 @@ export default () => {
           </div>
           </Content>
         </View>
+
+        <SideBar isRight>
+            <SideBarItem>
+              <h2>Превью</h2>
+            </SideBarItem>
+            <SideBarItem type="button" data={{title: 'lol'}}/>
+            <SideBarItem type="textarea" data={{title: 'lol'}}/>
+            <ShadowClipWrapper>
+              <SideBarItem>
+                {state.taskGroup.map(w => {
+                  const El = widgetMap[w.widgetGuid];
+                  const Jsx = El.previewRender;
+                  return (
+                    <React.Fragment key={w.inTaskGroupId}>
+                      <Jsx {...w} />
+                    </React.Fragment>
+                  );
+                })}
+              </SideBarItem>
+            </ShadowClipWrapper>
+        </SideBar>
         {/* <div className="preview">
           Preview
           <div>

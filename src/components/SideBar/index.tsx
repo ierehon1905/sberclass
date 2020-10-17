@@ -1,22 +1,23 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
+import constants from "../../utils/const";
 import { colors, shadows } from "../../utils/theme";
 import Icon from "../Icon";
 import Logo from '../images/Logo.svg'
 import Slash from '../images/Slash.svg'
 import SmartFlowLogo from '../images/SmartFlowLogo.svg'
 
-const StyledSideBar = styled.div<{isCollapsed: boolean}>`
+const StyledSideBar = styled.div<{isCollapsed?: boolean; isRight?: boolean; hide: boolean;}>`
   position: fixed;
-  left: 60px;
-  top: 60px;
+  left: ${constants.navBarWidth}px;
+  top: ${constants.navBarWidth}px;
   display: block;
   z-index: 8;
   height: 100%;
   background: ${colors.white};
   box-shadow: ${shadows.shadow3};
   padding-top: 18px;
-  width: 260px;
+  width: ${constants.sideBarWidth}px;
   transition: 0.3s ease;
   .content {
     opacity: 1;
@@ -43,8 +44,18 @@ const StyledSideBar = styled.div<{isCollapsed: boolean}>`
   .menu {
     opacity: 0;
   }
+  ${({isRight, hide})=> isRight && css`
+    .icon-wrapper {
+      display: none;
+    }
+    left: auto;
+    right: 0;
+    ${hide && css`
+      
+    `}
+  `}
 
-  ${({isCollapsed})=> isCollapsed && css`
+  ${({isCollapsed, isRight})=> isCollapsed && !isRight && css`
     transform: translateX(-200px);
     background: transparent;
     box-shadow: none;

@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 import constants from "../../utils/const";
 import { colors, shadows } from "../../utils/theme";
 import Icon from "../Icon";
+import { Widget } from "./Widgets";
 
 const Wrapper = styled.div<{
   withShadow?: boolean;
@@ -34,9 +35,12 @@ export const SideBarItem: React.FC<any> = props => {
         <Icon className='collapse' size={16} glyph='collapse' />
         <Icon className='menu' size={16} glyph='menu' />
       </div> */}
+      {props.type ? 
+      <Widget {...props} /> : 
       <div className="content">
         {props.children}
-      </div>
+      </div>}
+      
   </Wrapper>
 )
 };
