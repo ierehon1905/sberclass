@@ -5,8 +5,11 @@ import { SideBar } from "../../components/SideBar";
 import { SideBarItem } from "../../components/SideBarItem";
 import { ShadowClipWrapper } from "../../components/SideBarItem/ShadowClipWrapper";
 import View from "../../components/View";
-import { TaskCard } from "./taskCard";
-import { TaskHeader } from "./tasks/index";
+import { TaskCard } from './taskCard';
+import { TaskHeader } from './components/TaskHeader';
+
+import { taskStatuses } from "./tasks";
+import { resolveCreateRevisionBackend, resolveGetRevisions } from "../../entities/education/resolvers";
 
 import Start from "./tasks/Start";
 import AutoCheck from "./tasks/AutoCheck";
@@ -14,7 +17,6 @@ import MasterReview from "./tasks/MasterReview";
 import DesignReview from "./tasks/DesignReview";
 import Publish from "./tasks/Publish";
 import TextReview, { PipelineViewProps } from "./tasks/TextReview";
-import { taskStatuses } from "./tasks";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { EducationModule } from "../../entities/education";
@@ -55,8 +57,10 @@ const tasksMap = {
 };
 
 const releaseMock = {
-  moduleId: "5f8a7b7210636a07332f8339",
-  context: {},
+  moduleId: "5f8ae6a09d39c34503e6dd06",
+  context: {
+
+  },
   pipeline: {
     steps: [
       {
@@ -86,11 +90,6 @@ const releaseMock = {
             props: {},
             state: {},
           },
-        ],
-      },
-      {
-        id: 3,
-        tasks: [
           {
             type: "DesignReview",
             props: {},
@@ -135,9 +134,31 @@ const Release = () => {
       dispatch(moduleSlice.actions.setModule(m));
     });
   }, [moduleId]);
+
   const module = useSelector((state: RootState) => state.module);
 
   const [selectedTask, setSelectedTask] = useState(null);
+
+  const [revisions, setRevisions] = useState([]);
+  const [currentRevision, setCurrentRevision] = useState([]);
+
+
+
+  // REVISIONS
+  const getRevisions = () => {
+    return resolveGetRevisions(release.moduleId).then(({ result }) => setRevisions(result))
+  }
+
+  const createRevision = () => {
+    return resolveCreateRevisionBackend(moduleId).then(() => {
+      return getRevisions();
+    })
+  }
+  // REVISIONS END
+
+  useEffect(() => {
+    getRevisions();
+  }, [])
 
   const selectTask = type => {
     let _task;
@@ -171,20 +192,19 @@ const Release = () => {
       ? tasksMap[selectedTask.type].view
       : null;
 
-  console.log(TaskView);
 
-  console.log("Release", {
-    release,
-    selectedTask,
-    tasksMap,
-  });
 
   const currentStep = release.pipeline.steps.find(step =>
     // @ts-ignore
     step.tasks.some(task => task.state.status !== taskStatuses.COMPLETED)
   );
 
-  const releaseApiProps: PipelineViewProps = {
+  const releaseApiProps = {
+    getRevisions,
+    createRevision,
+    currentRevision,
+    setCurrentRevision,
+    revisions,
     task: selectedTask,
     tasksMap,
     context: release.context,
@@ -193,6 +213,13 @@ const Release = () => {
     setSelectedTask,
     module,
   };
+
+  console.log('Release', {
+    releaseApiProps,
+    release,
+    selectedTask,
+    tasksMap,
+  });
 
   return (
     <StyledReleaseArea>
@@ -220,30 +247,24 @@ const Release = () => {
         </ShadowClipWrapper>
       </SideBar>
       <View>
-        <div style={{ marginLeft: "260px", overflow: "scroll" }}>
-          <div
-            style={{
-              minWidth: "4000px",
-              minHeight: "1000px",
-              marginTop: "500px",
-              display: "flex",
-              flexDirection: "row",
-            }}
-          >
-            {release.pipeline.steps.map((step, stepIndex) => {
-              return step.tasks.map((task, taskIndex) => (
-                <TaskCard
-                  setSelectedTask={setSelectedTask}
-                  tasksMap={tasksMap}
-                  key={`${taskIndex}-${stepIndex}`}
-                  shouldStart={currentStep && currentStep.id === step.id}
-                  task={task}
-                  context={release.context}
-                  setTaskState={setTaskState}
-                  setReleaseContext={setReleaseContext}
-                />
-              ));
-            })}
+        <div style={{ marginLeft: '260px', overflow: 'scroll' }}>
+          <div style={{ minWidth: '4000px', minHeight: '1000px', marginTop: "500px", display: "flex", flexDirection: 'row' }}>
+            {release.pipeline.steps.map((step, stepIndex) =>
+              <div style={{ flexDirection: 'column', marginLeft: '150px', justifyContent: 'center' }} >
+                {step.tasks.map((task, taskIndex) =>
+                  <TaskCard
+                    setSelectedTask={setSelectedTask}
+                    tasksMap={tasksMap}
+                    key={`${taskIndex}-${stepIndex}`}
+                    shouldStart={(currentStep && currentStep.id === step.id)}
+                    task={task}
+                    context={release.context}
+                    setTaskState={setTaskState}
+                    setReleaseContext={setReleaseContext}
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
       </View>

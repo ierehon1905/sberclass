@@ -22,7 +22,8 @@ const getTaskColor = status => {
 const StyledCard = styled.div<any>`
     width: 150px;
     height: 150px;
-    margin-left: 100px;
+    margin-top: 100px;
+    margin-bottom: 100px;
     background-color: white;
     padding: 12px;
     border: 1px solid ${({ status }) => getTaskColor(status)};
