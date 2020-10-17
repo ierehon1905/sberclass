@@ -40,9 +40,32 @@ const StyledEditTaskGroupArea = styled.div`
   }
 `;
 
+const ControllableMain = (props: {
+  state: TaskGroup;
+  onEditWidget: (arg0: any) => any;
+  onDeleteWidget: (arg0: any) => any;
+}) => (
+  <div>
+    {props.state.content.blocks.map(w => {
+      const El = widgetMap[w.type];
+      const Jsx = El.editRender;
+      return (
+        <React.Fragment key={w._id}>
+          <Jsx
+            _id={w._id}
+            data={w.data}
+            onChange={props.onEditWidget(w._id)}
+            onDelete={props.onDeleteWidget(w._id)}
+          />
+        </React.Fragment>
+      );
+    })}
+  </div>
+);
+
 const Controllable = (props: {
   onAddWidget: (arg0: CmsBlockTypes) => any;
-  state: { content: { blocks: any[] } };
+  state: TaskGroup;
   onEditWidget: (arg0: any) => any;
   onDeleteWidget: (arg0: any) => any;
 }) => (
@@ -68,22 +91,11 @@ const Controllable = (props: {
       </SideBar>
       <View>
         <Content>
-          <div>
-            {props.state.content.blocks.map(w => {
-              const El = widgetMap[w.type];
-              const Jsx = El.editRender;
-              return (
-                <React.Fragment key={w._id}>
-                  <Jsx
-                    _id={w._id}
-                    data={w.data}
-                    onChange={props.onEditWidget(w._id)}
-                    onDelete={props.onDeleteWidget(w._id)}
-                  />
-                </React.Fragment>
-              );
-            })}
-          </div>
+          <ControllableMain
+            state={props.state}
+            onDeleteWidget={props.onDeleteWidget}
+            onEditWidget={props.onEditWidget}
+          />
         </Content>
       </View>
       <SideBar isRight>
