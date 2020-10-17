@@ -1,11 +1,9 @@
 import React from "react";
-import Hierarchy from "./containers/Hierarchy";
-import Flow from "./containers/Flow";
-import { Header } from "./containers/Header";
-import Footer from "./containers/Footer";
 import { Redirect, Route, Switch } from "react-router-dom";
+import EditTaskGroup from "./containers/EditTaskGroup";
+import Footer from "./containers/Footer";
+import { Header } from "./containers/Header";
 import NavBar from "./containers/NavBar";
-import Edit from "./containers/Edit";
 import httpFetch from "./utils/httpFetch";
 
 function App() {
@@ -18,21 +16,21 @@ function App() {
       <div style={{ display: "flex", flexGrow: 2 }}>
         <NavBar />
         <Switch>
-          <Route path="/flow">
+          {/* <Route path="/flow">
             <Hierarchy />
             <Flow></Flow>
           </Route>
           <Route path="/edit-page/:id">
             <Edit />
-          </Route>
+          </Route> */}
           <Route path="/edit-task-group">
-            <Edit />
+            <EditTaskGroup />
           </Route>
-          <Redirect to="/flow" />
+          <Redirect to="/edit-task-group" />
         </Switch>
       </div>
       {/* </div> */}
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

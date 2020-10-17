@@ -1,5 +1,7 @@
 import { combineReducers, configureStore, createSlice } from "@reduxjs/toolkit";
+
 import { FlowLessonPageTree, LessonPage } from "./containers/Flow";
+import { ConfiguredWidget, widgetMap, WidgetProps } from "./containers/Widget";
 
 export const DEV_data: FlowLessonPageTree = {
   pages: [
@@ -183,9 +185,57 @@ export const workSlice = createSlice({
   },
 });
 
+export const taskGroupSlice = createSlice({
+  name: "taskGroup",
+  initialState: [] as ConfiguredWidget[],
+  reducers: {
+    addWidget: (
+      state,
+      action: {
+        type: string;
+        payload: ConfiguredWidget["widgetGuid"];
+      }
+    ) => {
+      const newRawWidget = Object.values(widgetMap).find(
+        w => w.widgetGuid === action.payload
+      );
+
+      const newWidget: ConfiguredWidget = {
+        ...newRawWidget,
+        inTaskGroupId: Math.trunc(Math.random() * 100000000000).toString(),
+      };
+
+      Object.keys(newWidget).forEach(key => {
+        if (typeof newWidget[key] === "function") {
+          delete newWidget[key];
+        }
+      });
+
+      state.push(newWidget);
+    },
+    editWidget: (
+      state,
+      action: {
+        type: string;
+        payload: {
+          inTaskGroupId: WidgetProps["inTaskGroupId"];
+          params: WidgetProps["params"];
+        };
+      }
+    ) => {
+      const widgetToEdit = state.find(
+        w => w.inTaskGroupId === action.payload.inTaskGroupId
+      );
+
+      widgetToEdit.params = action.payload.params;
+    },
+  },
+});
+
 const rootReducer = combineReducers({
   flow: flowSlice.reducer,
   work: workSlice.reducer,
+  taskGroup: taskGroupSlice.reducer,
 });
 
 export const store = configureStore({
