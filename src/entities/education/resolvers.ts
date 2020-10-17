@@ -14,7 +14,7 @@ export const resolveEducationModule = (id: string) => {
 }
 
 export const resolveCreateEducationModule = (data: EducationModule) => {
-    return httpFetch('/lesson/create', {
+    return httpFetch('/lesson/createModule', {
         body: {
             data
         }
@@ -22,7 +22,7 @@ export const resolveCreateEducationModule = (data: EducationModule) => {
 }
 
 export const resolveUpdateEducationModule = (id: string, data: EducationModule) => {
-    return httpFetch('/lesson/update', {
+    return httpFetch('/lesson/updateModule', {
         body: {
             moduleId: id,
             data
