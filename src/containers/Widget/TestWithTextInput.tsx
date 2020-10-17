@@ -1,8 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import { CmsBlockTypes } from "../../entities/cms";
-import { taskGroupSlice } from "../../store";
 import { GenWidget, StyledConfiguredWidget, WidgetProps } from "./index";
 
 export class TestWithTextInput
@@ -13,7 +11,6 @@ export class TestWithTextInput
     }> {
   type: CmsBlockTypes = CmsBlockTypes.textQuestion;
   editRender = (props: WidgetProps) => {
-    // const dispatch = useDispatch();
     const { register, handleSubmit, watch, setValue, errors } = useForm<{
       text: string;
       answer: string;

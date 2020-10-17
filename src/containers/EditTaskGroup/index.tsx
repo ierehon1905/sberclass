@@ -40,13 +40,78 @@ const StyledEditTaskGroupArea = styled.div`
   }
 `;
 
+const Controllable = (props: {
+  onAddWidget: (arg0: CmsBlockTypes) => any;
+  state: { content: { blocks: any[] } };
+  onEditWidget: (arg0: any) => any;
+  onDeleteWidget: (arg0: any) => any;
+}) => (
+  <StyledEditTaskGroupArea>
+    {/* <h2>Редактор группы заданий</h2> */}
+    <div className="edit-area">
+      <SideBar>
+        <SideBarItem>
+          <h2>Библиотека</h2>
+        </SideBarItem>
+        <ShadowClipWrapper>
+          {Object.values(widgetMap).map((gw, i) => (
+            <SideBarItem
+              withShadow
+              isClickable
+              key={gw.type + i}
+              onClick={() => props.onAddWidget(gw.type)}
+            >
+              {gw.title}
+            </SideBarItem>
+          ))}
+        </ShadowClipWrapper>
+      </SideBar>
+      <View>
+        <Content>
+          <div>
+            {props.state.content.blocks.map(w => {
+              const El = widgetMap[w.type];
+              const Jsx = El.editRender;
+              return (
+                <React.Fragment key={w._id}>
+                  <Jsx
+                    _id={w._id}
+                    data={w.data}
+                    onChange={props.onEditWidget(w._id)}
+                    onDelete={props.onDeleteWidget(w._id)}
+                  />
+                </React.Fragment>
+              );
+            })}
+          </div>
+        </Content>
+      </View>
+      <SideBar isRight>
+        <SideBarItem>
+          <h2>Превью</h2>
+        </SideBarItem>
+        <SideBarItem type="button" data={{ title: "lol" }} />
+        <SideBarItem type="textArea" data={{ title: "lol" }} />
+        {/* <SideBarItem type="select" data={{ title: "lol" }} /> */}
+        <ShadowClipWrapper>
+          <SideBarItem>
+            {props.state.content.blocks.map(w => {
+              const El = widgetMap[w.type];
+              const Jsx = El.previewRender;
+              return (
+                <React.Fragment key={w._id}>
+                  <Jsx {...w} />
+                </React.Fragment>
+              );
+            })}
+          </SideBarItem>
+        </ShadowClipWrapper>
+      </SideBar>
+    </div>
+  </StyledEditTaskGroupArea>
+);
+
 export default () => {
-  // useEffect(() => {
-  //   resolveEducationModules().then(res => {
-  //     console.log(res);
-  //     debugger;
-  //   });
-  // }, []);
   const { moduleId, topicId, taskGroupId } = useParams<{
     moduleId: string;
     topicId: string;
@@ -58,7 +123,7 @@ export default () => {
     resolveEducationModule(moduleId).then(res => {
       const m = res.result as EducationModule;
       dispatch(moduleSlice.actions.setModule(m));
-      const topic = m.topics.find(t => t._id === topicId);
+      // const topic = m.topics.find(t => t._id === topicId);
       // const group = topic.taskGroups.find(g => g._id === taskGroupId);
       // dispatch(taskGroupSlice.actions.setGroup(group));
       // debugger;
@@ -166,83 +231,11 @@ export default () => {
   }
 
   return (
-    <StyledEditTaskGroupArea>
-      {/* <h2>Редактор группы заданий</h2> */}
-      <div className="edit-area">
-        <SideBar>
-          <SideBarItem>
-            <h2>Библиотека</h2>
-          </SideBarItem>
-          <ShadowClipWrapper>
-            {Object.values(widgetMap).map((gw, i) => (
-              <SideBarItem
-                withShadow
-                isClickable
-                key={gw.type + i}
-                onClick={() => onAddWidget(gw.type)}
-              >
-                {gw.title}
-              </SideBarItem>
-            ))}
-          </ShadowClipWrapper>
-        </SideBar>
-        <View>
-          <Content>
-            <div>
-              {state.content.blocks.map(w => {
-                const El = widgetMap[w.type];
-                const Jsx = El.editRender;
-                return (
-                  <React.Fragment key={w._id}>
-                    <Jsx
-                      _id={w._id}
-                      data={w.data}
-                      onChange={onEditWidget(w._id)}
-                      onDelete={onDeleteWidget(w._id)}
-                    />
-                  </React.Fragment>
-                );
-              })}
-            </div>
-          </Content>
-        </View>
-
-        <SideBar isRight>
-          <SideBarItem>
-            <h2>Превью</h2>
-          </SideBarItem>
-          <SideBarItem type="button" data={{ title: "lol" }} />
-          <SideBarItem type="textArea" data={{ title: "lol" }} />
-          {/* <SideBarItem type="select" data={{ title: "lol" }} /> */}
-          <ShadowClipWrapper>
-            <SideBarItem>
-              {state.content.blocks.map(w => {
-                const El = widgetMap[w.type];
-                const Jsx = El.previewRender;
-                return (
-                  <React.Fragment key={w._id}>
-                    <Jsx {...w} />
-                  </React.Fragment>
-                );
-              })}
-            </SideBarItem>
-          </ShadowClipWrapper>
-        </SideBar>
-        {/* <div className="preview">
-          Preview
-          <div>
-            {state.taskGroup.map(w => {
-              const El = widgetMap[w.widgetGuid];
-              const Jsx = El.previewRender;
-              return (
-                <React.Fragment key={w.inTaskGroupId}>
-                  <Jsx {...w} />
-                </React.Fragment>
-              );
-            })}
-          </div>
-        </div> */}
-      </div>
-    </StyledEditTaskGroupArea>
+    <Controllable
+      onAddWidget={onAddWidget}
+      onDeleteWidget={onDeleteWidget}
+      onEditWidget={onEditWidget}
+      state={state}
+    />
   );
 };

@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { batch, useDispatch } from "react-redux";
 import { CmsBlockTypes } from "../../entities/cms";
-import { taskGroupSlice } from "../../store";
-import { GenWidget, WidgetProps, StyledConfiguredWidget } from "./index";
+import { GenWidget, StyledConfiguredWidget, WidgetProps } from "./index";
 
 export class TestWithOptions
   implements GenWidget<{ text: string; options: string[] }> {
@@ -101,7 +99,7 @@ export class TestWithOptions
                   <input
                     type="checkbox"
                     name={"option" + i + "correct"}
-                    defaultChecked={props.data?.correct.includes(o)}
+                    defaultChecked={props.data?.correct?.includes(o)}
                     ref={register({
                       required: false,
                     })}

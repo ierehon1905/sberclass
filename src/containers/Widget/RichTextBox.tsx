@@ -1,22 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { taskGroupSlice } from "../../store";
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
-import SimpleImage from "@editorjs/simple-image";
-import Quote from "@editorjs/quote";
 import List from "@editorjs/list";
-import Warning from "@editorjs/warning";
-import Table from "@editorjs/table";
+import Quote from "@editorjs/quote";
 import RawTool from "@editorjs/raw";
-import { GenWidget, WidgetProps, StyledConfiguredWidget } from "./index";
-import { SimpleQuestion } from "./SimpleQuestion";
-import { CommentTool } from "./CommentTool";
+import SimpleImage from "@editorjs/simple-image";
+import Table from "@editorjs/table";
+import Warning from "@editorjs/warning";
+import React, { useEffect, useState } from "react";
 import { CmsBlockTypes } from "../../entities/cms";
+import { CommentTool } from "./CommentTool";
+import { GenWidget, StyledConfiguredWidget, WidgetProps } from "./index";
+import { SimpleQuestion } from "./SimpleQuestion";
 
 export class RichTextBox implements GenWidget {
   editRender = (props: WidgetProps) => {
-    const dispatch = useDispatch();
     const [editor, setEditor] = useState<null | EditorJS>(null);
     useEffect(() => {
       setEditor(
