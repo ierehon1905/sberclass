@@ -16,6 +16,7 @@ export interface GenWidget<T extends {} = {}> extends WidgetInfo {
 export interface WidgetProps {
   inTaskGroupId: string;
   onChange?: (params: any) => void;
+  onDelete?: () => void;
   params?: {
     [key: string]: any;
   };
@@ -26,8 +27,9 @@ export interface ConfiguredWidget
     Omit<WidgetProps, "onChange"> {}
 
 export const StyledConfiguredWidget = styled.div`
+  background-color: transparent;
   &:hover {
-    background-color: ${p => p.theme.gray1};
+    background-color: ${p => p.theme.white};
   }
   margin: 10px 0;
 `;

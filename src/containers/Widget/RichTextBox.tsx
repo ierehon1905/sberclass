@@ -14,7 +14,7 @@ import { SimpleQuestion } from "./SimpleQuestion";
 import { CommentTool } from "./CommentTool";
 
 export class RichTextBox implements GenWidget {
-  editRender = (props: WidgetProps) => {
+  editRender = props => {
     const dispatch = useDispatch();
     const [editor, setEditor] = useState<null | EditorJS>(null);
     useEffect(() => {
@@ -46,11 +46,17 @@ export class RichTextBox implements GenWidget {
         <button
           onClick={() => {
             editor.save().then(res => {
+              console.log("Saving the whole editor");
+              console.log(res);
+
               props.onChange(res);
             });
           }}
         >
           Save
+        </button>
+        <button type="button" onClick={props.onDelete}>
+          delete
         </button>
       </StyledConfiguredWidget>
     );

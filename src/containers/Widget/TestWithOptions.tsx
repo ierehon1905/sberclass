@@ -62,13 +62,6 @@ export class TestWithOptions
       });
 
       props.onChange({ ...data, options, correct, multi });
-
-      //   dispatch(
-      //     taskGroupSlice.actions.editWidget({
-      //       inTaskGroupId: props.inTaskGroupId,
-      //       params: { ...data, options, correct, multi },
-      //     })
-      //   );
     });
 
     return (
@@ -120,6 +113,9 @@ export class TestWithOptions
 
           <div>
             <button type="submit">save</button>
+            <button type="button" onClick={props.onDelete}>
+              delete
+            </button>
           </div>
         </form>
       </StyledConfiguredWidget>
