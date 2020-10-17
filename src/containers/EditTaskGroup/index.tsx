@@ -196,7 +196,8 @@ export default () => {
                 return (
                   <React.Fragment key={w._id}>
                     <Jsx
-                      {...w}
+                      _id={w._id}
+                      data={w.data}
                       onChange={onEditWidget(w._id)}
                       onDelete={onDeleteWidget(w._id)}
                     />

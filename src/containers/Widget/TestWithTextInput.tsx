@@ -12,13 +12,13 @@ export class TestWithTextInput
       answer: string;
     }> {
   type: CmsBlockTypes = CmsBlockTypes.textQuestion;
-  editRender = props => {
+  editRender = (props: WidgetProps) => {
     // const dispatch = useDispatch();
     const { register, handleSubmit, watch, setValue, errors } = useForm<{
       text: string;
       answer: string;
     }>({
-      defaultValues: { text: props.params?.text, answer: props.params?.answer },
+      defaultValues: { text: props.data?.text, answer: props.data?.answer },
     });
 
     const onSubmit = handleSubmit(data => {
