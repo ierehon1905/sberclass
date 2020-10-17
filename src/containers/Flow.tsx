@@ -104,9 +104,8 @@ const Connections = (props: FlowLessonPageTree) => {
           strokeWidth="3"
           fill="none"
           key={p.id + "_" + c}
-          d={`M${parentPos.x - selfPos.x} ${parentPos.y - selfPos.y} L${
-            childPos.x - selfPos.x
-          } ${childPos.y - selfPos.y}`}
+          d={`M${parentPos.x - selfPos.x} ${parentPos.y - selfPos.y} L${childPos.x - selfPos.x
+            } ${childPos.y - selfPos.y}`}
         />
       );
       conEl.push(conn);

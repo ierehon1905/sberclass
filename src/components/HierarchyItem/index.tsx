@@ -80,18 +80,18 @@ const Menu = (props: {
   onCreatePage: () => void;
   id: string;
 }) => (
-  <StyledMenu>
-    <div>
-      <button onClick={props.onDeletePage}>Удолить</button>
-    </div>
-    <div>
-      <button onClick={props.onCreatePage}>Создать подстраницу</button>
-    </div>
-    <div>
-      <a href={"/edit-page/" + props.id}>Редактировать</a>
-    </div>
-  </StyledMenu>
-);
+    <StyledMenu>
+      <div>
+        <button onClick={props.onDeletePage}>Удолить</button>
+      </div>
+      <div>
+        <button onClick={props.onCreatePage}>Создать подстраницу</button>
+      </div>
+      <div>
+        <a href={"/edit-page/" + props.id}>Редактировать</a>
+      </div>
+    </StyledMenu>
+  );
 
 export const HierarchyItem = (props: HierarchyItemProps) => {
   const [isMenu, setIsMenu] = useState(false);

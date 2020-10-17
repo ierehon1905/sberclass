@@ -68,6 +68,6 @@ export default () => {
         <Icon glyph='settings' />
         <div>Настройки</div>
       </NavLink>
-    </StyledNavbar>
+    </StyledNavbar >
   );
 };

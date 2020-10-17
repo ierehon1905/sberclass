@@ -118,7 +118,7 @@ export const flowSlice = createSlice({
         action.payload.path ??
         (action.payload.flowParent
           ? state.find(p => p.id === action.payload.flowParent)?.path +
-            (action.payload.title ?? "")
+          (action.payload.title ?? "")
           : "");
 
       const id = Math.trunc(Math.random() * 1000).toString();

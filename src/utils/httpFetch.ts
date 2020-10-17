@@ -59,7 +59,7 @@ const request = async (pathname: string, params: Params = {}) => {
         });
 };
 
-export default async (path: string, params: Params) => {
+export default async (path: string, params?: Params) => {
 
     try {
         const { error, result } = await request(path, params);

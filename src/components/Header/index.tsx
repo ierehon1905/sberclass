@@ -37,8 +37,8 @@ const StyledHeader = styled.header`
 
 export const Header: React.FC<any> = props => (
   <StyledHeader {...props}>
-        <img className='logo' src={Logo} alt="" />
-        <img className='slash' src={Slash} alt="" />
-        <img className='sub-logo' src={SmartFlowLogo} alt="" />
+    <img className='logo' src={Logo} alt="" />
+    <img className='slash' src={Slash} alt="" />
+    <img className='sub-logo' src={SmartFlowLogo} alt="" />
   </StyledHeader>
 );

@@ -4,6 +4,7 @@
   "private": true,
   "license": "GPLv3",
   "dependencies": {
+    "@babel/helper-call-delegate": "^7.12.1",
     "@editorjs/editorjs": "^2.19.0",
     "@editorjs/header": "^2.6.0",
     "@editorjs/list": "^1.6.0",

@@ -1,5 +1,5 @@
 export const config = {
     backend: {
-        url: 'http://localhost:4000'
+        url: 'http://192.168.31.212:4000'
     }
 }
