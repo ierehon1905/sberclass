@@ -110,6 +110,7 @@ const Connections = (props: FlowLessonPageTree) => {
       );
       conEl.push(conn);
     });
+
     p.triggers?.forEach((t: GoToTrigger) => {
       if (!t.goToPageId) return;
       if (!elMap[t.goToPageId]) return;

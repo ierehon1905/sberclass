@@ -29,6 +29,7 @@
     "express": "^4.17.1",
     "format-curl": "^2.2.1",
     "lint-staged": "^10.4.1",
+    "moment": "^2.29.1",
     "nodemon": "^2.0.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

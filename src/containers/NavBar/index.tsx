@@ -56,7 +56,7 @@ export default () => {
         <Icon glyph='flow' />
         <div>Конструктор</div>
       </NavLink>
-      <NavLink to="/data" activeClassName="nav-active">
+      <NavLink to="/release" activeClassName="nav-active">
         <Icon glyph='shipment' />
         <div>Релизы</div>
       </NavLink>
