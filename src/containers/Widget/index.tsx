@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { CmsBlockTypes } from "../../entities/cms";
 import { colors } from "../../utils/theme";
 import { RichTextBox } from "./RichTextBox";
@@ -23,7 +23,27 @@ export interface WidgetProps {
     [key: string]: any;
   };
 }
+export const inputBaseStyles = css`
+  outline: none;
+  display: inline-block;
+  padding: 20px;
+  margin-bottom: 10px;
 
+  background: #ffffff;
+
+  border: 1.5px solid ${colors.gray2};
+  box-sizing: border-box;
+  border-radius: 18px;
+
+  transition: 0.3s ease;
+
+  &:hover {
+    border: 1.5px solid ${colors.gray4};
+  }
+
+  & > input::not(.input) {
+  }
+`;
 export interface ConfiguredWidget
   extends WidgetInfo,
     Omit<WidgetProps, "onChange" | "onDelete"> {}
@@ -42,33 +62,32 @@ export const StyledConfiguredWidget = styled.div`
     }
   }
 
-  .title-input {
-    font-family: Ubuntu;
-    font-style: normal;
+  .input-title {
+    ${inputBaseStyles}
+    border-radius: 12px;
+    padding: 0px 20px;
     font-weight: bold;
     font-size: 20px;
     line-height: 130%;
+    width: 100%;
+  }
+
+  .input-half {
+    ${inputBaseStyles}
+    margin-right: 10px;
+    width: calc(50% - 10px);
+    height: 62px;
   }
 
   .input {
-    outline: none;
-    display: inline-block;
-
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    padding: 20px;
-
-    width: 50%;
+    ${inputBaseStyles}
+    width: 100%;
     height: 62px;
-    left: 0px;
-    top: 0px;
+  }
 
-    background: #ffffff;
-
-    border: 1.5px solid ${colors.gray2};
-    box-sizing: border-box;
-    border-radius: 18px;
+  .rm-button {
+    width: 46px;
+    height: 46px;
   }
 
   margin: 10px 0;

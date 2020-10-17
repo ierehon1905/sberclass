@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { batch, useDispatch } from "react-redux";
+import Icon from "../../components/Icon";
 import { CmsBlockTypes } from "../../entities/cms";
 import { taskGroupSlice } from "../../store";
+import { colors } from "../../utils/theme";
 import { GenWidget, WidgetProps, StyledConfiguredWidget } from "./index";
 
 export class TestWithOptions
@@ -76,8 +78,8 @@ export class TestWithOptions
         {this.title}
         <form onSubmit={onSubmit}>
           <div>
-            <input
-              type="text"
+            <textarea
+              // type="text"
               className="input-title"
               name="text"
               ref={register({
@@ -89,6 +91,14 @@ export class TestWithOptions
             {((props.data?.options as string[]) || []).map((o, i) => (
               <div key={o + i} className="input">
                 <input
+                  type="checkbox"
+                  name={"option" + i + "correct"}
+                  defaultChecked={props.data?.correct.includes(o)}
+                  ref={register({
+                    required: false,
+                  })}
+                />
+                <input
                   type="text"
                   name={"option" + i}
                   key={"input" + o + i}
@@ -97,19 +107,12 @@ export class TestWithOptions
                     required: true,
                   })}
                 />
-                <label>
-                  <input
-                    type="checkbox"
-                    name={"option" + i + "correct"}
-                    defaultChecked={props.data?.correct.includes(o)}
-                    ref={register({
-                      required: false,
-                    })}
-                  />
-                  Правильный
-                </label>
-                <button type="button" onClick={() => onRemoveOption(i)}>
-                  Удалить
+                <button
+                  className="rm-button"
+                  type="button"
+                  onClick={() => onRemoveOption(i)}
+                >
+                  <Icon glyph="remove" color={colors.red} />
                 </button>
               </div>
             ))}
