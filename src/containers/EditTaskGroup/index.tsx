@@ -128,7 +128,7 @@ export default () => {
       // dispatch(taskGroupSlice.actions.setGroup(group));
       // debugger;
     });
-  }, []);
+  }, [moduleId]);
 
   const state = useSelector((state: RootState) =>
     state.module.topics
