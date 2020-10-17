@@ -88,56 +88,57 @@ export default () => {
       {/* <h2>Редактор группы заданий</h2> */}
       <div className="edit-area">
         <SideBar>
-            <SideBarItem>
-              <h2>Библиотека</h2>
-            </SideBarItem>
-            <ShadowClipWrapper>
+          <SideBarItem>
+            <h2>Библиотека</h2>
+          </SideBarItem>
+          <ShadowClipWrapper>
             {Object.values(widgetMap).map(gw => (
-              <SideBarItem 
-              withShadow 
-              isClickable
-              key={gw.widgetGuid}
-              onClick={() => onAddWidget(gw.widgetGuid)}>
+              <SideBarItem
+                withShadow
+                isClickable
+                key={gw.widgetGuid}
+                onClick={() => onAddWidget(gw.widgetGuid)}
+              >
                 {gw.title}
               </SideBarItem>
             ))}
-            </ShadowClipWrapper>
+          </ShadowClipWrapper>
         </SideBar>
         <View>
           <Content>
-          <div>
-            {state.taskGroup.map(w => {
-              const El = widgetMap[w.widgetGuid];
-              const Jsx = El.editRender;
-              return (
-                <React.Fragment key={w.inTaskGroupId}>
-                  <Jsx {...w} onChange={onEditWidget(w.inTaskGroupId)} />
-                </React.Fragment>
-              );
-            })}
-          </div>
+            <div>
+              {state.taskGroup.map(w => {
+                const El = widgetMap[w.widgetGuid];
+                const Jsx = El.editRender;
+                return (
+                  <React.Fragment key={w.inTaskGroupId}>
+                    <Jsx {...w} onChange={onEditWidget(w.inTaskGroupId)} />
+                  </React.Fragment>
+                );
+              })}
+            </div>
           </Content>
         </View>
 
         <SideBar isRight>
+          <SideBarItem>
+            <h2>Превью</h2>
+          </SideBarItem>
+          {/* <SideBarItem type="button" data={{title: 'lol'}}/>
+            <SideBarItem type="textarea" data={{title: 'lol'}}/> */}
+          <ShadowClipWrapper>
             <SideBarItem>
-              <h2>Превью</h2>
+              {state.taskGroup.map(w => {
+                const El = widgetMap[w.widgetGuid];
+                const Jsx = El.previewRender;
+                return (
+                  <React.Fragment key={w.inTaskGroupId}>
+                    <Jsx {...w} />
+                  </React.Fragment>
+                );
+              })}
             </SideBarItem>
-            <SideBarItem type="button" data={{title: 'lol'}}/>
-            <SideBarItem type="textarea" data={{title: 'lol'}}/>
-            <ShadowClipWrapper>
-              <SideBarItem>
-                {state.taskGroup.map(w => {
-                  const El = widgetMap[w.widgetGuid];
-                  const Jsx = El.previewRender;
-                  return (
-                    <React.Fragment key={w.inTaskGroupId}>
-                      <Jsx {...w} />
-                    </React.Fragment>
-                  );
-                })}
-              </SideBarItem>
-            </ShadowClipWrapper>
+          </ShadowClipWrapper>
         </SideBar>
         {/* <div className="preview">
           Preview
