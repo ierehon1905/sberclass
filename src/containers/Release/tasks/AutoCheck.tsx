@@ -6,8 +6,6 @@ import { Spoiler } from '../../../components/Spoilter';
 
 
 export const View = () => {
-
-
     return (
         <div >
             <Spoiler title="Проверка ебать" >
