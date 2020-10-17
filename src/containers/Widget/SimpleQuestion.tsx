@@ -82,34 +82,30 @@ export class SimpleQuestion implements BlockToolConstructable {
     }
 
     return (
-      <div>
-        <ol>
-          <li>
-            <button
-              onClick={() => {
-                this.data.type = CmsBlockTypes.textQuestion;
-                console.log("Setting editor tool state", this.data);
-                setFoo(p => p + 1);
-                this.render();
-              }}
-            >
-              {widgetMap[CmsBlockTypes.textQuestion].title}
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => {
-                this.data.type = CmsBlockTypes.testSingle;
+      <div
+        className="choose-question-options-wrapper"
+      >
+        <button
+          onClick={() => {
+            this.data.type = CmsBlockTypes.textQuestion;
+            console.log("Setting editor tool state", this.data);
+            setFoo(p => p + 1);
+            this.render();
+          }}
+        >
+          {widgetMap[CmsBlockTypes.textQuestion].title}
+        </button>
+        <button
+          onClick={() => {
+            this.data.type = CmsBlockTypes.testSingle;
 
-                console.log("Setting editor tool state", this.data);
-                setFoo(p => p + 1);
-                this.render();
-              }}
-            >
-              {widgetMap[CmsBlockTypes.testSingle].title}
-            </button>
-          </li>
-        </ol>
+            console.log("Setting editor tool state", this.data);
+            setFoo(p => p + 1);
+            this.render();
+          }}
+        >
+          {widgetMap[CmsBlockTypes.testSingle].title}
+        </button>
       </div>
     );
   };
