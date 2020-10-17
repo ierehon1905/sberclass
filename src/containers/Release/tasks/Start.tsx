@@ -18,6 +18,7 @@ export const View = () => {
 
 
 export default {
+    cardView: null,
     view: View,
     triggerStart: ({ setTaskState, task }) => {
         setTaskState(task.type, { status: taskStatuses.COMPLETED })

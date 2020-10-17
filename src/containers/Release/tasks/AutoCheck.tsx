@@ -1,5 +1,7 @@
 import React from 'react';
 import { taskStatuses } from '.';
+import { Spoiler } from '../../../components/Spoilter';
+
 
 export type Props = {
     context: any,
@@ -9,9 +11,21 @@ export type Props = {
 }
 
 export const View = () => {
+
+
     return (
-        <div style={{ background: 'green' }}>
-            {/* sasai */}
+        <div >
+            <Spoiler title="Проверка ебать" >
+                ААААААААААА
+            </Spoiler>
+
+            <Spoiler title="Проверка ывфвфывф" >
+                фывфвфывфвыв
+            </Spoiler>
+
+            <Spoiler title="sasai uhuhuhuhu" >
+                фывфвфывфвыв
+            </Spoiler>
         </div>
     )
 }
