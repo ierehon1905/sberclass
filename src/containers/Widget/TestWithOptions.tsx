@@ -5,6 +5,7 @@ import Icon from "../../components/Icon";
 import { CmsBlockTypes } from "../../entities/cms";
 import { taskGroupSlice } from "../../store";
 import { colors } from "../../utils/theme";
+import ButtonGroup from "./ButtonGroup";
 import { GenWidget, WidgetProps, StyledConfiguredWidget } from "./index";
 
 export class TestWithOptions
@@ -82,13 +83,16 @@ export class TestWithOptions
 
     return (
       <StyledConfiguredWidget>
-        {this.title}
         <form onSubmit={onSubmit}>
+          <ButtonGroup canEdit={canEdit} onDelete={props.onDelete} />
           <div>
             <input
               type="text"
-              className="input-title"
               name="text"
+              autoComplete="off"
+              className="input-title"
+              placeholder="Заголовок вопроса"
+              autoFocus
               readOnly={!canEdit}
               ref={register({
                 required: true,
@@ -104,6 +108,8 @@ export class TestWithOptions
                     className="pointer"
                     name={"option" + i + "correct"}
                     defaultChecked={props.data?.correct?.includes(o)}
+                    readOnly={!canEdit}
+                    disabled={!canEdit}
                     ref={register({
                       required: false,
                     })}
@@ -111,39 +117,47 @@ export class TestWithOptions
                 </div>
                 <input
                   type="text"
+                  autoComplete="off"
                   name={"option" + i}
                   key={"input" + o + i}
                   defaultValue={o}
                   placeholder={"Введи вариант"}
                   readOnly={!canEdit}
+                  disabled={!canEdit}
                   ref={register({
                     required: true,
                   })}
                 />
-                <button
-                  className="inner-action button right"
-                  type="button"
-                  onClick={() => onRemoveOption(i)}
-                >
-                  <Icon size={16} glyph="remove" color={colors.red} />
-                </button>
+                {canEdit && (
+                  <button
+                    className="inner-action button right"
+                    type="button"
+                    onClick={() => onRemoveOption(i)}
+                  >
+                    <Icon size={16} glyph="remove" color={colors.red} />
+                  </button>
+                )}
               </div>
             ))}
+            {canEdit && (
+              <button
+                className="new-item input-half"
+                type="button"
+                onClick={onAddOption}
+                disabled={!canEdit}
+              >
+                Добавить вариант ответа
+              </button>
+            )}
           </div>
-          <div>
-            <button type="button" onClick={onAddOption} disabled={!canEdit}>
-              Добавить вариант ответа
-            </button>
-          </div>
-
-          <div>
+          {/* <div>
             <button type="submit" disabled={!canEdit}>
               Сохранить виджет
             </button>
             <button type="button" onClick={props.onDelete} disabled={!canEdit}>
               Удалить виджет
             </button>
-          </div>
+          </div> */}
         </form>
       </StyledConfiguredWidget>
     );
@@ -152,7 +166,6 @@ export class TestWithOptions
     if (!props.data) return <div>Заполните поля и сохраните виджет</div>;
     return (
       <div>
-        {props.data.text}
         <div>
           {props.data.options.map((o, i) => (
             <div>

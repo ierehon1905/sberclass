@@ -8,14 +8,20 @@ import View from "../../components/View";
 import { TaskCard } from './taskCard';
 import { TaskHeader } from './components/TaskHeader';
 
-import Start from './tasks/Start';
-import AutoCheck from './tasks/AutoCheck';
-import MasterReview from './tasks/MasterReview';
-import DesignReview from './tasks/DesignReview';
-import Publish from './tasks/Publish';
-import TextReview from './tasks/TextReview';
 import { taskStatuses } from "./tasks";
 import { resolveCreateRevisionBackend, resolveGetRevisions } from "../../entities/education/resolvers";
+
+import Start from "./tasks/Start";
+import AutoCheck from "./tasks/AutoCheck";
+import MasterReview from "./tasks/MasterReview";
+import DesignReview from "./tasks/DesignReview";
+import Publish from "./tasks/Publish";
+import TextReview, { PipelineViewProps } from "./tasks/TextReview";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { EducationModule } from "../../entities/education";
+import { resolveEducationModule } from "../../entities/education/resolvers";
+import { moduleSlice, RootState } from "../../store";
 
 const StyledReleaseArea = styled.div`
   flex-grow: 2;
@@ -48,7 +54,7 @@ const tasksMap = {
   DesignReview,
   MasterReview,
   TextReview,
-}
+};
 
 const releaseMock = {
   moduleId: "5f8ae6a09d39c34503e6dd06",
@@ -64,8 +70,8 @@ const releaseMock = {
             type: "Start",
             props: {},
             state: {},
-          }
-        ]
+          },
+        ],
       },
       {
         tasks: [
@@ -73,8 +79,8 @@ const releaseMock = {
             type: "AutoCheck",
             props: {},
             state: {},
-          }
-        ]
+          },
+        ],
       },
       {
         id: 2,
@@ -88,8 +94,8 @@ const releaseMock = {
             type: "DesignReview",
             props: {},
             state: {},
-          }
-        ]
+          },
+        ],
       },
       {
         id: 4,
@@ -98,8 +104,8 @@ const releaseMock = {
             type: "MasterReview",
             props: {},
             state: {},
-          }
-        ]
+          },
+        ],
       },
       {
         id: 5,
@@ -108,15 +114,28 @@ const releaseMock = {
             type: "Publish",
             props: {},
             state: {},
-          }
-        ]
-      }
-    ]
-  }
-}
+          },
+        ],
+      },
+    ],
+  },
+};
 
 const Release = () => {
   const [release, setRelease] = useState(releaseMock);
+
+  const { moduleId } = useParams<{
+    moduleId: string;
+  }>();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    resolveEducationModule(moduleId).then(res => {
+      const m = res.result as EducationModule;
+      dispatch(moduleSlice.actions.setModule(m));
+    });
+  }, [moduleId]);
+  const module = useSelector((state: RootState) => state.module);
+
   const [selectedTask, setSelectedTask] = useState(null);
 
   const [revisions, setRevisions] = useState([]);
@@ -141,39 +160,44 @@ const Release = () => {
     getRevisions();
   }, [])
 
-  const selectTask = (type) => {
+  const selectTask = type => {
     let _task;
 
     release.pipeline.steps.forEach(step => {
       _task = step.tasks.find(task => task.type === type);
-    })
+    });
 
     return _task;
-  }
+  };
 
   const setReleaseContext = (data = {}) => {
-    setRelease({ ...release, context: { ...release.context, ...data } })
-  }
+    setRelease({ ...release, context: { ...release.context, ...data } });
+  };
 
-  const setTaskState = (type, data = {}) => {
+  const setTaskState = (type: string, data = {}) => {
     release.pipeline.steps.forEach(step => {
       const task = step.tasks.find(task => task.type === type);
 
       if (task) {
         task.state = { ...task.state, ...data };
       }
-    })
+    });
 
-    setRelease({ ...release })
-  }
-
-  // @ts-ignore
-  const TaskView = (selectedTask && selectedTask.type && tasksMap[selectedTask.type].view) ? tasksMap[selectedTask.type].view : null;
-
-
+    setRelease({ ...release });
+  };
 
   // @ts-ignore
-  const currentStep = release.pipeline.steps.find((step) => step.tasks.some(task => task.state.status !== taskStatuses.COMPLETED));
+  const TaskView =
+    selectedTask && selectedTask.type && tasksMap[selectedTask.type].view
+      ? tasksMap[selectedTask.type].view
+      : null;
+
+
+
+  const currentStep = release.pipeline.steps.find(step =>
+    // @ts-ignore
+    step.tasks.some(task => task.state.status !== taskStatuses.COMPLETED)
+  );
 
   const releaseApiProps = {
     getRevisions,
@@ -187,7 +211,8 @@ const Release = () => {
     setTaskState,
     setReleaseContext,
     setSelectedTask,
-  }
+    module,
+  };
 
   console.log('Release', {
     releaseApiProps,
@@ -201,6 +226,12 @@ const Release = () => {
       <SideBar>
         <SideBarItem>
           <h2>Релиз</h2>
+          <br />
+          <div>Модуль {module.name}</div>
+          <div>ID {module._id}</div>
+          <div>{module.description}</div>
+          <br />
+          <div>Кол-во тем: {module.topics?.length || 0}</div>
         </SideBarItem>
         <ShadowClipWrapper>
           {/* {Object.values(widgetMap).map(gw => (
@@ -238,16 +269,27 @@ const Release = () => {
         </div>
       </View>
 
-      {TaskView &&
-        (
-          <div style={{ minWidth: '800px', background: 'white', boxShadow: '-2px 2px 30px #eee', position: 'absolute', right: '0', top: '0', bottom: '0', zIndex: 100 }}>
-            <TaskHeader {...releaseApiProps} />
-            <TaskView {...releaseApiProps} />
-          </div>
-        )
-      }
-    </StyledReleaseArea >
+      {TaskView && (
+        <div
+          style={{
+            minWidth: "800px",
+            background: "white",
+            boxShadow: "-2px 2px 30px #eee",
+            // height: "fit-content",
+            position: "absolute",
+            right: "0",
+            top: "0",
+            overflow: "scroll",
+            bottom: "0",
+            zIndex: 100,
+          }}
+        >
+          <TaskHeader {...releaseApiProps} />
+          <TaskView {...releaseApiProps} />
+        </div>
+      )}
+    </StyledReleaseArea>
   );
 };
 
-export default Release
+export default Release;

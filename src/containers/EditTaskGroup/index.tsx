@@ -2,12 +2,11 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import Content from "../../components/Content";
 import { SideBar } from "../../components/SideBar";
 import { SideBarItem } from "../../components/SideBarItem";
 import { ShadowClipWrapper } from "../../components/SideBarItem/ShadowClipWrapper";
 import View from "../../components/View";
-import { CmsBlockTypes } from "../../entities/cms";
+import { CmsBlockTypes, CmsDeclaration } from "../../entities/cms";
 import { EducationModule, TaskGroup } from "../../entities/education";
 import {
   resolveEducationModule,
@@ -46,7 +45,7 @@ export type WithPhase = {
   editableIds?: string[];
 };
 
-const ControllableMain = (
+export const ControllableEditArea = (
   props: {
     state: TaskGroup;
     onEditWidget: (arg0: any) => any;
@@ -99,21 +98,19 @@ const Controllable = (props: {
         </ShadowClipWrapper>
       </SideBar>
       <View>
-        <Content>
-          <ControllableMain
-            phase="edit"
-            state={props.state}
-            onDeleteWidget={props.onDeleteWidget}
-            onEditWidget={props.onEditWidget}
-          />
-        </Content>
+        <ControllableEditArea
+          phase="edit"
+          state={props.state}
+          onDeleteWidget={props.onDeleteWidget}
+          onEditWidget={props.onEditWidget}
+        />
       </View>
       <SideBar isRight>
         <SideBarItem>
           <h2>Превью</h2>
         </SideBarItem>
-        <SideBarItem type="button" data={{ title: "lol" }} />
-        <SideBarItem type="textArea" data={{ title: "lol" }} />
+        {/* <SideBarItem type="button" data={{ title: "lol" }} />
+        <SideBarItem type="textArea" data={{ title: "lol" }} /> */}
         {/* <SideBarItem type="select" data={{ title: "lol" }} /> */}
         <ShadowClipWrapper>
           <SideBarItem>
@@ -238,7 +235,7 @@ export default () => {
             resolveUpdateTaskGroup(moduleId, topicId, taskGroupId, {
               ...state,
               content: {
-                ...state.content,
+                ...(state?.content || ({} as CmsDeclaration)),
                 blocks: [],
               },
             }).then(() => {

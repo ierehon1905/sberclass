@@ -1,13 +1,9 @@
 import React from 'react';
+import { PipelineViewProps } from './TextReview';
 
-export type Props = {
-    context: any,
-    taskState: any,
-    setTaskState: (data: any) => void,
-    setReleaseContext: (data: any) => void,
-}
 
-export const View = (props: Props) => {
+
+export const View = (props: PipelineViewProps) => {
     return (
         <div style={{ background: 'green' }}>
             {/* sasai */}

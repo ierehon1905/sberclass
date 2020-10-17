@@ -79,3 +79,16 @@ span {
   opacity: 1;
   display: inline-block;
 } */
+
+.choose-question-options-wrapper button {
+  appearance: none;
+  border: 1.5px solid #d5d5d5;
+  background-color: transparent;
+  padding: 16px;
+  border-radius: 18px;
+  margin-right: 16px;
+  transition: all 0.3s ease;
+}
+.choose-question-options-wrapper button:hover {
+  border-color: #989898;
+}

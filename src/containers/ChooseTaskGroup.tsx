@@ -1,7 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 import { EducationModule } from "../entities/education";
 import { resolveEducationModules } from "../entities/education/resolvers";
+
+const StyledChoose = styled.div`
+  .module {
+  }
+  .topic {
+    margin-left: 2em;
+  }
+  .group {
+    margin-left: 2em;
+    display: inline-block;
+    padding: 0.5em;
+    border: 1px solid ${p => p.theme.gray6};
+    appearance: none;
+    text-decoration: none;
+    color: ${p => p.theme.gray6};
+    border-radius: 12px;
+  }
+`;
 
 export default () => {
   const [modules, setModules] = useState<EducationModule[]>([]);
@@ -10,30 +29,36 @@ export default () => {
   }, []);
 
   return (
-    <div>
-      Chose
+    <StyledChoose>
+      Choose
       {/* <code>{JSON.stringify(modules, null, 2)}</code> */}
       {/* <code>{typeof modules}</code> */}
+      <h3>Модули</h3>
       {modules.map(m => (
-        <div key={m._id}>
-          <h3>Module</h3>
-          <div>{m.name}</div>
+        <div key={m._id} className="module">
+          <div>
+            {m.name} <Link to={"/release/" + m._id}>Редактировать модуль</Link>
+          </div>
+          <h4>Топики</h4>
           {m.topics.map(t => (
-            <div key={t._id}>
-              <h4>Topic</h4>
+            <div key={t._id} className="topic">
               <div>{t.name}</div>
+              <h5>Группы заданий</h5>
               {t.taskGroups.map(g => (
                 <Link
                   to={`/edit-task-group/${m._id}/${t._id}/${g._id}`}
                   key={g._id}
+                  className="group"
                 >
-                  {g.name} {g._id}
+                  Название: {g.name}
+                  <br />
+                  Описание {JSON.stringify(g.description, null, 2)}
                 </Link>
               ))}
             </div>
           ))}
         </div>
       ))}
-    </div>
+    </StyledChoose>
   );
 };
