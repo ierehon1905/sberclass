@@ -42,7 +42,15 @@ export const StyledConfiguredWidget = styled.div`
     }
   }
 
-  input {
+  .title-input {
+    font-family: Ubuntu;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 130%;
+  }
+
+  .input {
     outline: none;
     display: inline-block;
 

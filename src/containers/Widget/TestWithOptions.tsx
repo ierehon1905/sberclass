@@ -80,6 +80,7 @@ export class TestWithOptions
           <div>
             <input
               type="text"
+              className="input-title"
               name="text"
               ref={register({
                 required: true,
@@ -87,34 +88,32 @@ export class TestWithOptions
             />
           </div>
           <div>
-            <ol>
-              {((props.params?.options as string[]) || []).map((o, i) => (
-                <li key={o + i}>
+            {((props.params?.options as string[]) || []).map((o, i) => (
+              <div className="input">
+                <input
+                  type="text"
+                  name={"option" + i}
+                  key={"input" + o + i}
+                  defaultValue={o}
+                  ref={register({
+                    required: true,
+                  })}
+                />
+                <label>
                   <input
-                    type="text"
-                    name={"option" + i}
-                    key={"input" + o + i}
-                    defaultValue={o}
+                    type="checkbox"
+                    name={"option" + i + "correct"}
                     ref={register({
-                      required: true,
+                      required: false,
                     })}
                   />
-                  <label>
-                    <input
-                      type="checkbox"
-                      name={"option" + i + "correct"}
-                      ref={register({
-                        required: false,
-                      })}
-                    />
-                    Правильный
-                  </label>
-                  <button type="button" onClick={() => onRemoveOption(i)}>
-                    Удалить
-                  </button>
-                </li>
-              ))}
-            </ol>
+                  Правильный
+                </label>
+                <button type="button" onClick={() => onRemoveOption(i)}>
+                  Удалить
+                </button>
+              </div>
+            ))}
           </div>
           <div>
             <button type="button" onClick={onAddOption}>
