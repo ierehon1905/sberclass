@@ -2,11 +2,13 @@ import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import View from "./components/View";
 import ChooseTaskGroup from "./containers/ChooseTaskGroup";
+import Hierarchy from "./containers/Hierarchy";
 import EditTaskGroup from "./containers/EditTaskGroup";
 import Footer from "./containers/Footer";
 import { Header } from "./containers/Header";
 import NavBar from "./containers/NavBar";
 import httpFetch from "./utils/httpFetch";
+import Release from "./containers/Release";
 
 function App() {
   httpFetch("/kekApi/kek", { method: "GET" });
@@ -25,6 +27,12 @@ function App() {
           <Route path="/edit-page/:id">
             <Edit />
           </Route> */}
+          <Route path="/release" exact>
+            {/* <EditTaskGroup /> */}
+            <View>
+              <Release />
+            </View>
+          </Route>
           <Route path="/edit-task-group" exact>
             {/* <EditTaskGroup /> */}
             <View>
