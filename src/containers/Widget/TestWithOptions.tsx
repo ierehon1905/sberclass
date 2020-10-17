@@ -108,6 +108,8 @@ export class TestWithOptions
                     className="pointer"
                     name={"option" + i + "correct"}
                     defaultChecked={props.data?.correct?.includes(o)}
+                    readOnly={!canEdit}
+                    disabled={!canEdit}
                     ref={register({
                       required: false,
                     })}
@@ -121,27 +123,32 @@ export class TestWithOptions
                   defaultValue={o}
                   placeholder={"Введи вариант"}
                   readOnly={!canEdit}
+                  disabled={!canEdit}
                   ref={register({
                     required: true,
                   })}
                 />
-                <button
-                  className="inner-action button right"
-                  type="button"
-                  onClick={() => onRemoveOption(i)}
-                >
-                  <Icon size={16} glyph="remove" color={colors.red} />
-                </button>
+                {canEdit && (
+                  <button
+                    className="inner-action button right"
+                    type="button"
+                    onClick={() => onRemoveOption(i)}
+                  >
+                    <Icon size={16} glyph="remove" color={colors.red} />
+                  </button>
+                )}
               </div>
             ))}
-            <button
-              className="new-item input-half"
-              type="button"
-              onClick={onAddOption}
-              disabled={!canEdit}
-            >
-              Добавить вариант ответа
-            </button>
+            {canEdit && (
+              <button
+                className="new-item input-half"
+                type="button"
+                onClick={onAddOption}
+                disabled={!canEdit}
+              >
+                Добавить вариант ответа
+              </button>
+            )}
           </div>
           {/* <div>
             <button type="submit" disabled={!canEdit}>

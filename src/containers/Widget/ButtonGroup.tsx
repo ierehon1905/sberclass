@@ -47,6 +47,7 @@ export default function ButtonGroup({
   onSave?: () => void;
   top?: number;
 }) {
+  if (!canEdit) return null;
   return (
     <Wrapper top={top} className="button-group show-on-hover">
       <button type="submit" onClick={onSave} disabled={!canEdit}>

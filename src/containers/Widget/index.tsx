@@ -148,6 +148,10 @@ export const StyledConfiguredWidget = styled.div`
   .pointer {
     cursor: pointer;
   }
+  .pointer:disabled, .pointer:read-only {
+    cursor: default
+  }
+
 `;
 
 export const widgetMap: { [widgetGuid in CmsBlockTypes]: GenWidget } = {

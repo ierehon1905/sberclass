@@ -153,7 +153,7 @@ const Release = () => {
     setRelease({ ...release, context: { ...release.context, ...data } });
   };
 
-  const setTaskState = (type, data = {}) => {
+  const setTaskState = (type: string, data = {}) => {
     release.pipeline.steps.forEach(step => {
       const task = step.tasks.find(task => task.type === type);
 
@@ -199,6 +199,12 @@ const Release = () => {
       <SideBar>
         <SideBarItem>
           <h2>Релиз</h2>
+          <br />
+          <div>Модуль {module.name}</div>
+          <div>ID {module._id}</div>
+          <div>{module.description}</div>
+          <br />
+          <div>Кол-во тем: {module.topics?.length || 0}</div>
         </SideBarItem>
         <ShadowClipWrapper>
           {/* {Object.values(widgetMap).map(gw => (
@@ -248,9 +254,11 @@ const Release = () => {
             minWidth: "800px",
             background: "white",
             boxShadow: "-2px 2px 30px #eee",
+            // height: "fit-content",
             position: "absolute",
             right: "0",
             top: "0",
+            overflow: "scroll",
             bottom: "0",
             zIndex: 100,
           }}
