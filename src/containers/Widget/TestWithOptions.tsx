@@ -33,7 +33,8 @@ export class TestWithOptions
       props.onChange({
         ...(props.data || {}),
         options: (props.data?.options || []).concat(
-          "New Option " + (props.data?.options.length + 1 || 1)
+          ""
+          // "New Option " + (props.data?.options.length + 1 || 1)
         ),
       });
     };
@@ -41,7 +42,8 @@ export class TestWithOptions
       if (!props.data?.options) {
         props.onChange({
           ...(props.data || {}),
-          options: ["New Option 1", "New Option 2"],
+          options: ["", ""],
+          // options: ["New Option 1", "New Option 2"],
         });
       }
     }, []);
@@ -83,8 +85,8 @@ export class TestWithOptions
         {this.title}
         <form onSubmit={onSubmit}>
           <div>
-            <textarea
-              // type="text"
+            <input
+              type="text"
               className="input-title"
               name="text"
               readOnly={!canEdit}
@@ -95,31 +97,35 @@ export class TestWithOptions
           </div>
           <div>
             {((props.data?.options as string[]) || []).map((o, i) => (
-              <div key={o + i} className="input">
-                <input
-                  type="checkbox"
-                  name={"option" + i + "correct"}
-                  defaultChecked={props.data?.correct.includes(o)}
-                  ref={register({
-                    required: false,
-                  })}
-                />
+              <div key={o + i} className="input-half">
+                <div className="inner-action left">
+                  <input
+                    type="checkbox"
+                    className="pointer"
+                    name={"option" + i + "correct"}
+                    defaultChecked={props.data?.correct.includes(o)}
+                    ref={register({
+                      required: false,
+                    })}
+                  />
+                </div>
                 <input
                   type="text"
                   name={"option" + i}
                   key={"input" + o + i}
                   defaultValue={o}
+                  placeholder={"Введи вариант"}
                   readOnly={!canEdit}
                   ref={register({
                     required: true,
                   })}
                 />
                 <button
-                  className="rm-button"
+                  className="inner-action button right"
                   type="button"
                   onClick={() => onRemoveOption(i)}
                 >
-                  <Icon glyph="remove" color={colors.red} />
+                  <Icon size={16} glyph="remove" color={colors.red} />
                 </button>
               </div>
             ))}

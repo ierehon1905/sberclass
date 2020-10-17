@@ -25,6 +25,7 @@ const StyledEditTaskGroupArea = styled.div`
     flex-grow: 2;
     background-color: ${p => p.theme.light};
     padding-top: 80px;
+    height: 100vh;
   }
   .main-edit {
     background-color: ${p => p.theme.white};

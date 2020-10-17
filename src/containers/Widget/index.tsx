@@ -27,8 +27,11 @@ export interface WidgetProps extends WithPhase {
 export const inputBaseStyles = css`
   outline: none;
   display: inline-block;
-  padding: 20px;
+  padding: 8px;
   margin-bottom: 10px;
+
+  display: flex;
+  justify-content: space-between;
 
   background: #ffffff;
 
@@ -42,7 +45,11 @@ export const inputBaseStyles = css`
     border: 1.5px solid ${colors.gray4};
   }
 
-  & > input::not(.input) {
+  & > input[type="text"]:not(.input) {
+    width: 100%;
+    border: 0;
+    outline: none;
+    margin-top: 4px;
   }
 `;
 export interface ConfiguredWidget
@@ -56,7 +63,7 @@ export const StyledConfiguredWidget = styled.div`
     pointer-events: none;
   }
   &:hover {
-    background-color: ${p => p.theme.white};
+    /* background-color: ${p => p.theme.white}; */
     .show-on-hover {
       opacity: 1;
       pointer-events: all;
@@ -64,9 +71,11 @@ export const StyledConfiguredWidget = styled.div`
   }
 
   .input-title {
-    ${inputBaseStyles}
-    border-radius: 12px;
-    padding: 0px 20px;
+    border-radius: 0;
+    border: 0;
+    background: transparent;
+    outline: none;
+    padding: 4px 0;
     font-weight: bold;
     font-size: 20px;
     line-height: 130%;
@@ -75,6 +84,7 @@ export const StyledConfiguredWidget = styled.div`
 
   .input-half {
     ${inputBaseStyles}
+    display: inline-flex;
     margin-right: 10px;
     width: calc(50% - 10px);
     height: 62px;
@@ -86,9 +96,35 @@ export const StyledConfiguredWidget = styled.div`
     height: 62px;
   }
 
-  .rm-button {
-    width: 46px;
+  .inner-action {
+    min-width: 46px;
     height: 46px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    border: 0;
+    background: transparent;
+    transition: 0.3s ease;
+    outline: none;
+    & > input[type="checkbox"] {
+      margin: 0;
+    }
+    &.button {
+      &:hover {
+        background-color: ${colors.light2};
+      }
+    }
+    &.right {
+      margin-left: -10px;
+    }
+    &.left {
+      margin-right: -10px;
+    }
+  }
+  .pointer {
+    cursor: pointer;
   }
 
   margin: 10px 0;
