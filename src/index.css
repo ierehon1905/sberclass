@@ -56,3 +56,22 @@ span {
   font-size: 12px;
   line-height: 20px;
 }
+
+.cdx-marker {
+  position: relative;
+}
+
+/* .cdx-marker::after {
+  opacity: 0;
+  display: none;
+  content: attr(data-comment);
+  position: absolute;
+  background-color: lightgray;
+  padding: 0.5em;
+  border-radius: 0.5em;
+}
+
+.cdx-marker:hover::after {
+  opacity: 1;
+  display: inline-block;
+} */
