@@ -7,7 +7,8 @@ import { colors } from "../../../utils/theme";
 const StyledSelect = styled.select`
   ${InputStyles}
   font-size: 14px;
-  padding: 10px 20px;
+  padding: 10px;
+  border-radius: 12px;
   margin-left: 10px;
   width: 190px;
   background: ${colors.white};

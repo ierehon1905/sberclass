@@ -11,6 +11,7 @@ import { Provider, useSelector } from "react-redux";
 import { CmsBlockTypes } from "../../entities/cms";
 import { RootState, store } from "../../store";
 import { ConfiguredWidget, widgetMap } from "./index";
+import tumbnail02 from "../../components/images/tumbnail02.png";
 
 // @ts-ignore
 export class SimpleQuestion implements BlockToolConstructable {
@@ -82,9 +83,7 @@ export class SimpleQuestion implements BlockToolConstructable {
     }
 
     return (
-      <div
-        className="choose-question-options-wrapper"
-      >
+      <div className="choose-question-options-wrapper">
         <button
           onClick={() => {
             this.data.type = CmsBlockTypes.textQuestion;
@@ -143,6 +142,7 @@ export class SimpleQuestion implements BlockToolConstructable {
     // debugger;
     return JSON.parse(JSON.stringify(this.data));
   }
+  preview: string = tumbnail02;
 
   //   validate(savedData) {
   //     if (!savedData.url.trim()) {

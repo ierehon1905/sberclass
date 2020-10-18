@@ -92,6 +92,7 @@ const Controllable = (props: {
               key={gw.type + i}
               onClick={() => props.onAddWidget(gw.type)}
             >
+              {gw.preview && <img src={gw.preview} />}
               {gw.title}
             </SideBarItem>
           ))}
@@ -105,13 +106,13 @@ const Controllable = (props: {
           onEditWidget={props.onEditWidget}
         />
       </View>
-      <SideBar isRight>
+      {/* <SideBar isRight>
         <SideBarItem>
           <h2>Превью</h2>
         </SideBarItem>
-        {/* <SideBarItem type="button" data={{ title: "lol" }} />
-        <SideBarItem type="textArea" data={{ title: "lol" }} /> */}
-        {/* <SideBarItem type="select" data={{ title: "lol" }} /> */}
+        <SideBarItem type="button" data={{ title: "lol" }} />
+        <SideBarItem type="textArea" data={{ title: "lol" }} />
+        <SideBarItem type="select" data={{ title: "lol" }} />
         <ShadowClipWrapper>
           <SideBarItem>
             {props.state.content.blocks.map(w => {
@@ -125,7 +126,7 @@ const Controllable = (props: {
             })}
           </SideBarItem>
         </ShadowClipWrapper>
-      </SideBar>
+      </SideBar> */}
     </div>
   </StyledEditTaskGroupArea>
 );

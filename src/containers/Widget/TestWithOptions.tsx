@@ -7,6 +7,7 @@ import { taskGroupSlice } from "../../store";
 import { colors } from "../../utils/theme";
 import ButtonGroup from "./ButtonGroup";
 import { GenWidget, WidgetProps, StyledConfiguredWidget } from "./index";
+import tumbnail04 from "../../components/images/tumbnail04.png";
 
 export class TestWithOptions
   implements GenWidget<{ text: string; options: string[] }> {
@@ -183,6 +184,7 @@ export class TestWithOptions
     );
   };
   type: CmsBlockTypes = CmsBlockTypes.testSingle;
+  preview: string = tumbnail04;
 
   title: string = "С вариантами ответа";
 }

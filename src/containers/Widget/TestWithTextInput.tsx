@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { CmsBlockTypes } from "../../entities/cms";
 import ButtonGroup from "./ButtonGroup";
 import { GenWidget, StyledConfiguredWidget, WidgetProps } from "./index";
+import tumbnail03 from "../../components/images/tumbnail03.png";
 
 export class TestWithTextInput
   implements
@@ -73,6 +74,7 @@ export class TestWithTextInput
       <div>{props.data?.answer}</div>
     </StyledConfiguredWidget>
   );
+  preview: string = tumbnail03;
 
   title: string = "С полем ввода";
 }

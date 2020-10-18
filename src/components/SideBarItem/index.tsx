@@ -27,6 +27,9 @@ const Wrapper = styled.div<{
   .content {
     opacity: 1;
   }
+  img {
+    width: 100%;
+  }
 `;
 
 export const SideBarItem: React.FC<any> = props => {
