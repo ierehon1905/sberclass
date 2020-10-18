@@ -28,29 +28,12 @@ import { moduleSlice, RootState } from "../../store";
 import { shadows } from "../../utils/theme";
 import { resolveUser } from "../../entities/user/resolvers";
 import Connections from "./Connections";
+import Icon from "../../components/Icon";
+import TaskViewComponent from "./TaskViewComponent";
 
 const StyledReleaseArea = styled.div`
-  flex-grow: 2;
-  display: flex;
-  flex-direction: column;
-  .edit-area {
-    display: flex;
-    flex-grow: 2;
-    background-color: ${p => p.theme.light};
-    padding-top: 80px;
-  }
-  .main-edit {
-    background-color: ${p => p.theme.white};
-    /* box-shadow: 0 0 10px 10px gray; */
-    margin-left: 340px;
-  }
-  .side-bar {
-    margin-left: 20px;
-    width: 200px;
-    .widget-item {
-      cursor: pointer;
-    }
-  }
+  width: 100vw;
+  overflow-x: hidden;
 `;
 
 const tasksMap = {
@@ -308,26 +291,10 @@ const Release = () => {
           </div>
         </div>
       </View>
-
-      {TaskView && (
-        <div
-          style={{
-            minWidth: "600px",
-            background: "white",
-            boxShadow: shadows.shadow3,
-            // height: "fit-content",
-            position: "absolute",
-            right: "0",
-            top: "0",
-            overflow: "scroll",
-            bottom: "0",
-            zIndex: 100,
-          }}
-        >
-          <TaskHeader {...releaseApiProps} />
-          <TaskView {...releaseApiProps} />
-        </div>
-      )}
+      <TaskViewComponent
+        TaskView={TaskView}
+        releaseApiProps={releaseApiProps}
+      />
     </StyledReleaseArea>
   );
 };

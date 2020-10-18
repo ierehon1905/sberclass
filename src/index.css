@@ -65,6 +65,12 @@ span {
   padding-bottom: 20px !important;
 }
 
+hr {
+  border-style: solid;
+  border-color: #f2f2f2;
+  border-width: 1.5 ищквук-цшверЖ 1ю5зч 0 0 0 * px 0 0 0;
+}
+
 /* .cdx-marker::after {
   opacity: 0;
   display: none;

@@ -16,15 +16,6 @@ const StyledWrap = styled.div`
 
   border-bottom: 1.5px solid ${p => p.theme.light2};
 `;
-const StyledCollapse = styled(Icon).attrs(props => ({
-  glyph: "collapse",
-}))`
-  transform: rotateY(180deg);
-  cursor: pointer;
-  position: absolute;
-  left: 20px;
-  top: 28px;
-`;
 
 const StyledHeading = styled.div`
   font-size: 24px;
@@ -57,7 +48,6 @@ export const TaskHeader = (props: any) => {
 
   return (
     <StyledWrap>
-      <StyledCollapse />
       <StyledHeading>{taskTypeToRussian(task.type)}</StyledHeading>
       {state.startedAt && (
         <StyledDate>
