@@ -1,7 +1,7 @@
 import { API as EditorAPI } from "@editorjs/editorjs";
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import moment from 'moment';
+import moment from "moment";
 import { resolveUser } from "../../entities/user/resolvers";
 import { colors } from "../../utils/theme";
 
@@ -12,14 +12,16 @@ type CommentContents = {
   roleText: string;
 };
 
-const Comment = (props: CommentContents & { mark: HTMLElement }) => {
+const Comment = (
+  props: CommentContents & { mark: HTMLElement; onRemove: () => void }
+) => {
   const [state, setState] = useState(true);
   const user = resolveUser() || {
     displayName: "Неопознанный Гладиолус",
-    roleText: "Посетитель"
+    roleText: "Посетитель",
   };
 
-  console.log('PROPSS COMMENT', props);
+  console.log("PROPSS COMMENT", props);
 
   return (
     <div
@@ -27,34 +29,37 @@ const Comment = (props: CommentContents & { mark: HTMLElement }) => {
         position: "absolute",
         // left: "100%",
         left:
-          props.mark.parentElement.getBoundingClientRect().left +
-          props.mark.parentElement.getBoundingClientRect().width,
+          props.mark.parentElement?.getBoundingClientRect().left +
+          props.mark.parentElement?.getBoundingClientRect().width,
         top: props.mark.getBoundingClientRect().top,
         // top: 0,
-        padding: '12px',
+        padding: "12px",
         backgroundColor: "white",
         boxShadow: `-2px -2px 30px ${colors.lightBlue}`,
         borderRadius: "0.5em",
         display: state ? "inline-block" : "none",
-        alignItems: 'flex-end',
+        alignItems: "flex-end",
         zIndex: 100,
       }}
       // onMouseLeave={() => setState(!state)}
       className="react-comment"
     >
-      <div style={{ fontSize: '14px', }}>
-        {props.author}
-      </div>
+      <div style={{ fontSize: "14px" }}>{props.author}</div>
 
-      <div style={{ fontSize: '12px' }}>
-        {props.roleText}
-      </div>
+      <div style={{ fontSize: "12px" }}>{props.roleText}</div>
 
-      <div style={{ marginTop: '12px' }}>
-        {props.text}
-      </div>
+      <div style={{ marginTop: "12px" }}>{props.text}</div>
 
-      <div style={{ marginTop: '10px', marginBottom: '10px', fontSize: '12px', color: '#aaa' }}>{props.time}</div>
+      <div
+        style={{
+          marginTop: "10px",
+          marginBottom: "10px",
+          fontSize: "12px",
+          color: "#aaa",
+        }}
+      >
+        {props.time}
+      </div>
 
       <input
         type="text"
@@ -66,7 +71,7 @@ const Comment = (props: CommentContents & { mark: HTMLElement }) => {
           props.mark.dataset.comment = JSON.stringify({
             roleText: user.roleText,
             author: user.displayName,
-            time: moment(Date.now()).format('DD-MM-YYYY hh:mm'),
+            time: moment(Date.now()).format("DD-MM-YYYY hh:mm"),
             text: v,
           });
         }}
@@ -77,6 +82,7 @@ const Comment = (props: CommentContents & { mark: HTMLElement }) => {
           // props.mark
           props.mark.insertAdjacentText("beforebegin", text);
           props.mark.remove();
+          props.onRemove();
           setState(false);
         }}
       >
@@ -85,10 +91,10 @@ const Comment = (props: CommentContents & { mark: HTMLElement }) => {
     </div>
   );
 };
+
+const currentComments = new Set();
 // @ts-ignore
 window.initializeComments = function (e: HTMLElement) {
-
-
   const comment = JSON.parse(e.dataset.comment || "{}") as CommentContents;
 
   // const initialized = e.querySelector(".react-comment-wrapper");
@@ -96,10 +102,24 @@ window.initializeComments = function (e: HTMLElement) {
   //   ReactDOM.hydrate(<Comment {...comment} key={comment.text} />, initialized);
   //   return;
   // }
+  if (currentComments.has(e)) return;
+
   const el = document.createElement("comment-root");
+  currentComments.add(e);
   document.body.appendChild(el);
   // el.className = "react-comment-wrapper";
-  ReactDOM.hydrate(<Comment {...comment} mark={e} key={comment.text} />, el);
+  ReactDOM.hydrate(
+    <Comment
+      {...comment}
+      mark={e}
+      key={comment.text}
+      onRemove={() => {
+        document.body.removeChild(el);
+        currentComments.delete(e)
+      }}
+    />,
+    el
+  );
 
   // e.appendChild(el);
   // let author = e.querySelector(".author");
