@@ -27,6 +27,7 @@ import { resolveEducationModule } from "../../entities/education/resolvers";
 import { moduleSlice, RootState } from "../../store";
 import { shadows } from "../../utils/theme";
 import { resolveUser } from "../../entities/user/resolvers";
+import Connections from "./Connections";
 
 const StyledReleaseArea = styled.div`
   flex-grow: 2;
@@ -61,7 +62,7 @@ const tasksMap = {
   TextReview,
 };
 
-const releaseMock = {
+export const releaseMock = {
   moduleId: "5f8ae6a09d39c34503e6dd06",
   context: {},
   pipeline: {
@@ -257,6 +258,7 @@ const Release = () => {
               minHeight: "1000px",
               marginTop: "500px",
               display: "flex",
+              position: "relative",
               flexDirection: "row",
             }}
           >
@@ -267,6 +269,8 @@ const Release = () => {
                   marginLeft: "150px",
                   justifyContent: "center",
                 }}
+                className="step-column"
+                id={"step-column__" + stepIndex}
               >
                 {step.tasks.map((task, taskIndex) => (
                   <TaskCard
@@ -282,6 +286,7 @@ const Release = () => {
                 ))}
               </div>
             ))}
+            <Connections steps={release.pipeline.steps} />
           </div>
         </div>
       </View>
