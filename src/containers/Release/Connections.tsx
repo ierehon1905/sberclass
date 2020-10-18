@@ -38,7 +38,6 @@ export default (props: { steps: typeof releaseMock["pipeline"]["steps"] }) => {
         currentColumn.querySelectorAll(".task-card")
       );
       const nextCards = Array.from(nextColumn.querySelectorAll(".task-card"));
-      console.log({ currentCards, nextCards });
 
       const [xSum, Ysum, len, minX, minY, maxX, maxY] = currentCards
         .concat(...nextCards)
@@ -58,7 +57,6 @@ export default (props: { steps: typeof releaseMock["pipeline"]["steps"] }) => {
           [0, 0, 0, Infinity, Infinity, -Infinity, -Infinity]
         );
       const [avgX, avgY] = [xSum / len, Ysum / len];
-      console.log({ avgX, avgY });
 
       const x =
         minX + (currentCards[0].clientWidth + maxX - minX) / 2 - selfPos.x;

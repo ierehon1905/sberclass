@@ -267,6 +267,8 @@ const Release = () => {
                   flexDirection: "column",
                   marginLeft: "150px",
                   justifyContent: "center",
+                  position: "relative",
+                  zIndex: 2,
                 }}
                 className="step-column"
                 id={"step-column__" + stepIndex}
