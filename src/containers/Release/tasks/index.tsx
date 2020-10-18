@@ -1,5 +1,6 @@
 export enum taskStatuses {
-    PENDING = 'PENDING',
-    COMPLETED = 'COMPLETED',
-    ERROR = 'ERROR'
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  ATTENTION = "ATTENTION",
+  ERROR = "ERROR",
 }
