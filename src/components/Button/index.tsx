@@ -22,7 +22,7 @@ export type ButtonProps = PropsWithChildren<{
   icon?: IconType;
   iconLeft?: IconType;
   iconRight?: IconType;
-  theme?: "light" | "dark" | "accent" | "current" | "gray";
+  theme?: "light" | "dark" | "accent" | "current" | "gray" | "dangerous";
   view?: "pseudo" | "action";
   size?: "s" | "m" | "l" | "xl" | "xxl" | "xxxl";
   onClick?: () => void;
@@ -42,8 +42,8 @@ const sizeMap = {
     padding: 4,
   },
   m: {
-    iconSize: 36,
-    fontSize: 16,
+    iconSize: 16,
+    fontSize: 14,
     padding: 7,
   },
   l: {
@@ -73,6 +73,7 @@ const bgColorMap: {
 } = {
   light: colors.light,
   dark: colors.dark,
+  dangerous: colors.lightRed,
   accent: colors.blue,
   current: colors.light,
   gray: colors.gray1,
@@ -82,6 +83,7 @@ const themeStylesMap: {
   [key in Exclude<ButtonProps["theme"], undefined>]: any;
 } = {
   light: {},
+  dangerous: {},
   dark: {},
   accent: {},
   current: {},
@@ -145,11 +147,11 @@ const StyledButton = styled.button<StyledButtonProps>`
           ? lightenDarkenColor(color, 20)
           : "transparent"
       }`};
-    background-color: ${({ bgColor }) => lightenDarkenColor(bgColor, 20)};
-    box-shadow: ${({ bgColor }) =>
+    background-color: ${({ bgColor }) => lightenDarkenColor(bgColor, -10)};
+    /* box-shadow: ${({ bgColor }) =>
       isDark(bgColor)
         ? `0px 16px 32px ${getRGBA(bgColor, 0.3)}`
-        : `8px 24px 42px rgba(0, 0, 0, 0.32)`};
+        : `8px 24px 42px rgba(0, 0, 0, 0.32)`}; */
   }
   &:focus {
     ${({ bgColor, borderWidth }) =>
@@ -259,7 +261,7 @@ const ButtonEl: ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (
             color={color}
             isColored={coloredIcons.includes(props.iconLeft)}
           />
-          {(hasContent || props.iconRight) && <Divider color={color} />}
+          {/* {(hasContent || props.iconRight) && <Divider color={color} />} */}
         </>
       )}
       {hasContent && (
@@ -267,7 +269,7 @@ const ButtonEl: ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (
       )}
       {(props.icon || props.iconRight) && (
         <>
-          {hasContent && <Divider color={color} />}
+          {/* {hasContent && <Divider color={color} />} */}
           <Icon
             size={iconSize}
             glyph={(props.icon || props.iconRight) as any}

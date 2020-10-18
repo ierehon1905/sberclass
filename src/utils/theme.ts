@@ -1,3 +1,5 @@
+import { ButtonProps } from "../components/Button";
+
 export const colors = {
   white: '#FFFFFF',
   black: '#000000',
@@ -13,6 +15,7 @@ export const colors = {
   gray2 : '#D5D5D5',
   gray1 : '#D5D5D5',
   lightBlue: '#E8F2FA',
+  lightRed: '#FAE8E8',
 };
 
 export const shadows = {
@@ -82,12 +85,12 @@ export function smartGrayColor(hex) {
     : 'rgba(255, 255, 255, 0.2)';
 }
 
-export const textColorByTheme = (theme: 'light' | 'dark' | 'accent' | 'current' | 'gray') => {
-  let color = colors.light;
+export const textColorByTheme = (theme: ButtonProps['theme']) => {
+  let color = colors.dark;
   if (theme === 'dark') {
     color = colors.dark;
   } else if (['accent', 'current'].includes(theme as string)) {
-    color = colors.blue;
+    color = colors.white;
   }
   return color;
 };
