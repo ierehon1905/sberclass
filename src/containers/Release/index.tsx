@@ -260,18 +260,17 @@ const Release = () => {
       <View>
         <div
           style={{
-            marginLeft: "260px",
+            paddingLeft: "260px",
             overflow: "scroll",
             height: "calc(100vh - 60px)",
           }}
           className="release-field-scroll"
-
         >
           <div
             style={{
-              minWidth: "4000px",
-              minHeight: "1000px",
-              marginTop: "500px",
+              minWidth: "2300px",
+              minHeight: "600px",
+              marginTop: "60px",
               display: "flex",
               alignItems: "center",
               position: "relative",

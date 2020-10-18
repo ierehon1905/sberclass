@@ -1,5 +1,6 @@
 import React, { useMemo, useRef } from "react";
 import { releaseMock } from ".";
+import { colors } from "../../utils/theme";
 export default (props: { steps: typeof releaseMock["pipeline"]["steps"] }) => {
   const self = useRef<SVGSVGElement>(null);
 
@@ -22,8 +23,8 @@ export default (props: { steps: typeof releaseMock["pipeline"]["steps"] }) => {
 
       const conn = (
         <path
-          stroke="gray"
-          strokeWidth="3"
+          stroke={colors.gray2}
+          strokeWidth="2"
           fill="none"
           d={`M${parentPos.x - selfPos.x + parentPos.width / 2} ${
             parentPos.y - selfPos.y + parentPos.height / 2
@@ -64,10 +65,10 @@ export default (props: { steps: typeof releaseMock["pipeline"]["steps"] }) => {
         <circle
           cx={x}
           cy={y}
-          r="8"
+          r="5"
           //   stroke="black"
           //   stroke-width="3"
-          fill="gray"
+          fill={colors.gray2}
         />
       );
       conns.push(c);
@@ -76,8 +77,8 @@ export default (props: { steps: typeof releaseMock["pipeline"]["steps"] }) => {
       currentCards.forEach(cc => {
         conns.push(
           <path
-            stroke="gray"
-            strokeWidth="3"
+            stroke={colors.gray2}
+            strokeWidth="2"
             fill="none"
             d={`M${
               cc.getBoundingClientRect().x -
@@ -96,8 +97,8 @@ export default (props: { steps: typeof releaseMock["pipeline"]["steps"] }) => {
       nextCards.forEach(cc => {
         conns.push(
           <path
-            stroke="gray"
-            strokeWidth="3"
+            stroke={colors.gray2}
+            strokeWidth="2"
             fill="none"
             d={`M${x} ${y} L${
               cc.getBoundingClientRect().x -

@@ -26,8 +26,9 @@ const StyledCard = styled.div<{ status: taskStatuses }>`
   margin-bottom: 100px;
   background-color: white;
   cursor: pointer;
+  border-radius: 14px;
   padding: 12px;
-  border: 1px solid ${({ status }) => getTaskColor(status)};
+  border: 2px solid ${({ status }) => getTaskColor(status)};
 `;
 
 export const TaskCard = ({
