@@ -17,6 +17,9 @@ const StyledHeader = styled.div`
     &.visible {
         padding: 20px 60px;
     }
+    &:first-child {
+        border-top: 0;
+    }
     /* box-shadow: 2px -2px 30px #eee; */
 `;
 

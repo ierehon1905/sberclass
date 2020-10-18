@@ -6,12 +6,15 @@ import styled from "styled-components";
 import Icon from "../../../components/Icon";
 import { colors } from "../../../utils/theme";
 import { InputStyles } from "../../../components/SideBarItem/Widgets/ShortInput";
+import { taskTypeToRussian } from "../../../utils/interpreter";
 
 const StyledWrap = styled.div`
   padding: 26px 60px;
   flex-direction: row;
   align-items: center;
   min-height: 134px;
+
+  border-bottom: 1.5px solid ${p => p.theme.light2};
 `;
 const StyledCollapse = styled(Icon).attrs(props => ({
   glyph: "collapse",
@@ -29,7 +32,7 @@ const StyledHeading = styled.div`
   margin-bottom: 12px;
 `;
 
-const StyledDate = styled.div`
+export const StyledDate = styled.div`
   font-weight: normal;
   font-size: 14px;
   line-height: 140%;
@@ -38,6 +41,7 @@ const StyledDate = styled.div`
     display: inline-block;
     transform: translateY(3px);
     margin-right: 4px;
+    margin-left: -2px;
   }
 `;
 
@@ -54,7 +58,7 @@ export const TaskHeader = (props: any) => {
   return (
     <StyledWrap>
       <StyledCollapse />
-      <StyledHeading>Задача {task.type}</StyledHeading>
+      <StyledHeading>{taskTypeToRussian(task.type)}</StyledHeading>
       {state.startedAt && (
         <StyledDate>
           <Icon glyph="start" size={16} />
