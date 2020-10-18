@@ -9,7 +9,7 @@ import { TaskCard } from './taskCard';
 import { TaskHeader } from './components/TaskHeader';
 
 import { taskStatuses } from "./tasks";
-import { resolveCreateRevisionBackend, resolveGetRevisions } from "../../entities/education/resolvers";
+import { resolveCreateRevisionBackend, resolveGetRelease, resolveGetRevisions, resolveUpdateRelease } from "../../entities/education/resolvers";
 
 import Start from "./tasks/Start";
 import AutoCheck from "./tasks/AutoCheck";
@@ -124,19 +124,13 @@ const releaseMock = {
 
 const Release = () => {
   const user = resolveUser();
-
-  const [release, setRelease] = useState(releaseMock);
+  const [release, setRelease] = useState();
 
   const { moduleId } = useParams<{
     moduleId: string;
   }>();
+
   const dispatch = useDispatch();
-  useEffect(() => {
-    resolveEducationModule(moduleId).then(res => {
-      const m = res.result as EducationModule;
-      dispatch(moduleSlice.actions.setModule(m));
-    });
-  }, [moduleId]);
 
   const module = useSelector((state: RootState) => state.module);
 
@@ -146,10 +140,9 @@ const Release = () => {
   const [currentRevision, setCurrentRevision] = useState([]);
 
 
-
   // REVISIONS
   const getRevisions = () => {
-    return resolveGetRevisions(release.moduleId).then(({ result }) => setRevisions(result))
+    return resolveGetRevisions(moduleId).then(({ result }) => setRevisions(result))
   }
 
   const createRevision = () => {
@@ -159,9 +152,36 @@ const Release = () => {
   }
   // REVISIONS END
 
+  // RELEASE
+  const getRelease = () => {
+    return resolveGetRelease().then(({ result }) => setRelease(result))
+  }
+
+  const updateRelease = () => {
+    return resolveUpdateRelease(release);
+  }
+
   useEffect(() => {
+    if (release) {
+      updateRelease();
+    }
+  }, [release])
+  // RELEASE END
+
+  // DID MOUNT
+  useEffect(() => {
+    getRelease();
+    resolveEducationModule(moduleId).then(res => {
+      const m = res.result as EducationModule;
+      dispatch(moduleSlice.actions.setModule(m));
+    });
     getRevisions();
-  }, [])
+  }, [moduleId]);
+
+  if (!release) {
+    return null
+  }
+
 
   const selectTask = type => {
     let _task;

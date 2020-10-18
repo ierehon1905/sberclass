@@ -74,6 +74,25 @@ export const resolveUpdateTaskGroup = (
     });
 };
 
+export const resolveUpdateBlock = (
+    moduleId: string,
+    topicId: string,
+    taskGroupId: string,
+    blockId: string,
+    data: any
+) => {
+    return httpFetch("/lesson/updateBlock", {
+        body: {
+            moduleId,
+            topicId,
+            taskGroupId,
+            blockId,
+            data,
+        },
+    });
+};
+
+
 
 export const resolveGetRevisions = (
     moduleId: string,
@@ -92,6 +111,27 @@ export const resolveCreateRevisionBackend = (
         body: {
             moduleId,
         },
+    });
+};
+
+export const resolveGetRelease = () => {
+    return httpFetch("/lesson/getRelease");
+};
+
+export const resolveUpdateRelease = (release) => {
+    return httpFetch("/lesson/updateRelease", {
+        body: {
+            release
+        }
+    });
+};
+
+export const resolveExtractContent = (modelId, revisionId) => {
+    return httpFetch("/lesson/extractContent", {
+        body: {
+            modelId,
+            revisionId,
+        }
     });
 };
 
