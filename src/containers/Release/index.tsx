@@ -139,6 +139,13 @@ const Release = () => {
       const m = res.result as EducationModule;
       dispatch(moduleSlice.actions.setModule(m));
     });
+
+    const field = document.getElementsByClassName("release-field-scroll")[0];
+    // debugger;
+    field.scroll({
+      top: 600,
+      behavior: "smooth",
+    });
   }, [moduleId]);
 
   const module = useSelector((state: RootState) => state.module);
@@ -251,7 +258,15 @@ const Release = () => {
         </ShadowClipWrapper>
       </SideBar>
       <View>
-        <div style={{ marginLeft: "260px", overflow: "scroll" }}>
+        <div
+          style={{
+            marginLeft: "260px",
+            overflow: "scroll",
+            height: "calc(100vh - 60px)",
+          }}
+          className="release-field-scroll"
+
+        >
           <div
             style={{
               minWidth: "4000px",
@@ -262,6 +277,7 @@ const Release = () => {
               position: "relative",
               flexDirection: "row",
             }}
+            className="release-field"
           >
             {release.pipeline.steps.map((step, stepIndex) => (
               <div
