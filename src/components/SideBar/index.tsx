@@ -3,11 +3,15 @@ import styled, { css } from "styled-components";
 import constants from "../../utils/const";
 import { colors, shadows } from "../../utils/theme";
 import Icon from "../Icon";
-import Logo from '../images/Logo.svg'
-import Slash from '../images/Slash.svg'
-import SmartFlowLogo from '../images/SmartFlowLogo.svg'
+import Logo from "../images/Logo.svg";
+import Slash from "../images/Slash.svg";
+import SmartFlowLogo from "../images/SmartFlowLogo.svg";
 
-const StyledSideBar = styled.div<{isCollapsed?: boolean; isRight?: boolean; hide: boolean;}>`
+const StyledSideBar = styled.div<{
+  isCollapsed?: boolean;
+  isRight?: boolean;
+  hide: boolean;
+}>`
   position: fixed;
   left: ${constants.navBarWidth}px;
   top: ${constants.navBarWidth}px;
@@ -44,53 +48,57 @@ const StyledSideBar = styled.div<{isCollapsed?: boolean; isRight?: boolean; hide
   .menu {
     opacity: 0;
   }
-  ${({isRight, hide})=> isRight && css`
-    .icon-wrapper {
-      display: none;
-    }
-    left: auto;
-    right: 0;
-    ${hide && css`
-      
+  ${({ isRight, hide }) =>
+    isRight &&
+    css`
+      .icon-wrapper {
+        display: none;
+      }
+      left: auto;
+      right: 0;
+      ${hide && css``}
     `}
-  `}
 
-  ${({isCollapsed, isRight})=> isCollapsed && !isRight && css`
-    transform: translateX(-200px);
-    background: transparent;
-    box-shadow: none;
-    .content {
-      opacity: 0.1;
-    }
-    .menu {
-      opacity: 1;
-    }
-    .collapse {
-      opacity: 0;
-    }
-    .icon-wrapper:hover {
-      .menu {
+  ${({ isCollapsed, isRight }) =>
+    isCollapsed &&
+    !isRight &&
+    css`
+      transform: translateX(-200px);
+      background: transparent;
+      box-shadow: none;
+      .content {
         opacity: 0;
       }
-      .collapse {
+      .menu {
         opacity: 1;
-        transform: rotateY(180deg);
       }
-    }
-  `}
+      .collapse {
+        opacity: 0;
+      }
+      .icon-wrapper:hover {
+        .menu {
+          opacity: 0;
+        }
+        .collapse {
+          opacity: 1;
+          transform: rotateY(180deg);
+        }
+      }
+    `}
 `;
 
 export const SideBar: React.FC<any> = props => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  return(
-  <StyledSideBar {...props} isCollapsed={isCollapsed}>
-      <div className="content">
-        {props.children}
+  return (
+    <StyledSideBar {...props} isCollapsed={isCollapsed}>
+      <div className="content">{props.children}</div>
+      <div
+        className="icon-wrapper"
+        onClick={() => setIsCollapsed(!isCollapsed)}
+      >
+        <Icon className="collapse" size={16} glyph="collapse" />
+        <Icon className="menu" size={16} glyph="menu" />
       </div>
-      <div className="icon-wrapper" onClick={()=>setIsCollapsed(!isCollapsed)} >
-        <Icon className='collapse' size={16} glyph='collapse' />
-        <Icon className='menu' size={16} glyph='menu' />
-      </div>
-  </StyledSideBar>
-)
+    </StyledSideBar>
+  );
 };

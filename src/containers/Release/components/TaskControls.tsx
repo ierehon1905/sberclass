@@ -1,51 +1,69 @@
-import React, { useState } from 'react';
-import { taskStatuses } from '../tasks';
+import React, { useState } from "react";
+import Button from "../../../components/Button";
+import { taskStatuses } from "../tasks";
 
 export const TaskControls = ({ task, setTaskState }) => {
-    const { needAction, error } = task.state;
+  const { needAction, error } = task.state;
 
-    if (!needAction) {
-        return null
-    }
+  if (needAction) {
+    return null;
+  }
 
-    const errorMessage = "Отказано";
+  const errorMessage = "Отказано";
 
-    return (
-        <div >
-            {error && (
-                <button
-                    onClick={() => setTaskState(task.type, {
-                        status: taskStatuses.PENDING,
-                        error: null,
-                        needAction: true
-                    })}
-                >
-                    Повторить шаг
-                </button>
-            )}
+  return (
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        justifyContent: "flex-end",
+      }}
+    >
+      {error && (
+        <Button
+          onClick={() =>
+            setTaskState(task.type, {
+              status: taskStatuses.PENDING,
+              error: null,
+              needAction: true,
+            })
+          }
+        >
+          Повторить шаг
+        </Button>
+      )}
 
-            {!error && (
-                <>
-                    <button
-                        onClick={() => setTaskState(task.type, {
-                            status: taskStatuses.ERROR,
-                            error: errorMessage,
-                            needAction: true
-                        })}
-                    >
-                        Отказать
-                    </button>
-                    <button
-                        onClick={() => setTaskState(task.type, {
-                            status: taskStatuses.COMPLETED,
-                            error: null,
-                            needAction: false
-                        })}
-                    >
-                        Подтвердить
-                    </button>
-                </>
-            )}
-        </div>
-    )
-}
+      {!error && (
+        <>
+          <Button
+            theme="dangerous"
+            icon="cross"
+            onClick={() =>
+              setTaskState(task.type, {
+                status: taskStatuses.ERROR,
+                error: errorMessage,
+                needAction: true,
+              })
+            }
+          >
+            Отказать
+          </Button>
+          <Button
+            theme="accent"
+            icon="arrow-right"
+            style={{ marginLeft: 8 }}
+            onClick={() =>
+              setTaskState(task.type, {
+                status: taskStatuses.COMPLETED,
+                error: null,
+                needAction: false,
+              })
+            }
+          >
+            Подтвердить
+          </Button>
+        </>
+      )}
+    </div>
+  );
+};

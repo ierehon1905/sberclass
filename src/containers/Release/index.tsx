@@ -132,6 +132,20 @@ const Release = () => {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    resolveEducationModule(moduleId).then(res => {
+      const m = res.result as EducationModule;
+      dispatch(moduleSlice.actions.setModule(m));
+    });
+
+    const field = document.getElementsByClassName("release-field-scroll")[0];
+    // debugger;
+    field.scroll({
+      top: 600,
+      behavior: "smooth",
+    });
+  }, [moduleId]);
+
   const module = useSelector((state: RootState) => state.module);
 
   const [selectedTask, setSelectedTask] = useState(null);
@@ -300,16 +314,25 @@ const Release = () => {
         </ShadowClipWrapper>
       </SideBar>
       <View>
-        <div style={{ marginLeft: "260px", overflow: "scroll" }}>
+        <div
+          style={{
+            paddingLeft: "260px",
+            overflow: "scroll",
+            height: "calc(100vh - 60px)",
+          }}
+          className="release-field-scroll"
+        >
           <div
             style={{
-              minWidth: "4000px",
-              minHeight: "1000px",
-              marginTop: "500px",
+              minWidth: "2300px",
+              minHeight: "600px",
+              marginTop: "60px",
               display: "flex",
+              alignItems: "center",
               position: "relative",
               flexDirection: "row",
             }}
+            className="release-field"
           >
             {release.pipeline.steps.map((step, stepIndex) => (
               <div

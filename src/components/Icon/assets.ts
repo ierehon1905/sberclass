@@ -14,6 +14,8 @@ import PipelineSuccess from './icons/PipelineSuccess.svg';
 import Start from './icons/Start.svg';
 import End from './icons/End.svg';
 import DownSimply from './icons/DownSimply.svg';
+import RightArrow from './icons/RightArrow.svg'
+import Cross from './icons/Cross.svg'
 
 
 export const mapping = {
@@ -32,5 +34,7 @@ export const mapping = {
   'PENDING': PipelineInProgress,
   'ERROR': PipelineRejected,
   'COMPLETED': PipelineSuccess,
-  'down-simply': DownSimply
+  'down-simply': DownSimply,
+  'cross': Cross,
+  'arrow-right': RightArrow,
 };
