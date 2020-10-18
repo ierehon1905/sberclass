@@ -98,3 +98,20 @@ hr {
 .choose-question-options-wrapper button:hover {
   border-color: #989898;
 }
+.StyledConfiguredWidget {
+  margin: 10px auto;
+  max-width: 600px;
+  padding: 0 60px;
+}
+
+/* .StyledConfiguredWidget .StyledConfiguredWidget {
+  padding: 0;
+}
+.StyledConfiguredWidget .StyledConfiguredWidget:hover .show-on-hover {
+  opacity: 0;
+  pointer-events: none;
+}
+.StyledConfiguredWidget .StyledConfiguredWidget .show-on-hover {
+  opacity: 0;
+  pointer-events: none;
+} */

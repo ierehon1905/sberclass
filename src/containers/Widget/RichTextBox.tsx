@@ -12,6 +12,7 @@ import ButtonGroup from "./ButtonGroup";
 import { CommentTool } from "./CommentTool";
 import { GenWidget, StyledConfiguredWidget, WidgetProps } from "./index";
 import { SimpleQuestion } from "./SimpleQuestion";
+import tumbnail01 from "../../components/images/tumbnail01.png";
 
 export class RichTextBox implements GenWidget {
   editRender = (props: WidgetProps) => {
@@ -98,5 +99,8 @@ export class RichTextBox implements GenWidget {
 
   type: CmsBlockTypes = CmsBlockTypes.richContent;
 
-  title: string = "Рич текст";
+  preview: string = tumbnail01;
+
+  title: string =
+    "Текстовый редактор с возможностью вставки и форматирования текста, изображений";
 }

@@ -17,6 +17,7 @@ const StyledSideBar = styled.div<{
   top: ${constants.navBarWidth}px;
   display: block;
   z-index: 8;
+  overflow-y: auto;
   height: 100%;
   background: ${colors.white};
   box-shadow: ${shadows.shadow3};

@@ -9,6 +9,7 @@ import { TestWithTextInput } from "./TestWithTextInput";
 export interface WidgetInfo {
   type: CmsBlockTypes; // === type
   title: string;
+  preview?: string;
 }
 
 export interface GenWidget<T extends {} = {}> extends WidgetInfo {
@@ -56,7 +57,9 @@ export interface ConfiguredWidget
   extends WidgetInfo,
     Omit<WidgetProps, "onChange" | "onDelete"> {}
 
-export const StyledConfiguredWidget = styled.div`
+export const StyledConfiguredWidget = styled.div.attrs(() => ({
+  className: "StyledConfiguredWidget",
+}))`
   position: relative;
   margin: 10px auto;
   max-width: 600px;
@@ -155,9 +158,9 @@ export const StyledConfiguredWidget = styled.div`
 `;
 
 export const widgetMap: { [widgetGuid in CmsBlockTypes]: GenWidget } = {
+  richContent: new RichTextBox(),
   textQuestion: new TestWithTextInput(),
   testSingle: new TestWithOptions(),
   testMultiple: new TestWithOptions(),
   testMultipleCombination: new TestWithOptions(),
-  richContent: new RichTextBox(),
 };
