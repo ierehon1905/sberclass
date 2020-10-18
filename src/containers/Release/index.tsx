@@ -26,6 +26,7 @@ import { EducationModule } from "../../entities/education";
 import { resolveEducationModule } from "../../entities/education/resolvers";
 import { moduleSlice, RootState } from "../../store";
 import { shadows } from "../../utils/theme";
+import { resolveUser } from "../../entities/user/resolvers";
 
 const StyledReleaseArea = styled.div`
   flex-grow: 2;
@@ -124,6 +125,8 @@ const releaseMock = {
 };
 
 const Release = () => {
+  const user = resolveUser();
+
   const [release, setRelease] = useState(releaseMock);
 
   const { moduleId } = useParams<{
