@@ -9,7 +9,7 @@ import { TaskCard } from "./taskCard";
 import { TaskHeader } from "./components/TaskHeader";
 
 import { taskStatuses } from "./tasks";
-import { resolveCreateRevisionBackend, resolveGetRelease, resolveGetRevisions, resolveUpdateRelease } from "../../entities/education/resolvers";
+import { resolveCreateRevisionBackend, resolveExtractContent, resolveGetRelease, resolveGetRevisions, resolveUpdateBlock, resolveUpdateRelease } from "../../entities/education/resolvers";
 
 import Start from "./tasks/Start";
 import AutoCheck from "./tasks/AutoCheck";
@@ -138,7 +138,37 @@ const Release = () => {
 
   const [revisions, setRevisions] = useState([]);
   const [currentRevision, setCurrentRevision] = useState([]);
+  const [extractedContent, setExtractedContent] = useState(null);
 
+
+  // CONTENT
+  const getContent = () => {
+    const id = currentRevision ? null : moduleId;
+    // @ts-ignore
+    const revId = currentRevision ? currentRevision._id : null;
+
+    return resolveExtractContent(moduleId, revId).then(({ result }) => setExtractedContent(result))
+  }
+
+
+  const updateBlock = (blockId, data) => {
+    const topicId = module.topics[0]._id;
+    const taskGroupId = module.topics[0].taskGroups[0]._id;
+    // @ts-ignore
+    return resolveUpdateBlock(moduleId, topicId, taskGroupId, blockId, data).then(() => {
+      return resolveEducationModule(moduleId).then(res => {
+        const m = res.result as EducationModule;
+        dispatch(moduleSlice.actions.setModule(m));
+      });
+    })
+  }
+
+  useEffect(() => {
+    if (module) {
+      getContent();
+    }
+  }, [module])
+  // CONTENT END
 
   // REVISIONS
   const getRevisions = () => {
@@ -221,6 +251,8 @@ const Release = () => {
   );
 
   const releaseApiProps = {
+    updateBlock,
+    extractedContent,
     getRevisions,
     createRevision,
     currentRevision,
