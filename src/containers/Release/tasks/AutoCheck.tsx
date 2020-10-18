@@ -15,6 +15,8 @@ const JobText = styled.div<any>`
     ${props => props.code ? 'background-color: #eee; padding: 12px;' : ''}
     font-size: 14px;
     alignItems: center;
+    max-width: 400px;
+    overflow: scroll;
 `
 
 const JobMessage = styled.div`
