@@ -258,6 +258,7 @@ const Release = () => {
               minHeight: "1000px",
               marginTop: "500px",
               display: "flex",
+              alignItems: "center",
               position: "relative",
               flexDirection: "row",
             }}

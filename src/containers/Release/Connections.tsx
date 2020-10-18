@@ -25,9 +25,9 @@ export default (props: { steps: typeof releaseMock["pipeline"]["steps"] }) => {
           stroke="gray"
           strokeWidth="3"
           fill="none"
-          d={`M${parentPos.x - selfPos.x + parentPos.width} ${
+          d={`M${parentPos.x - selfPos.x + parentPos.width / 2} ${
             parentPos.y - selfPos.y + parentPos.height / 2
-          } L${childPos.x - selfPos.x} ${
+          } L${childPos.x - selfPos.x + childPos.width / 2} ${
             childPos.y - selfPos.y + childPos.height / 2
           }`}
         />
@@ -45,21 +45,20 @@ export default (props: { steps: typeof releaseMock["pipeline"]["steps"] }) => {
           (acc, cur) => {
             const rect = cur.getBoundingClientRect();
             return [
-              acc[0] + rect.x,
-              acc[1] + rect.y,
+              acc[0] + rect.x + rect.width / 2,
+              acc[1] + rect.y + rect.height / 2,
               acc[2] + 1,
-              Math.min(acc[3], rect.x),
-              Math.min(acc[4], rect.y),
-              Math.max(acc[5], rect.x),
-              Math.max(acc[6], rect.y),
+              Math.min(acc[3], rect.x + rect.width / 2),
+              Math.min(acc[4], rect.y + rect.height / 2),
+              Math.max(acc[5], rect.x + rect.width / 2),
+              Math.max(acc[6], rect.y + rect.height / 2),
             ];
           },
           [0, 0, 0, Infinity, Infinity, -Infinity, -Infinity]
         );
       const [avgX, avgY] = [xSum / len, Ysum / len];
 
-      const x =
-        minX + (currentCards[0].clientWidth + maxX - minX) / 2 - selfPos.x;
+      const x = minX + (maxX - minX) / 2 - selfPos.x;
       const y = avgY - selfPos.y;
       const c = (
         <circle
@@ -83,7 +82,7 @@ export default (props: { steps: typeof releaseMock["pipeline"]["steps"] }) => {
             d={`M${
               cc.getBoundingClientRect().x -
               selfPos.x +
-              cc.getBoundingClientRect().width
+              cc.getBoundingClientRect().width / 2
             } ${
               cc.getBoundingClientRect().y -
               selfPos.y +
@@ -100,7 +99,11 @@ export default (props: { steps: typeof releaseMock["pipeline"]["steps"] }) => {
             stroke="gray"
             strokeWidth="3"
             fill="none"
-            d={`M${x} ${y} L${cc.getBoundingClientRect().x - selfPos.x} ${
+            d={`M${x} ${y} L${
+              cc.getBoundingClientRect().x -
+              selfPos.x +
+              cc.getBoundingClientRect().width / 2
+            } ${
               cc.getBoundingClientRect().y -
               selfPos.y +
               cc.getBoundingClientRect().height / 2
