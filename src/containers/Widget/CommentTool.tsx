@@ -12,7 +12,9 @@ type CommentContents = {
   roleText: string;
 };
 
-const Comment = (props: CommentContents & { mark: HTMLElement }) => {
+const Comment = (
+  props: CommentContents & { mark: HTMLElement; onRemove: () => void }
+) => {
   const [state, setState] = useState(true);
   const user = resolveUser() || {
     displayName: "Неопознанный Гладиолус",
@@ -27,8 +29,8 @@ const Comment = (props: CommentContents & { mark: HTMLElement }) => {
         position: "absolute",
         // left: "100%",
         left:
-          props.mark.parentElement.getBoundingClientRect().left +
-          props.mark.parentElement.getBoundingClientRect().width,
+          props.mark.parentElement?.getBoundingClientRect().left +
+          props.mark.parentElement?.getBoundingClientRect().width,
         top: props.mark.getBoundingClientRect().top,
         // top: 0,
         padding: '12px',
@@ -77,6 +79,7 @@ const Comment = (props: CommentContents & { mark: HTMLElement }) => {
           // props.mark
           props.mark.insertAdjacentText("beforebegin", text);
           props.mark.remove();
+          props.onRemove();
           setState(false);
         }}
       >
@@ -99,7 +102,17 @@ window.initializeComments = function (e: HTMLElement) {
   const el = document.createElement("comment-root");
   document.body.appendChild(el);
   // el.className = "react-comment-wrapper";
-  ReactDOM.hydrate(<Comment {...comment} mark={e} key={comment.text} />, el);
+  ReactDOM.hydrate(
+    <Comment
+      {...comment}
+      mark={e}
+      key={comment.text}
+      onRemove={() => {
+        document.body.removeChild(el);
+      }}
+    />,
+    el
+  );
 
   // e.appendChild(el);
   // let author = e.querySelector(".author");
