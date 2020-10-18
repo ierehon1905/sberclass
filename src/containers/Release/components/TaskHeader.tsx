@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { RevisionSelector } from './RevisionSelector';
+import { TaskControls } from './TaskControls';
 import styled from "styled-components";
 
 
@@ -21,7 +22,8 @@ const StyledDate = styled.div`
     alignItems: center;
 `
 
-export const TaskHeader = ({ task, ...props }: any) => {
+export const TaskHeader = (props: any) => {
+    const { task } = props;
     const { state } = task;
 
     return (
@@ -36,6 +38,7 @@ export const TaskHeader = ({ task, ...props }: any) => {
             }
 
             <RevisionSelector {...props} />
+            <TaskControls {...props} />
         </StyledWrap>
     )
 }
