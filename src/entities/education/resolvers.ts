@@ -106,10 +106,12 @@ export const resolveGetRevisions = (
 
 export const resolveCreateRevisionBackend = (
     moduleId: string,
+    message,
 ) => {
-    return httpFetch("/lesson/getRevisions", {
+    return httpFetch("/lesson/createRevisionBackend", {
         body: {
             moduleId,
+            message
         },
     });
 };
@@ -126,10 +128,10 @@ export const resolveUpdateRelease = (release) => {
     });
 };
 
-export const resolveExtractContent = (modelId, revisionId) => {
+export const resolveExtractContent = (moduleId, revisionId) => {
     return httpFetch("/lesson/extractContent", {
         body: {
-            modelId,
+            moduleId,
             revisionId,
         }
     });

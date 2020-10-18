@@ -15,36 +15,42 @@ const StyledSelect = styled.select`
 `;
 
 export const RevisionSelector = ({
-  revisions,
-  currentRevision,
-  setCurrentRevision,
-  module = { _id: 0 },
+    revisions,
+    currentRevision,
+    setCurrentRevision,
+    module = { _id: 0 },
 }) => {
-  const current = currentRevision ? currentRevision.revisionId : module._id;
+    const current = currentRevision ? currentRevision.revisionVersion : module._id;
 
-  const onChange = e => {
-    const revisionId = e.target.value;
+    const onChange = e => {
+        const revisionVersion = e.target.value;
 
-    if (revisionId === module._id) {
-      setCurrentRevision(null);
-    }
+        if (revisionVersion === module._id) {
+            setCurrentRevision(null);
+        }
 
-    setCurrentRevision(revisions.find(rev => rev.revisionId === revisionId));
-  };
+        const newRev = revisions.find(rev => rev.revisionVersion == revisionVersion);
 
-  return (
-    <label htmlFor="revision">
-      Ревизия
-      <StyledSelect value={current} onChange={onChange} name="revision" id="">
-        <option key={module._id} value={module._id}>
-          Последняя версия
-        </option>
-        {revisions.map(rev => (
-          <option key={rev.revisionId} value={rev.revisionId}>{`${moment(
-            rev.revisionVersion
-          ).format("DD-MM-YYYY hh:mm:ss")} | ${rev.revision}`}</option>
-        ))}
-      </StyledSelect>
-    </label>
-  );
+        console.log('revisionId', revisionVersion, newRev);
+
+        setCurrentRevision(newRev);
+    };
+
+
+
+    return (
+        <label htmlFor="revision">
+            Ревизия
+            <StyledSelect value={current} onChange={onChange} name="revision" id="">
+                <option key={module._id + 'kek'} value={module._id}>
+                    Последняя версия
+                </option>
+                {revisions.sort((a, b) => Number(b.revisionVersion) - Number(a.revisionVersion)).map(rev => (
+                    <option key={rev.revisionVersion} value={rev.revisionVersion}>
+                        {`${moment(rev.revisionVersion).format("DD-MM-YYYY hh:mm:ss")} | ${rev.revision}`}
+                    </option>
+                ))}
+            </StyledSelect>
+        </label>
+    );
 };

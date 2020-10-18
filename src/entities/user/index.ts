@@ -6,6 +6,13 @@ export enum userRoles {
     TEACHER = 'TEACHER',
 }
 
+export const masterUser = {
+    displayName: 'Василий Иванович',
+    pic: "https://vilianov.com/wp-content/uploads/2015/11/userpic.png",
+    roleText: 'Главный редактор',
+    role: userRoles.TEACHER
+}
+
 export const authorUser = {
     displayName: 'Илья Ильич',
     pic: "https://vilianov.com/wp-content/uploads/2015/11/userpic.png",
@@ -20,11 +27,11 @@ export const designerUser = {
     role: userRoles.DESIGNER
 }
 
-export const masterUser = {
+export const techerUser = {
     displayName: 'Сергей Леонидович',
     pic: "https://vilianov.com/wp-content/uploads/2015/11/userpic.png",
-    roleText: 'Учитель',
-    role: userRoles.TEACHER
+    roleText: 'Главный редактор',
+    role: userRoles.MASTER
 }
 
 export const correctorUser = {
@@ -39,4 +46,5 @@ export const users = [
     designerUser,
     masterUser,
     correctorUser,
+    techerUser,
 ]

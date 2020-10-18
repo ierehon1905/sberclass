@@ -31,22 +31,24 @@ const StyledCard = styled.div<{ status: taskStatuses }>`
   border: 2px solid ${({ status }) => getTaskColor(status)};
 `;
 
-export const TaskCard = ({
-    shouldStart,
-    task,
-    tasksMap,
-    context,
-    setTaskState,
-    setReleaseContext,
-    setSelectedTask,
-}) => {
+export const TaskCard = (props) => {
+    const {
+        shouldStart,
+        task,
+        tasksMap,
+        context,
+        setTaskState,
+        setReleaseContext,
+        setSelectedTask,
+    } = props;
+
     const { type } = task;
     const { isManual } = task.props;
     const { status, error } = task.state;
     const config = tasksMap[type];
 
     useEffect(() => {
-        if (shouldStart && !isManual) {
+        if (shouldStart && !isManual && (task.state.status !== taskStatuses.COMPLETED && task.state.status !== taskStatuses.ERROR)) {
             setTaskState(type, { status: taskStatuses.PENDING });
         }
     }, [shouldStart]);
@@ -69,12 +71,14 @@ export const TaskCard = ({
             }
         }
 
-        if (status === taskStatuses.COMPLETED) {
+        if (status === taskStatuses.COMPLETED && !task.state.finishedAt) {
             setTaskState(type, { finishedAt: Date.now() });
 
             if (config.triggerEnd) {
                 config.triggerEnd(triggerParams);
             }
+
+            props.createRevision(`${task.type} ${status.toLowerCase()}`)
         }
 
         if (status === taskStatuses.ERROR) {
@@ -84,6 +88,8 @@ export const TaskCard = ({
         }
     }, [status]);
 
+    const CardView = config.cardView ? config.cardView : () => null;
+
     return (
         <StyledCard
             status={status}
@@ -92,6 +98,7 @@ export const TaskCard = ({
         >
             <div>{type}</div>
             <div>{status}</div>
+            <CardView {...props} />
         </StyledCard>
     );
 };

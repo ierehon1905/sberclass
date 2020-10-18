@@ -133,26 +133,28 @@ const Release = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    resolveEducationModule(moduleId).then(res => {
-      const m = res.result as EducationModule;
-      dispatch(moduleSlice.actions.setModule(m));
-    });
+    if (release) {
+      resolveEducationModule(moduleId).then(res => {
+        const m = res.result as EducationModule;
+        dispatch(moduleSlice.actions.setModule(m));
+      });
 
-    const field = document.getElementsByClassName("release-field-scroll")[0];
-    // debugger;
-    field.scroll({
-      top: 600,
-      behavior: "smooth",
-    });
-  }, [moduleId]);
+      const field = document.getElementsByClassName("release-field-scroll")[0];
+      // debugger;
+      field.scroll({
+        top: 600,
+        behavior: "smooth",
+      });
+    }
+  }, [moduleId, Boolean(release)]);
 
   const module = useSelector((state: RootState) => state.module);
 
-  const [selectedTask, setSelectedTask] = useState(null);
+  const [selectedTask, setSelectedTask] = useState();
 
   const [revisions, setRevisions] = useState([]);
-  const [currentRevision, setCurrentRevision] = useState([]);
-  const [extractedContent, setExtractedContent] = useState(null);
+  const [currentRevision, setCurrentRevision] = useState();
+  const [extractedContent, setExtractedContent] = useState();
 
 
   // CONTENT
@@ -189,8 +191,8 @@ const Release = () => {
     return resolveGetRevisions(moduleId).then(({ result }) => setRevisions(result))
   }
 
-  const createRevision = () => {
-    return resolveCreateRevisionBackend(moduleId).then(() => {
+  const createRevision = (message) => {
+    return resolveCreateRevisionBackend(moduleId, message).then(() => {
       return getRevisions();
     });
   };
@@ -348,6 +350,7 @@ const Release = () => {
               >
                 {step.tasks.map((task, taskIndex) => (
                   <TaskCard
+                    {...releaseApiProps}
                     setSelectedTask={setSelectedTask}
                     tasksMap={tasksMap}
                     key={`${taskIndex}-${stepIndex}`}
