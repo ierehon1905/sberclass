@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { EducationModule } from "../../entities/education";
 import { resolveEducationModule } from "../../entities/education/resolvers";
 import { moduleSlice, RootState } from "../../store";
+import { shadows } from "../../utils/theme";
 import { resolveUser } from "../../entities/user/resolvers";
 import Connections from "./Connections";
 
@@ -295,9 +296,9 @@ const Release = () => {
       {TaskView && (
         <div
           style={{
-            minWidth: "800px",
+            minWidth: "600px",
             background: "white",
-            boxShadow: "-2px 2px 30px #eee",
+            boxShadow: shadows.shadow3,
             // height: "fit-content",
             position: "absolute",
             right: "0",
